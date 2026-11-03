@@ -1,7 +1,7 @@
 {
   "name": "cortico-world-infinity",
-  "version": "0.5.1",
-  "description": "给 Coopanion 桌宠的无限流世界：她是一个被主神选中的轮回者，穿梭进电影世界里完成任务、活着回来、拿奖励点换血统和基因锁。单机、不联网、不额外调用模型。",
+  "version": "0.5.2",
+  "description": "给 Coopanion 桌宠的无限流世界：她是一个被主神选中的轮回者，穿梭进电影世界里完成任务、活着回来、拿奖励点换血统和基因锁。单机、不联网、不额外调用模型。\n\nQQ 交流群：745879632",
   "type": "module",
   "main": "./src/index.js",
   "exports": {
@@ -70,11 +70,11 @@
     "locales": {
       "zh": {
         "displayName": "大肥鱼之无限流",
-        "description": "她被主神选中了。桌面待机时蹲在主神空间，进副本就是一场回合制推演：掷 D100、选行动、算能不能活着回来。活着回来有奖励点和支线剧情，换血统、点属性、开基因锁；血统还能往上叠浓度——越浓越强，也越不像人。十个电影世界，每个副本都有一个人跟着她：信任攒够了，他会在你死的那一刻替你挨一下；救过他的人，他记得。每局结束她会写一篇手记。单机、不联网、不额外调用模型。有问题或想聊两句：QQ 群 745879632。"
+        "description": "她被主神选中了。桌面待机时蹲在主神空间，进副本就是一场回合制推演：掷 D100、选行动、算能不能活着回来。活着回来有奖励点和支线剧情，换血统、点属性、开基因锁；血统还能往上叠浓度——越浓越强，也越不像人。十个电影世界，每个副本都有一个人跟着她：信任攒够了，他会在你死的那一刻替你挨一下；救过他的人，他记得。每局结束她会写一篇手记。单机、不联网、不额外调用模型。\n\nQQ 交流群：745879632"
       },
       "en": {
         "displayName": "Infinity Runner",
-        "description": "Your desktop pet got drafted by the Main God. Between runs she waits in the void; entering a movie world turns into a turn-based crawl of d100 checks, action picks and survival math. Survive and you earn reward points and plot tokens for bloodlines, stats and gene locks - and a bloodline can be deepened three times, each layer stronger and less human. Ten film worlds, each with one companion whose trust buys you a single death; the ones you saved remember you. She writes a journal entry after every run. Single-player, offline, no extra model calls. Questions or just want to chat: QQ group 745879632."
+        "description": "Your desktop pet got drafted by the Main God. Between runs she waits in the void; entering a movie world turns into a turn-based crawl of d100 checks, action picks and survival math. Survive and you earn reward points and plot tokens for bloodlines, stats and gene locks - and a bloodline can be deepened three times, each layer stronger and less human. Ten film worlds, each with one companion whose trust buys you a single death; the ones you saved remember you. She writes a journal entry after every run. Single-player, offline, no extra model calls.\n\nQQ group: 745879632"
       }
     }
   }
