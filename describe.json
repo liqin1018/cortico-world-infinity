@@ -1,0 +1,166 @@
+{
+  "tools": [
+    {
+      "name": "mg_status",
+      "description": "看轮回者的现状：属性、生命理智、基因锁与心魔、血统技能背包、奖励点与支线剧情；在副本里时还看当前回合、场景和这一次能选哪几个动作。被问到「到哪了」「还剩多少」先看这个。",
+      "parameters": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      },
+      "tags": [
+        "read"
+      ],
+      "summary": {
+        "zh": "看属性、基因锁、钱包，以及副本里的当前回合和可选项。",
+        "en": "Reads stats, gene lock, wallet, and the current turn with its options."
+      }
+    },
+    {
+      "name": "mg_run",
+      "description": "往前走一步。action=enter 挑一个副本进去（world 填副本代号，见 mg_status）；pick 在副本里选第几个动作（index 从 1 开始，选项文字看 mg_status；insure=yes 是花 1 个支线剧情保底——判定没过自动重掷一次取较好的结果，过了不扣，大失败保不了）；gene 决定濒死时要不要开基因锁（accept 填 yes/no）；flee 提前撤退，算失败但保住命；leave 结算完回到主神空间。不填 action 默认 pick。",
+      "parameters": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "action": {
+            "type": "string",
+            "enum": [
+              "enter",
+              "pick",
+              "gene",
+              "flee",
+              "leave"
+            ],
+            "description": "要做什么。"
+          },
+          "world": {
+            "type": "string",
+            "description": "enter 用：副本代号，mg_status 里列着（re1 / a2 / lotr 这类）。"
+          },
+          "index": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 4,
+            "description": "pick 用：选第几个动作。"
+          },
+          "accept": {
+            "type": "string",
+            "enum": [
+              "yes",
+              "no"
+            ],
+            "description": "gene 用：开不开锁。"
+          },
+          "insure": {
+            "type": "string",
+            "enum": [
+              "yes",
+              "no"
+            ],
+            "description": "pick 用：要不要用支线剧情保底。手里没有支线剧情时填了也没用。"
+          }
+        }
+      },
+      "tags": [
+        "write"
+      ],
+      "summary": {
+        "zh": "进副本、选动作、决定开不开锁、撤退或回主神空间。",
+        "en": "Enters a world, picks an action, decides on a gene lock, flees or returns."
+      }
+    },
+    {
+      "name": "mg_do",
+      "description": "兑换和用东西。attr 点属性（str/agi/con/int/per，上限 40）；bloodline 换血统（152 条，D→S）；grade 把血统往上叠一层浓度（更强，但理智上限降、心魔更容易满）；skill 学技能（16 条）；item 买道具（消耗/装备）；purify 净化心魔。use 是把手上的消耗品或治疗技能用掉（副本里也能用，比如还剩 12 血时打一针）。key 填中文名或编号；不确定买什么先 mg_status 看点数。",
+      "parameters": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "action"
+        ],
+        "properties": {
+          "action": {
+            "type": "string",
+            "enum": [
+              "attr",
+              "bloodline",
+              "grade",
+              "skill",
+              "item",
+              "purify",
+              "use"
+            ],
+            "description": "要办的事。"
+          },
+          "key": {
+            "type": "string",
+            "description": "attr 是属性名；bloodline/skill/item/use 是名字或编号；grade/purify 不用填。"
+          },
+          "n": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 5,
+            "description": "item 用：买几个，默认 1。"
+          }
+        }
+      },
+      "tags": [
+        "write"
+      ],
+      "summary": {
+        "zh": "点属性、换血统、升浓度、学技能、买道具、净化心魔，以及局内用掉消耗品。",
+        "en": "Spends points on stats, bloodlines, skills, items, or purification."
+      }
+    },
+    {
+      "name": "mg_chronicle",
+      "description": "翻履历：进过哪几个副本、结局是什么、拿了多少点，最近一篇手记的原文，以及这一局每一步选了什么、掷了多少。想回忆上次怎么死的、或者要跟人讲一遍时用。",
+      "parameters": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 20,
+            "description": "看最近几条，默认 8。"
+          }
+        }
+      },
+      "tags": [
+        "read"
+      ],
+      "summary": {
+        "zh": "翻副本履历和上一局的每一步。",
+        "en": "Reads run history and the last run step by step."
+      }
+    }
+  ],
+  "events": [
+    {
+      "type": "infinity.run",
+      "description": {
+        "zh": "一趟副本结束时的回执：活没活下来、拿到多少奖励点、结局是什么。她据此用自己的口气讲这一段。",
+        "en": "A receipt when a run ends: survived or not, points earned, which ending. She retells it in her own voice."
+      },
+      "trigger": "debounce"
+    },
+    {
+      "type": "infinity.gene",
+      "description": {
+        "zh": "濒死开基因锁的那一刻：几阶、成没成、心魔涨了多少。这是这个世界的情绪高点，值得让她说一句。",
+        "en": "The moment she gambles on a gene lock at death's door: which tier, whether it held, how much corruption. The emotional peak of this world."
+      },
+      "trigger": "flush"
+    },
+    {
+      "type": "infinity.mate",
+      "description": {
+        "zh": "同伴替她挡了一下，或者走了。这个世界里没有第二个愿意替她挨的人，所以这两件事都值得开口。",
+        "en": "A companion took a hit for her, or left. Nobody else in this world would take that hit, so both are worth saying out loud."
+      },
+      "trigger": "debounce"
+    }
+  ]
+}

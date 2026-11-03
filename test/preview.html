@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<title>大肥鱼之无限流 · 面板预览</title>
+<style>
+  html, body { margin: 0; padding: 0; background: #08060e; }
+  body { padding: 18px; font-family: "PingFang SC","Microsoft YaHei",system-ui,sans-serif; }
+  #bar { position: fixed; left: 18px; top: -60px; display: flex; gap: 8px; z-index: 99; }
+  #app { max-width: 1080px; margin: 0 auto; }
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script type="module">
+import client from '../webui/client.js';
+
+const params = new URLSearchParams(location.search);
+const state = params.get('s') || 'home';
+const data = await (await fetch('./preview-data.json')).json();
+
+const ctx = {
+  root: document.getElementById('app'),
+  invoke: async (method, args) => {
+    if (method === 'state') {
+      // ?s=home 时即使有 run 也藏起来，方便单看主神空间
+      if (state === 'home' && data.home.run) return { ...data.home, run: null };
+      return data[state] ?? data.home;
+    }
+    return { ok: true, message: '（预览模式，动作不生效）' };
+  },
+  interval: () => {},
+};
+
+client.panels.infinity.mount(ctx);
+</script>
+</body>
+</html>

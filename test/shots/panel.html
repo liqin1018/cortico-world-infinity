@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<title>大肥鱼之无限流 · 面板预览</title>
+<style>
+body { margin:0; padding:28px 20px 60px; background:#07060c;
+  font-family:"PingFang SC","Microsoft YaHei",system-ui,sans-serif; }
+.page { max-width:1080px; margin:0 auto; }
+.cap { font-size:11px; letter-spacing:.28em; color:#5a5375; margin:34px 4px 10px; }
+section:first-of-type .cap { margin-top:0; }
+
+.mg-root {
+  --bg0:#0b0912; --bg1:#12101c; --bg2:#181527; --bg3:#201c30; --bg4:#272239;
+  --line:#2e2846; --line2:#3c3459;
+  --txt:#ece9f7; --dim:#9b94b5; --dim2:#6d6685; --dim3:#4a4360;
+  --acc:#8b7cf6; --acc2:#b3a8ff; --acc3:#6f5ae0;
+  --gold:#d9a94c; --blood:#c2413a; --green:#5fb98a; --warn:#e0a04c;
+  position: relative; box-sizing: border-box; max-width: 1080px;
+  padding: 16px; border-radius: 14px;
+  background: radial-gradient(120% 80% at 50% -10%, #201a38 0%, var(--bg0) 62%);
+  color: var(--txt); font-size: 13px; line-height: 1.62;
+  font-family: "PingFang SC","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif;
+  --mono: "SF Mono", "Cascadia Mono", Consolas, monospace;
+}
+.mg-root * { box-sizing: border-box; }
+.mg-root button { font-family: inherit; }
+
+/* ── 顶栏 ───────────────────────────────────────────────────────────── */
+.mg-head { display:flex; align-items:center; gap:14px; padding-bottom:13px; border-bottom:1px solid var(--line); flex-wrap:wrap; }
+.mg-orb { width:38px; height:38px; border-radius:50%; flex:none; position:relative;
+  background: radial-gradient(circle at 34% 28%, #e9e3ff, #8b7cf6 40%, #4b3fa8 72%, #1e1748 100%);
+  box-shadow: 0 0 22px rgba(139,124,246,.55), inset 0 0 14px rgba(255,255,255,.18);
+  animation: mg-breathe 4.2s ease-in-out infinite; }
+.mg-orb::after { content:""; position:absolute; inset:-5px; border-radius:50%; border:1px solid rgba(139,124,246,.28); animation: mg-ripple 3.6s ease-out infinite; }
+@keyframes mg-breathe { 0%,100%{transform:scale(1);filter:brightness(1)} 50%{transform:scale(1.06);filter:brightness(1.15)} }
+@keyframes mg-ripple { 0%{transform:scale(.92);opacity:.8} 100%{transform:scale(1.45);opacity:0} }
+
+.mg-id { min-width:0; }
+.mg-name { font-size:15px; font-weight:600; letter-spacing:.02em; }
+.mg-sub { font-size:11px; color:var(--dim2); margin-top:2px; }
+
+.mg-badges { margin-left:auto; display:flex; gap:18px; align-items:center; flex-wrap:wrap; }
+.mg-badge { text-align:right; }
+.mg-badge .k { font-size:9.5px; color:var(--dim2); letter-spacing:.14em; display:block; margin-bottom:1px; }
+.mg-badge .v { font-size:15px; font-variant-numeric:tabular-nums; line-height:1.25; }
+.mg-badge.gold .v { color:var(--gold); }
+.mg-badge.gene .v { color:var(--acc2); }
+
+.mg-plots { display:flex; gap:4px; }
+.mg-plot { min-width:24px; height:22px; padding:0 5px; border-radius:5px; display:inline-flex;
+  align-items:center; justify-content:center; font-size:10.5px; font-weight:600;
+  background:var(--bg3); color:var(--dim3); border:1px solid var(--line); }
+.mg-plot.on { color:#1a1526; border-color:transparent; }
+.mg-plot.on.D { background:#9a8f7a } .mg-plot.on.C { background:#6fa8a0 }
+.mg-plot.on.B { background:#7b8fd9 } .mg-plot.on.A { background:#b98ad4 }
+.mg-plot.on.S { background:#e0b64c }
+
+/* ── 布局 ───────────────────────────────────────────────────────────── */
+.mg-body { display:grid; grid-template-columns: 322px 1fr; gap:16px; padding-top:14px; }
+.mg-body.solo { grid-template-columns: 1fr; }
+@media (max-width: 860px) { .mg-body { grid-template-columns: 1fr; } }
+
+.mg-col { min-width:0; }
+.mg-card { background:linear-gradient(158deg, var(--bg2), var(--bg1)); border:1px solid var(--line); border-radius:12px; padding:13px 15px; }
+.mg-card + .mg-card { margin-top:11px; }
+
+.mg-h { font-size:10px; letter-spacing:.18em; color:var(--dim2); font-weight:500; margin:0 0 9px; }
+.mg-h.row { display:flex; align-items:center; gap:8px; }
+.mg-h.row .spacer { flex:1; }
+
+/* ── 角色卡 ─────────────────────────────────────────────────────────── */
+.mg-attrs { display:grid; grid-template-columns:repeat(5,1fr); gap:6px; }
+.mg-attr { background:var(--bg3); border:1px solid var(--line); border-radius:9px; padding:8px 4px; text-align:center; }
+.mg-attr .k { font-size:9px; color:var(--dim2); letter-spacing:.08em; }
+.mg-attr .v { font-size:19px; margin-top:2px; font-variant-numeric:tabular-nums; }
+.mg-attr .v em { font-style:normal; font-size:10px; color:var(--green); margin-left:1px; }
+
+.mg-bars { margin-top:11px; display:flex; flex-direction:column; gap:7px; }
+.mg-bar { display:flex; align-items:center; gap:9px; }
+.mg-bar .lbl { width:28px; font-size:9.5px; color:var(--dim2); letter-spacing:.08em; }
+.mg-track { flex:1; height:7px; border-radius:4px; background:#241f36; overflow:hidden; }
+.mg-track i { display:block; height:100%; border-radius:4px; transition:width .4s cubic-bezier(.3,.9,.3,1); }
+.mg-track.hp i { background:linear-gradient(90deg,#a83232,#e0644f); }
+.mg-track.san i { background:linear-gradient(90deg,#41509e,#7b8fd9); }
+.mg-bar .num { width:58px; text-align:right; font-size:10.5px; color:var(--dim); font-variant-numeric:tabular-nums; }
+
+.mg-locks { display:flex; gap:5px; margin-top:9px; }
+.mg-lock { flex:1; height:30px; border-radius:7px; border:1px solid var(--line); background:var(--bg1);
+  display:flex; align-items:center; justify-content:center; font-size:10px; color:var(--dim3); letter-spacing:.06em; }
+.mg-lock.on { background:linear-gradient(135deg,#4a2222,#2e1a24); border-color:#7a4444; color:#e8a0a0; }
+.mg-lock.cur { box-shadow:inset 0 0 0 1px var(--acc), 0 0 14px rgba(139,124,246,.22); color:var(--acc2); }
+
+.mg-line { display:flex; gap:8px; font-size:11.5px; color:var(--dim); padding:5px 0; line-height:1.55; }
+.mg-line b { color:var(--txt); font-weight:500; }
+.mg-line .tag { flex:none; }
+
+.mg-tag { display:inline-block; padding:1px 6px; border-radius:4px; font-size:9.5px; letter-spacing:.04em;
+  background:var(--bg4); color:var(--acc2); white-space:nowrap; }
+.mg-tag.D { background:#2a2620; color:#b8a888 } .mg-tag.C { background:#1d2725; color:#7fbfb5 }
+.mg-tag.B { background:#1e2233; color:#8fa4e0 } .mg-tag.A { background:#28202f; color:#c79ade }
+.mg-tag.S { background:#2d2615; color:#e2bb63 } .mg-tag.warn { background:#33201f; color:#e08d80 }
+.mg-tag.soft { background:var(--bg3); color:var(--dim2) }
+
+.mg-list { display:flex; flex-direction:column; gap:6px; }
+.mg-item { display:flex; gap:9px; align-items:flex-start; padding:8px 10px; border-radius:8px; background:var(--bg1); border:1px solid var(--line); }
+.mg-item .m { flex:1; min-width:0; }
+.mg-item .t { font-size:11.5px; }
+.mg-item .d { font-size:10.5px; color:var(--dim2); margin-top:2px; line-height:1.5; }
+
+/* ── 按钮 ───────────────────────────────────────────────────────────── */
+.mg-btn { border:1px solid var(--line2); background:var(--bg3); color:var(--txt);
+  padding:7px 13px; border-radius:8px; font-size:11.5px; cursor:pointer; transition:.14s; }
+.mg-btn:hover:not(:disabled) { background:var(--bg4); border-color:#4d4276; }
+.mg-btn:disabled { opacity:.34; cursor:not-allowed; }
+.mg-btn.acc { background:linear-gradient(135deg,#7b68ee,#5c48c8); border-color:#8f7cff; color:#fff; box-shadow:0 4px 16px rgba(106,85,214,.3); }
+.mg-btn.acc:hover:not(:disabled) { filter:brightness(1.14); }
+.mg-btn.ghost { background:transparent; }
+.mg-btn.xs { padding:4px 9px; font-size:10.5px; border-radius:6px; }
+.mg-btn.wide { width:100%; }
+
+.mg-tabs { display:flex; gap:6px; margin-bottom:12px; flex-wrap:wrap; }
+.mg-tab { padding:6px 14px; border-radius:8px; font-size:11.5px; cursor:pointer;
+  background:transparent; border:1px solid var(--line); color:var(--dim2); transition:.14s; }
+.mg-tab.on { background:var(--bg3); color:var(--acc2); border-color:var(--line2); }
+
+/* ── 副本卡 ─────────────────────────────────────────────────────────── */
+.mg-band { display:flex; align-items:center; gap:10px; margin:16px 2px 9px; }
+.mg-band .b { font-size:10.5px; letter-spacing:.2em; color:#7d739c; }
+.mg-band .n { font-size:10px; color:#4f4868; }
+.mg-band .line { flex:1; height:1px; background:#221d33; }
+.mg-band:first-child { margin-top:4px; }
+.mg-world { position:relative; overflow:hidden; border-radius:12px; padding:15px 17px;
+  background:linear-gradient(140deg,#221a24,var(--bg1) 62%); border:1px solid #33283a; margin-bottom:10px; }
+.mg-world::before { content:""; position:absolute; inset:0; pointer-events:none;
+  background:radial-gradient(75% 110% at 100% 0%, rgba(194,65,58,.16), transparent 62%); }
+.mg-world.done { border-color:#2f3a30; }
+.mg-world.done::before { background:radial-gradient(75% 110% at 100% 0%, rgba(95,185,138,.12), transparent 62%); }
+.mg-world h3 { font-size:16px; font-weight:600; position:relative; }
+.mg-world .sub { font-size:10.5px; color:var(--dim2); margin-top:3px; letter-spacing:.05em; position:relative; }
+.mg-world .brf { font-size:11.5px; color:var(--dim); line-height:1.7; margin-top:9px; position:relative; }
+.mg-world .foot { display:flex; align-items:center; gap:14px; margin-top:11px; position:relative; font-size:10.5px; color:var(--dim2); }
+.mg-world .foot b { color:var(--txt); font-weight:500; }
+
+/* ── 推演 ───────────────────────────────────────────────────────────── */
+.mg-run { display:grid; grid-template-columns: 1fr 236px; gap:15px; }
+@media (max-width: 860px) { .mg-run { grid-template-columns: 1fr; } }
+.mg-scene { display:flex; align-items:center; gap:11px; padding-bottom:10px; border-bottom:1px solid var(--line); flex-wrap:wrap; }
+.mg-scene .idx { font-size:9.5px; letter-spacing:.16em; color:var(--dim2); font-variant-numeric:tabular-nums; }
+.mg-scene .nm { font-size:13.5px; }
+.mg-pressure { margin-left:auto; display:flex; align-items:center; gap:7px; }
+.mg-pressure .lb { font-size:9px; color:var(--dim2); letter-spacing:.04em; }
+.mg-pressure .vl { font-size:16px; color:#e08d80; font-variant-numeric:tabular-nums; }
+.mg-dots { display:flex; gap:2px; }
+.mg-dots i { width:3px; height:11px; border-radius:2px; background:var(--bg4); }
+.mg-dots i.on { background:linear-gradient(#e0644f,#a83b3b); }
+
+.mg-text { font-size:13px; line-height:1.95; color:#d6d1e8; padding:15px 2px 12px; white-space:pre-line; }
+.mg-opts { display:flex; flex-direction:column; gap:7px; }
+.mg-opt { display:flex; gap:11px; align-items:flex-start; text-align:left; width:100%;
+  padding:11px 14px; border-radius:10px; background:var(--bg2); border:1px solid var(--line);
+  color:var(--txt); font-size:12.5px; line-height:1.6; cursor:pointer; transition:.15s; }
+.mg-opt:hover:not(:disabled) { background:var(--bg3); border-color:#453b6d; transform:translateX(2px); }
+.mg-opt:disabled { opacity:.4; cursor:not-allowed; }
+.mg-opt .k { flex:none; width:21px; height:21px; border-radius:6px; display:flex; align-items:center;
+  justify-content:center; font-size:10.5px; background:var(--bg4); color:var(--acc2); font-variant-numeric:tabular-nums; }
+.mg-opt.risk .k { background:#3a2129; color:#e08d80; }
+.mg-opt.safe .k { background:#1e2a26; color:#7fbfb5; }
+.mg-opt .m { flex:1; min-width:0; }
+.mg-opt .hint { display:block; font-size:10px; color:var(--dim2); margin-top:3px; }
+.mg-opt .hint.bad { color:#c47a70; }
+
+.mg-side { display:flex; flex-direction:column; gap:10px; min-width:0; }
+.mg-box { background:var(--bg1); border:1px solid var(--line); border-radius:10px; padding:10px 12px; }
+.mg-box.scroll { max-height:220px; overflow-y:auto; }
+.mg-box.scroll::-webkit-scrollbar { width:5px }
+.mg-box.scroll::-webkit-scrollbar-thumb { background:var(--line2); border-radius:3px }
+.mg-log { font-size:10.5px; line-height:1.55; color:var(--dim2); padding:4px 0; border-bottom:1px dashed #221d33; }
+.mg-log:last-child { border:none }
+.mg-log.good { color:#8fc9a8 } .mg-log.bad { color:#d98b80 } .mg-log.settle { color:var(--gold) }
+
+.mg-trail { font-size:10.5px; color:var(--dim2); padding:4px 0; display:flex; gap:7px; }
+.mg-trail .n { width:34px; color:var(--dim3); flex:none }
+.mg-trail .l { flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.mg-trail .r { flex:none; font-variant-numeric:tabular-nums }
+.mg-trail .r.ok { color:#6fbf94 } .mg-trail .r.no { color:#c47a70 }
+
+/* ── 结算 ───────────────────────────────────────────────────────────── */
+.mg-settle { text-align:center; padding:6px 0 18px; }
+.mg-settle-title { font-size:23px; letter-spacing:.05em; }
+.mg-settle-text { font-size:12px; color:var(--dim); line-height:1.95; max-width:540px; margin:12px auto 0; white-space:pre-line; }
+.mg-row { display:flex; align-items:center; gap:12px; padding:10px 2px; border-bottom:1px solid #221d33; font-size:12px;
+  animation: mg-in .32s backwards; }
+@keyframes mg-in { from{opacity:0;transform:translateY(5px)} to{opacity:1;transform:none} }
+.mg-row .l { flex:1; color:var(--dim); text-align:left; }
+.mg-row.miss .l { color:var(--dim3); }
+.mg-row.bad .l { color:#d98b80; }
+.mg-row .v { font-variant-numeric:tabular-nums; color:var(--green); }
+.mg-row.bad .v { color:#d98b80; }
+.mg-row .v.zero { color:var(--dim3); }
+.mg-total { display:flex; align-items:baseline; gap:9px; justify-content:flex-end; margin-top:16px; padding-top:13px; border-top:1px solid var(--line); }
+.mg-total .k { font-size:10px; color:var(--dim2); letter-spacing:.12em; }
+.mg-total .v { font-size:27px; color:var(--gold); font-variant-numeric:tabular-nums; }
+
+/* ── 提示条 ─────────────────────────────────────────────────────────── */
+.mg-msg { font-size:11.5px; color:var(--acc2); padding:8px 12px; border-radius:8px; background:rgba(139,124,246,.09);
+  border:1px solid rgba(139,124,246,.22); margin-bottom:11px; white-space:pre-line; display:none; }
+.mg-msg.on { display:block }
+.mg-msg.bad { color:#e0a09a; background:rgba(194,65,58,.1); border-color:rgba(194,65,58,.28) }
+
+.mg-empty { text-align:center; padding:34px 16px; color:var(--dim3); font-size:11.5px; line-height:1.9 }
+
+/* ── 基因锁赌局 ─────────────────────────────────────────────────────── */
+.mg-gamble { border:1px solid #6a3a3a; background:linear-gradient(160deg,#2a1620,#1a1220); border-radius:12px; padding:16px 18px; margin-bottom:12px; }
+.mg-gamble h4 { font-size:14px; color:#e8a0a0; margin-bottom:9px; }
+.mg-gamble p { font-size:11.5px; color:var(--dim); line-height:1.8; }
+.mg-gamble .acts { display:flex; gap:8px; margin-top:13px; }
+
+
+.mg-root {
+  --bg0:#0b0912; --bg1:#12101c; --bg2:#181527; --bg3:#201c30; --bg4:#272239;
+  --line:#2e2846; --line2:#3c3459;
+  --txt:#ece9f7; --dim:#9b94b5; --dim2:#6d6685; --dim3:#4a4360;
+  --acc:#8b7cf6; --acc2:#b3a8ff; --acc3:#6f5ae0;
+  --gold:#d9a94c; --blood:#c2413a; --green:#5fb98a; --warn:#e0a04c;
+  position: relative; box-sizing: border-box; max-width: 1080px;
+  padding: 16px; border-radius: 14px;
+  background: radial-gradient(120% 80% at 50% -10%, #201a38 0%, var(--bg0) 62%);
+  color: var(--txt); font-size: 13px; line-height: 1.62;
+  font-family: "PingFang SC","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif;
+  --mono: "SF Mono", "Cascadia Mono", Consolas, monospace;
+}
+.mg-root * { box-sizing: border-box; }
+.mg-root button { font-family: inherit; }
+
+/* ── 顶栏 ───────────────────────────────────────────────────────────── */
+.mg-head { display:flex; align-items:center; gap:14px; padding-bottom:13px; border-bottom:1px solid var(--line); flex-wrap:wrap; }
+.mg-orb { width:38px; height:38px; border-radius:50%; flex:none; position:relative;
+  background: radial-gradient(circle at 34% 28%, #e9e3ff, #8b7cf6 40%, #4b3fa8 72%, #1e1748 100%);
+  box-shadow: 0 0 22px rgba(139,124,246,.55), inset 0 0 14px rgba(255,255,255,.18);
+  animation: mg-breathe 4.2s ease-in-out infinite; }
+.mg-orb::after { content:""; position:absolute; inset:-5px; border-radius:50%; border:1px solid rgba(139,124,246,.28); animation: mg-ripple 3.6s ease-out infinite; }
+@keyframes mg-breathe { 0%,100%{transform:scale(1);filter:brightness(1)} 50%{transform:scale(1.06);filter:brightness(1.15)} }
+@keyframes mg-ripple { 0%{transform:scale(.92);opacity:.8} 100%{transform:scale(1.45);opacity:0} }
+
+.mg-id { min-width:0; }
+.mg-name { font-size:15px; font-weight:600; letter-spacing:.02em; }
+.mg-sub { font-size:11px; color:var(--dim2); margin-top:2px; }
+
+.mg-badges { margin-left:auto; display:flex; gap:18px; align-items:center; flex-wrap:wrap; }
+.mg-badge { text-align:right; }
+.mg-badge .k { font-size:9.5px; color:var(--dim2); letter-spacing:.14em; display:block; margin-bottom:1px; }
+.mg-badge .v { font-size:15px; font-variant-numeric:tabular-nums; line-height:1.25; }
+.mg-badge.gold .v { color:var(--gold); }
+.mg-badge.gene .v { color:var(--acc2); }
+
+.mg-plots { display:flex; gap:4px; }
+.mg-plot { min-width:24px; height:22px; padding:0 5px; border-radius:5px; display:inline-flex;
+  align-items:center; justify-content:center; font-size:10.5px; font-weight:600;
+  background:var(--bg3); color:var(--dim3); border:1px solid var(--line); }
+.mg-plot.on { color:#1a1526; border-color:transparent; }
+.mg-plot.on.D { background:#9a8f7a } .mg-plot.on.C { background:#6fa8a0 }
+.mg-plot.on.B { background:#7b8fd9 } .mg-plot.on.A { background:#b98ad4 }
+.mg-plot.on.S { background:#e0b64c }
+
+/* ── 布局 ───────────────────────────────────────────────────────────── */
+.mg-body { display:grid; grid-template-columns: 322px 1fr; gap:16px; padding-top:14px; }
+.mg-body.solo { grid-template-columns: 1fr; }
+@media (max-width: 860px) { .mg-body { grid-template-columns: 1fr; } }
+
+.mg-col { min-width:0; }
+.mg-card { background:linear-gradient(158deg, var(--bg2), var(--bg1)); border:1px solid var(--line); border-radius:12px; padding:13px 15px; }
+.mg-card + .mg-card { margin-top:11px; }
+
+.mg-h { font-size:10px; letter-spacing:.18em; color:var(--dim2); font-weight:500; margin:0 0 9px; }
+.mg-h.row { display:flex; align-items:center; gap:8px; }
+.mg-h.row .spacer { flex:1; }
+
+/* ── 角色卡 ─────────────────────────────────────────────────────────── */
+.mg-attrs { display:grid; grid-template-columns:repeat(5,1fr); gap:6px; }
+.mg-attr { background:var(--bg3); border:1px solid var(--line); border-radius:9px; padding:8px 4px; text-align:center; }
+.mg-attr .k { font-size:9px; color:var(--dim2); letter-spacing:.08em; }
+.mg-attr .v { font-size:19px; margin-top:2px; font-variant-numeric:tabular-nums; }
+.mg-attr .v em { font-style:normal; font-size:10px; color:var(--green); margin-left:1px; }
+
+.mg-bars { margin-top:11px; display:flex; flex-direction:column; gap:7px; }
+.mg-bar { display:flex; align-items:center; gap:9px; }
+.mg-bar .lbl { width:28px; font-size:9.5px; color:var(--dim2); letter-spacing:.08em; }
+.mg-track { flex:1; height:7px; border-radius:4px; background:#241f36; overflow:hidden; }
+.mg-track i { display:block; height:100%; border-radius:4px; transition:width .4s cubic-bezier(.3,.9,.3,1); }
+.mg-track.hp i { background:linear-gradient(90deg,#a83232,#e0644f); }
+.mg-track.san i { background:linear-gradient(90deg,#41509e,#7b8fd9); }
+.mg-bar .num { width:58px; text-align:right; font-size:10.5px; color:var(--dim); font-variant-numeric:tabular-nums; }
+
+.mg-locks { display:flex; gap:5px; margin-top:9px; }
+.mg-lock { flex:1; height:30px; border-radius:7px; border:1px solid var(--line); background:var(--bg1);
+  display:flex; align-items:center; justify-content:center; font-size:10px; color:var(--dim3); letter-spacing:.06em; }
+.mg-lock.on { background:linear-gradient(135deg,#4a2222,#2e1a24); border-color:#7a4444; color:#e8a0a0; }
+.mg-lock.cur { box-shadow:inset 0 0 0 1px var(--acc), 0 0 14px rgba(139,124,246,.22); color:var(--acc2); }
+
+.mg-line { display:flex; gap:8px; font-size:11.5px; color:var(--dim); padding:5px 0; line-height:1.55; }
+.mg-line b { color:var(--txt); font-weight:500; }
+.mg-line .tag { flex:none; }
+
+.mg-tag { display:inline-block; padding:1px 6px; border-radius:4px; font-size:9.5px; letter-spacing:.04em;
+  background:var(--bg4); color:var(--acc2); white-space:nowrap; }
+.mg-tag.D { background:#2a2620; color:#b8a888 } .mg-tag.C { background:#1d2725; color:#7fbfb5 }
+.mg-tag.B { background:#1e2233; color:#8fa4e0 } .mg-tag.A { background:#28202f; color:#c79ade }
+.mg-tag.S { background:#2d2615; color:#e2bb63 } .mg-tag.warn { background:#33201f; color:#e08d80 }
+.mg-tag.soft { background:var(--bg3); color:var(--dim2) }
+
+.mg-list { display:flex; flex-direction:column; gap:6px; }
+.mg-item { display:flex; gap:9px; align-items:flex-start; padding:8px 10px; border-radius:8px; background:var(--bg1); border:1px solid var(--line); }
+.mg-item .m { flex:1; min-width:0; }
+.mg-item .t { font-size:11.5px; }
+.mg-item .d { font-size:10.5px; color:var(--dim2); margin-top:2px; line-height:1.5; }
+
+/* ── 按钮 ───────────────────────────────────────────────────────────── */
+.mg-btn { border:1px solid var(--line2); background:var(--bg3); color:var(--txt);
+  padding:7px 13px; border-radius:8px; font-size:11.5px; cursor:pointer; transition:.14s; }
+.mg-btn:hover:not(:disabled) { background:var(--bg4); border-color:#4d4276; }
+.mg-btn:disabled { opacity:.34; cursor:not-allowed; }
+.mg-btn.acc { background:linear-gradient(135deg,#7b68ee,#5c48c8); border-color:#8f7cff; color:#fff; box-shadow:0 4px 16px rgba(106,85,214,.3); }
+.mg-btn.acc:hover:not(:disabled) { filter:brightness(1.14); }
+.mg-btn.ghost { background:transparent; }
+.mg-btn.xs { padding:4px 9px; font-size:10.5px; border-radius:6px; }
+.mg-btn.wide { width:100%; }
+
+.mg-tabs { display:flex; gap:6px; margin-bottom:12px; flex-wrap:wrap; }
+.mg-tab { padding:6px 14px; border-radius:8px; font-size:11.5px; cursor:pointer;
+  background:transparent; border:1px solid var(--line); color:var(--dim2); transition:.14s; }
+.mg-tab.on { background:var(--bg3); color:var(--acc2); border-color:var(--line2); }
+
+/* ── 副本卡 ─────────────────────────────────────────────────────────── */
+.mg-band { display:flex; align-items:center; gap:10px; margin:16px 2px 9px; }
+.mg-band .b { font-size:10.5px; letter-spacing:.2em; color:#7d739c; }
+.mg-band .n { font-size:10px; color:#4f4868; }
+.mg-band .line { flex:1; height:1px; background:#221d33; }
+.mg-band:first-child { margin-top:4px; }
+.mg-world { position:relative; overflow:hidden; border-radius:12px; padding:15px 17px;
+  background:linear-gradient(140deg,#221a24,var(--bg1) 62%); border:1px solid #33283a; margin-bottom:10px; }
+.mg-world::before { content:""; position:absolute; inset:0; pointer-events:none;
+  background:radial-gradient(75% 110% at 100% 0%, rgba(194,65,58,.16), transparent 62%); }
+.mg-world.done { border-color:#2f3a30; }
+.mg-world.done::before { background:radial-gradient(75% 110% at 100% 0%, rgba(95,185,138,.12), transparent 62%); }
+.mg-world h3 { font-size:16px; font-weight:600; position:relative; }
+.mg-world .sub { font-size:10.5px; color:var(--dim2); margin-top:3px; letter-spacing:.05em; position:relative; }
+.mg-world .brf { font-size:11.5px; color:var(--dim); line-height:1.7; margin-top:9px; position:relative; }
+.mg-world .foot { display:flex; align-items:center; gap:14px; margin-top:11px; position:relative; font-size:10.5px; color:var(--dim2); }
+.mg-world .foot b { color:var(--txt); font-weight:500; }
+
+/* ── 推演 ───────────────────────────────────────────────────────────── */
+.mg-run { display:grid; grid-template-columns: 1fr 236px; gap:15px; }
+@media (max-width: 860px) { .mg-run { grid-template-columns: 1fr; } }
+.mg-scene { display:flex; align-items:center; gap:11px; padding-bottom:10px; border-bottom:1px solid var(--line); flex-wrap:wrap; }
+.mg-scene .idx { font-size:9.5px; letter-spacing:.16em; color:var(--dim2); font-variant-numeric:tabular-nums; }
+.mg-scene .nm { font-size:13.5px; }
+.mg-pressure { margin-left:auto; display:flex; align-items:center; gap:7px; }
+.mg-pressure .lb { font-size:9px; color:var(--dim2); letter-spacing:.04em; }
+.mg-pressure .vl { font-size:16px; color:#e08d80; font-variant-numeric:tabular-nums; }
+.mg-dots { display:flex; gap:2px; }
+.mg-dots i { width:3px; height:11px; border-radius:2px; background:var(--bg4); }
+.mg-dots i.on { background:linear-gradient(#e0644f,#a83b3b); }
+
+.mg-text { font-size:13px; line-height:1.95; color:#d6d1e8; padding:15px 2px 12px; white-space:pre-line; }
+.mg-opts { display:flex; flex-direction:column; gap:7px; }
+.mg-opt { display:flex; gap:11px; align-items:flex-start; text-align:left; width:100%;
+  padding:11px 14px; border-radius:10px; background:var(--bg2); border:1px solid var(--line);
+  color:var(--txt); font-size:12.5px; line-height:1.6; cursor:pointer; transition:.15s; }
+.mg-opt:hover:not(:disabled) { background:var(--bg3); border-color:#453b6d; transform:translateX(2px); }
+.mg-opt:disabled { opacity:.4; cursor:not-allowed; }
+.mg-opt .k { flex:none; width:21px; height:21px; border-radius:6px; display:flex; align-items:center;
+  justify-content:center; font-size:10.5px; background:var(--bg4); color:var(--acc2); font-variant-numeric:tabular-nums; }
+.mg-opt.risk .k { background:#3a2129; color:#e08d80; }
+.mg-opt.safe .k { background:#1e2a26; color:#7fbfb5; }
+.mg-opt .m { flex:1; min-width:0; }
+.mg-opt .hint { display:block; font-size:10px; color:var(--dim2); margin-top:3px; }
+.mg-opt .hint.bad { color:#c47a70; }
+
+.mg-side { display:flex; flex-direction:column; gap:10px; min-width:0; }
+.mg-box { background:var(--bg1); border:1px solid var(--line); border-radius:10px; padding:10px 12px; }
+.mg-box.scroll { max-height:220px; overflow-y:auto; }
+.mg-box.scroll::-webkit-scrollbar { width:5px }
+.mg-box.scroll::-webkit-scrollbar-thumb { background:var(--line2); border-radius:3px }
+.mg-log { font-size:10.5px; line-height:1.55; color:var(--dim2); padding:4px 0; border-bottom:1px dashed #221d33; }
+.mg-log:last-child { border:none }
+.mg-log.good { color:#8fc9a8 } .mg-log.bad { color:#d98b80 } .mg-log.settle { color:var(--gold) }
+
+.mg-trail { font-size:10.5px; color:var(--dim2); padding:4px 0; display:flex; gap:7px; }
+.mg-trail .n { width:34px; color:var(--dim3); flex:none }
+.mg-trail .l { flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.mg-trail .r { flex:none; font-variant-numeric:tabular-nums }
+.mg-trail .r.ok { color:#6fbf94 } .mg-trail .r.no { color:#c47a70 }
+
+/* ── 结算 ───────────────────────────────────────────────────────────── */
+.mg-settle { text-align:center; padding:6px 0 18px; }
+.mg-settle-title { font-size:23px; letter-spacing:.05em; }
+.mg-settle-text { font-size:12px; color:var(--dim); line-height:1.95; max-width:540px; margin:12px auto 0; white-space:pre-line; }
+.mg-row { display:flex; align-items:center; gap:12px; padding:10px 2px; border-bottom:1px solid #221d33; font-size:12px;
+  animation: mg-in .32s backwards; }
+@keyframes mg-in { from{opacity:0;transform:translateY(5px)} to{opacity:1;transform:none} }
+.mg-row .l { flex:1; color:var(--dim); text-align:left; }
+.mg-row.miss .l { color:var(--dim3); }
+.mg-row.bad .l { color:#d98b80; }
+.mg-row .v { font-variant-numeric:tabular-nums; color:var(--green); }
+.mg-row.bad .v { color:#d98b80; }
+.mg-row .v.zero { color:var(--dim3); }
+.mg-total { display:flex; align-items:baseline; gap:9px; justify-content:flex-end; margin-top:16px; padding-top:13px; border-top:1px solid var(--line); }
+.mg-total .k { font-size:10px; color:var(--dim2); letter-spacing:.12em; }
+.mg-total .v { font-size:27px; color:var(--gold); font-variant-numeric:tabular-nums; }
+
+/* ── 提示条 ─────────────────────────────────────────────────────────── */
+.mg-msg { font-size:11.5px; color:var(--acc2); padding:8px 12px; border-radius:8px; background:rgba(139,124,246,.09);
+  border:1px solid rgba(139,124,246,.22); margin-bottom:11px; white-space:pre-line; display:none; }
+.mg-msg.on { display:block }
+.mg-msg.bad { color:#e0a09a; background:rgba(194,65,58,.1); border-color:rgba(194,65,58,.28) }
+
+.mg-empty { text-align:center; padding:34px 16px; color:var(--dim3); font-size:11.5px; line-height:1.9 }
+
+/* ── 基因锁赌局 ─────────────────────────────────────────────────────── */
+.mg-gamble { border:1px solid #6a3a3a; background:linear-gradient(160deg,#2a1620,#1a1220); border-radius:12px; padding:16px 18px; margin-bottom:12px; }
+.mg-gamble h4 { font-size:14px; color:#e8a0a0; margin-bottom:9px; }
+.mg-gamble p { font-size:11.5px; color:var(--dim); line-height:1.8; }
+.mg-gamble .acts { display:flex; gap:8px; margin-top:13px; }
+
+
+.mg-root {
+  --bg0:#0b0912; --bg1:#12101c; --bg2:#181527; --bg3:#201c30; --bg4:#272239;
+  --line:#2e2846; --line2:#3c3459;
+  --txt:#ece9f7; --dim:#9b94b5; --dim2:#6d6685; --dim3:#4a4360;
+  --acc:#8b7cf6; --acc2:#b3a8ff; --acc3:#6f5ae0;
+  --gold:#d9a94c; --blood:#c2413a; --green:#5fb98a; --warn:#e0a04c;
+  position: relative; box-sizing: border-box; max-width: 1080px;
+  padding: 16px; border-radius: 14px;
+  background: radial-gradient(120% 80% at 50% -10%, #201a38 0%, var(--bg0) 62%);
+  color: var(--txt); font-size: 13px; line-height: 1.62;
+  font-family: "PingFang SC","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif;
+  --mono: "SF Mono", "Cascadia Mono", Consolas, monospace;
+}
+.mg-root * { box-sizing: border-box; }
+.mg-root button { font-family: inherit; }
+
+/* ── 顶栏 ───────────────────────────────────────────────────────────── */
+.mg-head { display:flex; align-items:center; gap:14px; padding-bottom:13px; border-bottom:1px solid var(--line); flex-wrap:wrap; }
+.mg-orb { width:38px; height:38px; border-radius:50%; flex:none; position:relative;
+  background: radial-gradient(circle at 34% 28%, #e9e3ff, #8b7cf6 40%, #4b3fa8 72%, #1e1748 100%);
+  box-shadow: 0 0 22px rgba(139,124,246,.55), inset 0 0 14px rgba(255,255,255,.18);
+  animation: mg-breathe 4.2s ease-in-out infinite; }
+.mg-orb::after { content:""; position:absolute; inset:-5px; border-radius:50%; border:1px solid rgba(139,124,246,.28); animation: mg-ripple 3.6s ease-out infinite; }
+@keyframes mg-breathe { 0%,100%{transform:scale(1);filter:brightness(1)} 50%{transform:scale(1.06);filter:brightness(1.15)} }
+@keyframes mg-ripple { 0%{transform:scale(.92);opacity:.8} 100%{transform:scale(1.45);opacity:0} }
+
+.mg-id { min-width:0; }
+.mg-name { font-size:15px; font-weight:600; letter-spacing:.02em; }
+.mg-sub { font-size:11px; color:var(--dim2); margin-top:2px; }
+
+.mg-badges { margin-left:auto; display:flex; gap:18px; align-items:center; flex-wrap:wrap; }
+.mg-badge { text-align:right; }
+.mg-badge .k { font-size:9.5px; color:var(--dim2); letter-spacing:.14em; display:block; margin-bottom:1px; }
+.mg-badge .v { font-size:15px; font-variant-numeric:tabular-nums; line-height:1.25; }
+.mg-badge.gold .v { color:var(--gold); }
+.mg-badge.gene .v { color:var(--acc2); }
+
+.mg-plots { display:flex; gap:4px; }
+.mg-plot { min-width:24px; height:22px; padding:0 5px; border-radius:5px; display:inline-flex;
+  align-items:center; justify-content:center; font-size:10.5px; font-weight:600;
+  background:var(--bg3); color:var(--dim3); border:1px solid var(--line); }
+.mg-plot.on { color:#1a1526; border-color:transparent; }
+.mg-plot.on.D { background:#9a8f7a } .mg-plot.on.C { background:#6fa8a0 }
+.mg-plot.on.B { background:#7b8fd9 } .mg-plot.on.A { background:#b98ad4 }
+.mg-plot.on.S { background:#e0b64c }
+
+/* ── 布局 ───────────────────────────────────────────────────────────── */
+.mg-body { display:grid; grid-template-columns: 322px 1fr; gap:16px; padding-top:14px; }
+.mg-body.solo { grid-template-columns: 1fr; }
+@media (max-width: 860px) { .mg-body { grid-template-columns: 1fr; } }
+
+.mg-col { min-width:0; }
+.mg-card { background:linear-gradient(158deg, var(--bg2), var(--bg1)); border:1px solid var(--line); border-radius:12px; padding:13px 15px; }
+.mg-card + .mg-card { margin-top:11px; }
+
+.mg-h { font-size:10px; letter-spacing:.18em; color:var(--dim2); font-weight:500; margin:0 0 9px; }
+.mg-h.row { display:flex; align-items:center; gap:8px; }
+.mg-h.row .spacer { flex:1; }
+
+/* ── 角色卡 ─────────────────────────────────────────────────────────── */
+.mg-attrs { display:grid; grid-template-columns:repeat(5,1fr); gap:6px; }
+.mg-attr { background:var(--bg3); border:1px solid var(--line); border-radius:9px; padding:8px 4px; text-align:center; }
+.mg-attr .k { font-size:9px; color:var(--dim2); letter-spacing:.08em; }
+.mg-attr .v { font-size:19px; margin-top:2px; font-variant-numeric:tabular-nums; }
+.mg-attr .v em { font-style:normal; font-size:10px; color:var(--green); margin-left:1px; }
+
+.mg-bars { margin-top:11px; display:flex; flex-direction:column; gap:7px; }
+.mg-bar { display:flex; align-items:center; gap:9px; }
+.mg-bar .lbl { width:28px; font-size:9.5px; color:var(--dim2); letter-spacing:.08em; }
+.mg-track { flex:1; height:7px; border-radius:4px; background:#241f36; overflow:hidden; }
+.mg-track i { display:block; height:100%; border-radius:4px; transition:width .4s cubic-bezier(.3,.9,.3,1); }
+.mg-track.hp i { background:linear-gradient(90deg,#a83232,#e0644f); }
+.mg-track.san i { background:linear-gradient(90deg,#41509e,#7b8fd9); }
+.mg-bar .num { width:58px; text-align:right; font-size:10.5px; color:var(--dim); font-variant-numeric:tabular-nums; }
+
+.mg-locks { display:flex; gap:5px; margin-top:9px; }
+.mg-lock { flex:1; height:30px; border-radius:7px; border:1px solid var(--line); background:var(--bg1);
+  display:flex; align-items:center; justify-content:center; font-size:10px; color:var(--dim3); letter-spacing:.06em; }
+.mg-lock.on { background:linear-gradient(135deg,#4a2222,#2e1a24); border-color:#7a4444; color:#e8a0a0; }
+.mg-lock.cur { box-shadow:inset 0 0 0 1px var(--acc), 0 0 14px rgba(139,124,246,.22); color:var(--acc2); }
+
+.mg-line { display:flex; gap:8px; font-size:11.5px; color:var(--dim); padding:5px 0; line-height:1.55; }
+.mg-line b { color:var(--txt); font-weight:500; }
+.mg-line .tag { flex:none; }
+
+.mg-tag { display:inline-block; padding:1px 6px; border-radius:4px; font-size:9.5px; letter-spacing:.04em;
+  background:var(--bg4); color:var(--acc2); white-space:nowrap; }
+.mg-tag.D { background:#2a2620; color:#b8a888 } .mg-tag.C { background:#1d2725; color:#7fbfb5 }
+.mg-tag.B { background:#1e2233; color:#8fa4e0 } .mg-tag.A { background:#28202f; color:#c79ade }
+.mg-tag.S { background:#2d2615; color:#e2bb63 } .mg-tag.warn { background:#33201f; color:#e08d80 }
+.mg-tag.soft { background:var(--bg3); color:var(--dim2) }
+
+.mg-list { display:flex; flex-direction:column; gap:6px; }
+.mg-item { display:flex; gap:9px; align-items:flex-start; padding:8px 10px; border-radius:8px; background:var(--bg1); border:1px solid var(--line); }
+.mg-item .m { flex:1; min-width:0; }
+.mg-item .t { font-size:11.5px; }
+.mg-item .d { font-size:10.5px; color:var(--dim2); margin-top:2px; line-height:1.5; }
+
+/* ── 按钮 ───────────────────────────────────────────────────────────── */
+.mg-btn { border:1px solid var(--line2); background:var(--bg3); color:var(--txt);
+  padding:7px 13px; border-radius:8px; font-size:11.5px; cursor:pointer; transition:.14s; }
+.mg-btn:hover:not(:disabled) { background:var(--bg4); border-color:#4d4276; }
+.mg-btn:disabled { opacity:.34; cursor:not-allowed; }
+.mg-btn.acc { background:linear-gradient(135deg,#7b68ee,#5c48c8); border-color:#8f7cff; color:#fff; box-shadow:0 4px 16px rgba(106,85,214,.3); }
+.mg-btn.acc:hover:not(:disabled) { filter:brightness(1.14); }
+.mg-btn.ghost { background:transparent; }
+.mg-btn.xs { padding:4px 9px; font-size:10.5px; border-radius:6px; }
+.mg-btn.wide { width:100%; }
+
+.mg-tabs { display:flex; gap:6px; margin-bottom:12px; flex-wrap:wrap; }
+.mg-tab { padding:6px 14px; border-radius:8px; font-size:11.5px; cursor:pointer;
+  background:transparent; border:1px solid var(--line); color:var(--dim2); transition:.14s; }
+.mg-tab.on { background:var(--bg3); color:var(--acc2); border-color:var(--line2); }
+
+/* ── 副本卡 ─────────────────────────────────────────────────────────── */
+.mg-band { display:flex; align-items:center; gap:10px; margin:16px 2px 9px; }
+.mg-band .b { font-size:10.5px; letter-spacing:.2em; color:#7d739c; }
+.mg-band .n { font-size:10px; color:#4f4868; }
+.mg-band .line { flex:1; height:1px; background:#221d33; }
+.mg-band:first-child { margin-top:4px; }
+.mg-world { position:relative; overflow:hidden; border-radius:12px; padding:15px 17px;
+  background:linear-gradient(140deg,#221a24,var(--bg1) 62%); border:1px solid #33283a; margin-bottom:10px; }
+.mg-world::before { content:""; position:absolute; inset:0; pointer-events:none;
+  background:radial-gradient(75% 110% at 100% 0%, rgba(194,65,58,.16), transparent 62%); }
+.mg-world.done { border-color:#2f3a30; }
+.mg-world.done::before { background:radial-gradient(75% 110% at 100% 0%, rgba(95,185,138,.12), transparent 62%); }
+.mg-world h3 { font-size:16px; font-weight:600; position:relative; }
+.mg-world .sub { font-size:10.5px; color:var(--dim2); margin-top:3px; letter-spacing:.05em; position:relative; }
+.mg-world .brf { font-size:11.5px; color:var(--dim); line-height:1.7; margin-top:9px; position:relative; }
+.mg-world .foot { display:flex; align-items:center; gap:14px; margin-top:11px; position:relative; font-size:10.5px; color:var(--dim2); }
+.mg-world .foot b { color:var(--txt); font-weight:500; }
+
+/* ── 推演 ───────────────────────────────────────────────────────────── */
+.mg-run { display:grid; grid-template-columns: 1fr 236px; gap:15px; }
+@media (max-width: 860px) { .mg-run { grid-template-columns: 1fr; } }
+.mg-scene { display:flex; align-items:center; gap:11px; padding-bottom:10px; border-bottom:1px solid var(--line); flex-wrap:wrap; }
+.mg-scene .idx { font-size:9.5px; letter-spacing:.16em; color:var(--dim2); font-variant-numeric:tabular-nums; }
+.mg-scene .nm { font-size:13.5px; }
+.mg-pressure { margin-left:auto; display:flex; align-items:center; gap:7px; }
+.mg-pressure .lb { font-size:9px; color:var(--dim2); letter-spacing:.04em; }
+.mg-pressure .vl { font-size:16px; color:#e08d80; font-variant-numeric:tabular-nums; }
+.mg-dots { display:flex; gap:2px; }
+.mg-dots i { width:3px; height:11px; border-radius:2px; background:var(--bg4); }
+.mg-dots i.on { background:linear-gradient(#e0644f,#a83b3b); }
+
+.mg-text { font-size:13px; line-height:1.95; color:#d6d1e8; padding:15px 2px 12px; white-space:pre-line; }
+.mg-opts { display:flex; flex-direction:column; gap:7px; }
+.mg-opt { display:flex; gap:11px; align-items:flex-start; text-align:left; width:100%;
+  padding:11px 14px; border-radius:10px; background:var(--bg2); border:1px solid var(--line);
+  color:var(--txt); font-size:12.5px; line-height:1.6; cursor:pointer; transition:.15s; }
+.mg-opt:hover:not(:disabled) { background:var(--bg3); border-color:#453b6d; transform:translateX(2px); }
+.mg-opt:disabled { opacity:.4; cursor:not-allowed; }
+.mg-opt .k { flex:none; width:21px; height:21px; border-radius:6px; display:flex; align-items:center;
+  justify-content:center; font-size:10.5px; background:var(--bg4); color:var(--acc2); font-variant-numeric:tabular-nums; }
+.mg-opt.risk .k { background:#3a2129; color:#e08d80; }
+.mg-opt.safe .k { background:#1e2a26; color:#7fbfb5; }
+.mg-opt .m { flex:1; min-width:0; }
+.mg-opt .hint { display:block; font-size:10px; color:var(--dim2); margin-top:3px; }
+.mg-opt .hint.bad { color:#c47a70; }
+
+.mg-side { display:flex; flex-direction:column; gap:10px; min-width:0; }
+.mg-box { background:var(--bg1); border:1px solid var(--line); border-radius:10px; padding:10px 12px; }
+.mg-box.scroll { max-height:220px; overflow-y:auto; }
+.mg-box.scroll::-webkit-scrollbar { width:5px }
+.mg-box.scroll::-webkit-scrollbar-thumb { background:var(--line2); border-radius:3px }
+.mg-log { font-size:10.5px; line-height:1.55; color:var(--dim2); padding:4px 0; border-bottom:1px dashed #221d33; }
+.mg-log:last-child { border:none }
+.mg-log.good { color:#8fc9a8 } .mg-log.bad { color:#d98b80 } .mg-log.settle { color:var(--gold) }
+
+.mg-trail { font-size:10.5px; color:var(--dim2); padding:4px 0; display:flex; gap:7px; }
+.mg-trail .n { width:34px; color:var(--dim3); flex:none }
+.mg-trail .l { flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.mg-trail .r { flex:none; font-variant-numeric:tabular-nums }
+.mg-trail .r.ok { color:#6fbf94 } .mg-trail .r.no { color:#c47a70 }
+
+/* ── 结算 ───────────────────────────────────────────────────────────── */
+.mg-settle { text-align:center; padding:6px 0 18px; }
+.mg-settle-title { font-size:23px; letter-spacing:.05em; }
+.mg-settle-text { font-size:12px; color:var(--dim); line-height:1.95; max-width:540px; margin:12px auto 0; white-space:pre-line; }
+.mg-row { display:flex; align-items:center; gap:12px; padding:10px 2px; border-bottom:1px solid #221d33; font-size:12px;
+  animation: mg-in .32s backwards; }
+@keyframes mg-in { from{opacity:0;transform:translateY(5px)} to{opacity:1;transform:none} }
+.mg-row .l { flex:1; color:var(--dim); text-align:left; }
+.mg-row.miss .l { color:var(--dim3); }
+.mg-row.bad .l { color:#d98b80; }
+.mg-row .v { font-variant-numeric:tabular-nums; color:var(--green); }
+.mg-row.bad .v { color:#d98b80; }
+.mg-row .v.zero { color:var(--dim3); }
+.mg-total { display:flex; align-items:baseline; gap:9px; justify-content:flex-end; margin-top:16px; padding-top:13px; border-top:1px solid var(--line); }
+.mg-total .k { font-size:10px; color:var(--dim2); letter-spacing:.12em; }
+.mg-total .v { font-size:27px; color:var(--gold); font-variant-numeric:tabular-nums; }
+
+/* ── 提示条 ─────────────────────────────────────────────────────────── */
+.mg-msg { font-size:11.5px; color:var(--acc2); padding:8px 12px; border-radius:8px; background:rgba(139,124,246,.09);
+  border:1px solid rgba(139,124,246,.22); margin-bottom:11px; white-space:pre-line; display:none; }
+.mg-msg.on { display:block }
+.mg-msg.bad { color:#e0a09a; background:rgba(194,65,58,.1); border-color:rgba(194,65,58,.28) }
+
+.mg-empty { text-align:center; padding:34px 16px; color:var(--dim3); font-size:11.5px; line-height:1.9 }
+
+/* ── 基因锁赌局 ─────────────────────────────────────────────────────── */
+.mg-gamble { border:1px solid #6a3a3a; background:linear-gradient(160deg,#2a1620,#1a1220); border-radius:12px; padding:16px 18px; margin-bottom:12px; }
+.mg-gamble h4 { font-size:14px; color:#e8a0a0; margin-bottom:9px; }
+.mg-gamble p { font-size:11.5px; color:var(--dim); line-height:1.8; }
+.mg-gamble .acts { display:flex; gap:8px; margin-top:13px; }
+
+</style></head>
+<body><div class="page"><section><div class="cap">主神空间</div><div><div class="mg-root"><div class="mg-head"><div class="mg-orb"></div><div class="mg-id"><div class="mg-name">大肥鱼</div><div class="mg-sub">无血统 · 技能 1 · 在主神空间</div></div><div class="mg-badges"><div class="mg-badge gene"><span class="k">基因锁</span><span class="v">0 阶</span></div><div class="mg-badge"><span class="k">心魔</span><span class="v">0/3</span></div><div class="mg-badge gold"><span class="k">奖励点</span><span class="v">0</span></div><div class="mg-plots"><span class="mg-plot ">D</span><span class="mg-plot ">C</span><span class="mg-plot ">B</span><span class="mg-plot ">A</span><span class="mg-plot ">S</span></div></div></div><div class="mg-msg  "></div><div class="mg-body"><div class="mg-col"><div><div class="mg-card"><div class="mg-h">属性</div><div class="mg-attrs"><div class="mg-attr" title=""><div class="k">力量</div><div class="v">10</div></div><div class="mg-attr" title=""><div class="k">敏捷</div><div class="v">10</div></div><div class="mg-attr" title=""><div class="k">体质</div><div class="v">10</div></div><div class="mg-attr" title=""><div class="k">智力</div><div class="v">10</div></div><div class="mg-attr" title=""><div class="k">感知</div><div class="v">10</div></div></div><div class="mg-bars"><div class="mg-bar"><span class="lbl">生命</span><div class="mg-track hp"><i style="width:100%"></i></div><span class="num">100/100</span></div><div class="mg-bar"><span class="lbl">理智</span><div class="mg-track san"><i style="width:100%"></i></div><span class="num">80/80</span></div></div></div><div class="mg-card"><div class="mg-h row">基因锁<span class="spacer"></span><span class="mg-tag soft">承载上限 1 阶</span></div><div class="mg-locks"><div class="mg-lock  cur">一阶</div><div class="mg-lock  ">二阶</div><div class="mg-lock  ">三阶</div><div class="mg-lock  ">四阶</div><div class="mg-lock  ">五阶</div></div><div class="mg-line" style="margin-top:8px"><span>还没开锁。第一次濒死时主神会给一次机会——那不是奖励，是赌。</span></div></div><div class="mg-card"><div class="mg-h">血统</div><div class="mg-line"><span>身上还没有血统。去兑换里挑一个——这一步不可逆。</span></div></div><div class="mg-card"><div class="mg-h">技能 1</div><div class="mg-list"><div class="mg-item"><div class="m"><div class="t">基础格斗专精 <span class="mg-tag D">D</span> <span class="mg-tag soft">被动</span></div><div class="d">力量判定 +10。徒手伤害 +2。</div></div></div></div></div><div class="mg-card"><div class="mg-h">背包 1</div><div class="mg-list"><div class="mg-item"><div class="m"><div class="t">急救针 ×1 <span class="mg-tag D">D</span></div><div class="d">恢复 40 生命。</div></div></div></div></div></div></div><div class="mg-col"><div class="mg-tabs"><button class="mg-tab on">副本</button><button class="mg-tab ">兑换</button><button class="mg-tab ">履历</button></div><div><div class="mg-h">可进入的副本</div><div class="mg-band"><span class="b">新手</span><span class="n">0/4 通关</span><span class="line"></span></div><div class="mg-world "><h3>生化危机 1 <span class="mg-tag D">D</span></h3><div class="sub">蜂巢 · 地下三百米　·　14 回合　·　支线 4 条</div><div class="brf">活到列车启动。这里原本有五百个人，现在还有几个，我们不告诉你。</div><div class="foot"><span>主线保底 <b>1,000</b></span><span style="margin-left:auto"><button class="mg-btn acc xs">进入</button></span></div></div><div class="mg-world "><h3>死神来了 2 <span class="mg-tag C">C</span></h3><div class="sub">180 号公路 · 18:07　·　12 回合　·　支线 4 条</div><div class="brf">活到天亮。本世界没有可战斗的敌人——你唯一能做的，是看出它下一步要杀谁，然后决定救不救。</div><div class="foot"><span>主线保底 <b>1,000</b></span><span style="margin-left:auto"><button class="mg-btn acc xs">进入</button></span></div></div><div class="mg-world "><h3>生化危机 2 <span class="mg-tag C">C</span></h3><div class="sub">浣熊市 · 警局与下水道　·　12 回合　·　支线 4 条</div><div class="brf">在净化开始前离开城区。这里有一个找哥哥的女人、一个第一天上班的警察，和一个一直在找她的东西。</div><div class="foot"><span>主线保底 <b>1,200</b></span><span style="margin-left:auto"><button class="mg-btn acc xs">进入</button></span></div></div><div class="mg-world "><h3>侏罗纪公园 <span class="mg-tag C">C</span></h3><div class="sub">努布拉岛 · 暴雨夜　·　12 回合　·　支线 4 条</div><div class="brf">在直升机来之前活下来。这里没有诅咒，没有鬼，只有一群被人造出来、然后没人管的动物。</div><div class="foot"><span>主线保底 <b>1,200</b></span><span style="margin-left:auto"><button class="mg-btn acc xs">进入</button></span></div></div><div class="mg-band"><span class="b">进阶</span><span class="n">0/3 通关</span><span class="line"></span></div><div class="mg-world "><h3>异形 2 <span class="mg-tag B">B</span></h3><div class="sub">哈德利的希望 · LV-426　·　14 回合　·　支线 4 条</div><div class="brf">把活人带出去，然后炸掉这里。敌人会随回合变多，弹药不会。</div><div class="foot"><span>主线保底 <b>1,500</b></span><span style="margin-left:auto"><button class="mg-btn acc xs">进入</button></span></div></div><div class="mg-world "><h3>咒怨 <span class="mg-tag B">B</span></h3><div class="sub">东京都 · 佐伯家　·　12 回合　·　支线 4 条</div><div class="brf">活到天亮。这里没有可以打死的东西——进门的人会被标记，然后它有的是时间。</div><div class="foot"><span>主线保底 <b>1,500</b></span><span style="margin-left:auto"><button class="mg-btn acc xs">进入</button></span></div></div><div class="mg-world "><h3>猛鬼街 <span class="mg-tag B">B</span></h3><div class="sub">斯普林伍德 · 第七夜　·　12 回合　·　支线 4 条</div><div class="brf">保持清醒，或者学会在梦里打赢他。睡着的人不会醒过来——他们只是不再起床。</div><div class="foot"><span>主线保底 <b>1,500</b></span><span style="margin-left:auto"><button class="mg-btn acc xs">进入</button></span></div></div><div class="mg-band"><span class="b">高难</span><span class="n">0/3 通关</span><span class="line"></span></div><div class="mg-world "><h3>神鬼传奇 <span class="mg-tag A">A</span></h3><div class="sub">哈姆纳塔 · 亡灵之城　·　14 回合　·　支线 4 条</div><div class="brf">在伊莫顿恢复全部力量之前处理掉他。他打不死——他只能被念回去。</div><div class="foot"><span>主线保底 <b>3,000</b></span><span style="margin-left:auto"><button class="mg-btn acc xs">进入</button></span></div></div><div class="mg-world "><h3>魔戒 <span class="mg-tag A">A</span></h3><div class="sub">中土 · 第三纪元末　·　16 回合　·　支线 4 条</div><div class="brf">把戒指送到末日火山。路上每一次「我拿着它更安全」，都会让你更接近另一个人。</div><div class="foot"><span>主线保底 <b>3,000</b></span><span style="margin-left:auto"><button class="mg-btn acc xs">进入</button></span></div></div><div class="mg-world "><h3>星河战队 <span class="mg-tag A">A</span></h3><div class="sub">克伦达苏 · 前哨站　·　12 回合　·　支线 4 条</div><div class="brf">守到撤离艇来。虫子的数量是无限的，你的弹药不是——所以活下来的人，都是会算数的人。</div><div class="foot"><span>主线保底 <b>3,000</b></span><span style="margin-left:auto"><button class="mg-btn acc xs">进入</button></span></div></div><div class="mg-card" style="margin-top:14px"><div class="mg-h">这个世界怎么玩</div><div class="mg-line"><span>进副本是一回合一次选择：带判定的要掷 D100，加属性×2 对 DC。失败不等于死，默认是掉血、掉理智、丢线索——只有明确标了致命的那几处会碰死亡判定。</span></div><div class="mg-line"><span>活到最后一回合才有主线点数。中途死了会被抹杀：本局收益清零，复活一次。前两次会触发「主神怜悯」，只清点数不抹杀。</span></div><div class="mg-line"><span>支线剧情（D/C/B/A/S）比点数稀有，只能靠改变原剧情拿到——救一个本该死的人、放走一个本该发生的结局。</span></div></div><div class="mg-card" style="margin-top:11px"><div class="mg-h">她会不会自己走</div><div class="mg-line"><span>不自动：她等你决定。关掉之后，桌面上的她就只是坐在那里。</span></div><div class="mg-line"><span>兑换：允许她自己花点数。换血统不可逆，介意的话去设置里关掉。</span></div></div></div></div></div></div></div></section>
+<section><div class="cap">副本推演</div><div><div class="mg-root"><div class="mg-head"><div class="mg-orb"></div><div class="mg-id"><div class="mg-name">大肥鱼</div><div class="mg-sub">无血统 · 技能 1 · 生化危机 1 第 6/14 回合</div></div><div class="mg-badges"><div class="mg-badge gene"><span class="k">基因锁</span><span class="v">0 阶</span></div><div class="mg-badge"><span class="k">心魔</span><span class="v">0/3</span></div><div class="mg-badge gold"><span class="k">奖励点</span><span class="v">6,200</span></div><div class="mg-plots"><span class="mg-plot on D">D2</span><span class="mg-plot on C">C2</span><span class="mg-plot ">B</span><span class="mg-plot ">A</span><span class="mg-plot ">S</span></div></div></div><div class="mg-msg  "></div><div class="mg-body solo"><div class="mg-run"><div><div class="mg-scene"><span class="idx">第 6 / 14 回合</span><span class="nm">红后机房</span><div class="mg-pressure"><span class="lb">距离蜂巢封锁</span><span class="vl">9</span><div class="mg-dots"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div></div><div class="mg-text">机房中央悬着一个小女孩的全息影像，穿白裙子，赤着脚。
+
+「你们不该下来的。」她说，声音很平静，「我把他们关在里面，是为了不让它出去。现在你们把门打开了。」</div><div class="mg-opts"><button class="mg-opt safe"><span class="k">1</span><span class="m">拔掉红后的主电源<span class="hint ">全息影像熄灭前，她说了句「谢谢」</span></span></button><button class="mg-opt safe"><span class="k">2</span><span class="m">先问她「它」是什么<span class="hint ">获得关键情报，但要多花时间</span></span></button><button class="mg-opt "><span class="k">3</span><span class="m">让卡普兰黑进系统，自己警戒<span class="hint ">感知 判定 · DC 45（普通）</span></span></button></div><div style="display:flex;gap:8px;margin-top:13px;flex-wrap:wrap"><span style="font-size:10.5px;color:var(--dim2);align-self:center">支线 4 条 · 主线 1,000 点</span><span style="flex:1"></span><button class="mg-btn ghost xs">撤退（判失败，保住命）</button></div></div><div class="mg-side"><div class="mg-box"><div class="mg-h">状态</div><div class="mg-bar"><span class="lbl">生命</span><div class="mg-track hp"><i style="width:100%"></i></div><span class="num">100/100</span></div><div class="mg-bar" style="margin-top:5px"><span class="lbl">理智</span><div class="mg-track san"><i style="width:96.25%"></i></div><span class="num">77/80</span></div><div style="font-size:10px;color:var(--dim3);margin-top:7px">基因锁 0 阶 · 心魔 0/3 · 6,200 点</div></div><div class="mg-box scroll"><div class="mg-h">走过的</div><div class="mg-trail"><span class="n">第1</span><span class="l" title="罗德山庄 · 玄关｜反问她「你们在找什么」（26+20=46 vs 45）">反问她「你们在找什么」</span><span class="r ok">过</span></div><div class="mg-trail"><span class="n">第2</span><span class="l" title="列车车厢｜检查列车上的装备箱（96+20=116 vs 40）">检查列车上的装备箱</span><span class="r ok">过</span></div><div class="mg-trail"><span class="n">第3</span><span class="l" title="蜂巢 · 入口闸门｜直接滚进走廊（81+20=101 vs 45）">直接滚进走廊</span><span class="r ok">过</span></div><div class="mg-trail"><span class="n">第4</span><span class="l" title="B 区 · 激光走廊｜原地不动，看激光的规律（42+20=62 vs 50）">原地不动，看激光的规律</span><span class="r ok">过</span></div><div class="mg-trail"><span class="n">第5</span><span class="l" title="实验室 · 培养区｜查看终端记录（32+20=52 vs 45）">查看终端记录</span><span class="r ok">过</span></div></div><div class="mg-box scroll"><div class="mg-h">记录</div><div class="mg-log good">第 5 回合 · 实验室 · 培养区｜查看终端记录（52 vs 45）</div><div class="mg-log good">第 4 回合 · B 区 · 激光走廊｜原地不动，看激光的规律（62 vs 50）</div><div class="mg-log good">第 3 回合 · 蜂巢 · 入口闸门｜直接滚进走廊（101 vs 45）</div><div class="mg-log good">第 2 回合 · 列车车厢｜检查列车上的装备箱（116 vs 40）</div><div class="mg-log good">第 1 回合 · 罗德山庄 · 玄关｜反问她「你们在找什么」（46 vs 45）</div><div class="mg-log run">进入副本：生化危机 1</div></div></div></div></div></div></div></section>
+<section><div class="cap">结算</div><div><div class="mg-root"><div class="mg-head"><div class="mg-orb"></div><div class="mg-id"><div class="mg-name">大肥鱼</div><div class="mg-sub">无血统 · 技能 1 · 在主神空间</div></div><div class="mg-badges"><div class="mg-badge gene"><span class="k">基因锁</span><span class="v">0 阶</span></div><div class="mg-badge"><span class="k">心魔</span><span class="v">0/3</span></div><div class="mg-badge gold"><span class="k">奖励点</span><span class="v">9,200</span></div><div class="mg-plots"><span class="mg-plot on D">D2</span><span class="mg-plot on C">C2</span><span class="mg-plot ">B</span><span class="mg-plot ">A</span><span class="mg-plot ">S</span></div></div></div><div class="mg-msg  "></div><div class="mg-body solo"><div><div class="mg-settle"><div class="mg-settle-title">一个不该活的人</div><div class="mg-settle-text">马特下了车，站在白光里回头看你。他想说什么，但最后只是点了点头。
+
+在主神的记录里，他应该在第十二个刻度就已经死了。</div></div><div style="max-width:620px;margin:0 auto"><div class="mg-row " style="animation-delay:0ms"><span class="l">主线 · 在蜂巢封锁前乘列车离开</span><span class="v ">+1,000</span></div><div class="mg-row " style="animation-delay:70ms"><span class="l">支线 · 让马特·艾迪森活着登上列车<span class="mg-tag C" style="margin-left:7px">C 级</span></span><span class="v ">+2,000</span></div><div class="mg-row miss" style="animation-delay:140ms"><span class="l">未达成 · 击杀或困住「舔食者」</span><span class="v zero">—</span></div><div class="mg-row miss" style="animation-delay:210ms"><span class="l">未达成 · 取得 T 病毒样本</span><span class="v zero">—</span></div><div class="mg-row miss" style="animation-delay:280ms"><span class="l">未达成 · 得知斯宾塞真正在做什么</span><span class="v zero">—</span></div><div class="mg-total"><span class="k">本次结算</span><span class="v">3,000</span></div><div style="margin-top:22px"><div class="mg-h">这一局怎么走过来的</div><div class="mg-box"><div class="mg-trail"><span class="n">第1</span><span class="l" title="罗德山庄 · 玄关">反问她「你们在找什么」</span><span class="r ok">过</span></div><div class="mg-trail"><span class="n">第2</span><span class="l" title="列车车厢">检查列车上的装备箱</span><span class="r ok">过</span></div><div class="mg-trail"><span class="n">第3</span><span class="l" title="蜂巢 · 入口闸门">直接滚进走廊</span><span class="r ok">过</span></div><div class="mg-trail"><span class="n">第4</span><span class="l" title="B 区 · 激光走廊">原地不动，看激光的规律</span><span class="r ok">过</span></div><div class="mg-trail"><span class="n">第5</span><span class="l" title="实验室 · 培养区">查看终端记录</span><span class="r ok">过</span></div><div class="mg-trail"><span class="n">第6</span><span class="l" title="红后机房">拔掉红后的主电源</span><span class="r">—</span></div><div class="mg-trail"><span class="n">第7</span><span class="l" title="实验室 · 停电">屏住呼吸，靠墙不动</span><span class="r ok">过</span></div><div class="mg-trail"><span class="n">第8</span><span class="l" title="走廊 · 舔食者">正面开战</span><span class="r ok">过</span></div><div class="mg-trail"><span class="n">第9</span><span class="l" title="配电间 · 斯宾塞">答应他，先拿到解药</span><span class="r">—</span></div><div class="mg-trail"><span class="n">第10</span><span class="l" title="B 区 · 回程">告诉他实话</span><span class="r">—</span></div><div class="mg-trail"><span class="n">第11</span><span class="l" title="列车站台">回去找</span><span class="r no">折</span></div><div class="mg-trail"><span class="n">第12</span><span class="l" title="列车 · 启动">打开车顶检修口，上去打</span><span class="r no">折</span></div><div class="mg-trail"><span class="n">第13</span><span class="l" title="列车 · 最后一节">用解药救他</span><span class="r">—</span></div><div class="mg-trail"><span class="n">第14</span><span class="l" title="出口 · 白光">走出去</span><span class="r">—</span></div></div></div><div style="display:flex;gap:9px;justify-content:flex-end;margin-top:20px"><button class="mg-btn">去看兑换</button><button class="mg-btn acc">回主神空间</button></div></div></div></div></div></div></section></div></body></html>

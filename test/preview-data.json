@@ -1,0 +1,3200 @@
+{
+ "home": {
+  "runner": {
+   "name": "大肥鱼",
+   "attrs": [
+    {
+     "key": "str",
+     "label": "力量",
+     "value": 10,
+     "base": 10,
+     "bonus": 0
+    },
+    {
+     "key": "agi",
+     "label": "敏捷",
+     "value": 10,
+     "base": 10,
+     "bonus": 0
+    },
+    {
+     "key": "con",
+     "label": "体质",
+     "value": 10,
+     "base": 10,
+     "bonus": 0
+    },
+    {
+     "key": "int",
+     "label": "智力",
+     "value": 10,
+     "base": 10,
+     "bonus": 0
+    },
+    {
+     "key": "per",
+     "label": "感知",
+     "value": 10,
+     "base": 10,
+     "bonus": 0
+    }
+   ],
+   "hp": 100,
+   "hpMax": 100,
+   "san": 80,
+   "sanMax": 80,
+   "gene": {
+    "tier": 0,
+    "karma": 0,
+    "cap": 1
+   },
+   "bloodline": null,
+   "skills": [
+    {
+     "id": "brawl",
+     "name": "基础格斗专精",
+     "tier": "D",
+     "type": "被动",
+     "desc": "力量判定 +10。徒手伤害 +2。"
+    }
+   ],
+   "inv": [
+    {
+     "id": "medkit",
+     "n": 1,
+     "name": "急救针",
+     "tier": "D",
+     "desc": "恢复 40 生命。",
+     "type": "消耗"
+    }
+   ]
+  },
+  "wallet": {
+   "points": 0,
+   "plots": {
+    "D": 0,
+    "C": 0,
+    "B": 0,
+    "A": 0,
+    "S": 0
+   }
+  },
+  "meta": {
+   "runs": 0,
+   "cleared": 0,
+   "failed": 0,
+   "mercyUsed": false,
+   "bestPoints": 0,
+   "clearedWorlds": [
+    "re1"
+   ]
+  },
+  "stats": {
+   "kills": 0,
+   "saved": 0,
+   "deepestTurn": 0
+  },
+  "worlds": [
+   {
+    "id": "re1",
+    "title": "生化危机 1",
+    "subtitle": "蜂巢 · 地下三百米",
+    "rating": "D",
+    "band": "新手",
+    "turns": 14,
+    "brief": "活到列车启动。这里原本有五百个人，现在还有几个，我们不告诉你。",
+    "accent": "#c2413a",
+    "cleared": false,
+    "sides": 4,
+    "main": 1000,
+    "locked": false
+   },
+   {
+    "id": "fd2",
+    "title": "死神来了 2",
+    "subtitle": "180 号公路 · 18:07",
+    "rating": "C",
+    "band": "新手",
+    "turns": 12,
+    "brief": "活到天亮。本世界没有可战斗的敌人——你唯一能做的，是看出它下一步要杀谁，然后决定救不救。",
+    "accent": "#8a6d3b",
+    "cleared": false,
+    "sides": 4,
+    "main": 1000,
+    "locked": false
+   },
+   {
+    "id": "re2",
+    "title": "生化危机 2",
+    "subtitle": "浣熊市 · 警局与下水道",
+    "rating": "C",
+    "band": "新手",
+    "turns": 12,
+    "brief": "在净化开始前离开城区。这里有一个找哥哥的女人、一个第一天上班的警察，和一个一直在找她的东西。",
+    "accent": "#a83c46",
+    "cleared": false,
+    "sides": 4,
+    "main": 1200,
+    "locked": false
+   },
+   {
+    "id": "jp1",
+    "title": "侏罗纪公园",
+    "subtitle": "努布拉岛 · 暴雨夜",
+    "rating": "C",
+    "band": "新手",
+    "turns": 12,
+    "brief": "在直升机来之前活下来。这里没有诅咒，没有鬼，只有一群被人造出来、然后没人管的动物。",
+    "accent": "#3f7a5c",
+    "cleared": false,
+    "sides": 4,
+    "main": 1200,
+    "locked": false
+   },
+   {
+    "id": "a2",
+    "title": "异形 2",
+    "subtitle": "哈德利的希望 · LV-426",
+    "rating": "B",
+    "band": "进阶",
+    "turns": 14,
+    "brief": "把活人带出去，然后炸掉这里。敌人会随回合变多，弹药不会。",
+    "accent": "#4c6b8a",
+    "cleared": false,
+    "sides": 4,
+    "main": 1500,
+    "locked": false
+   },
+   {
+    "id": "juon",
+    "title": "咒怨",
+    "subtitle": "东京都 · 佐伯家",
+    "rating": "B",
+    "band": "进阶",
+    "turns": 12,
+    "brief": "活到天亮。这里没有可以打死的东西——进门的人会被标记，然后它有的是时间。",
+    "accent": "#6b5f8a",
+    "cleared": false,
+    "sides": 4,
+    "main": 1500,
+    "locked": false
+   },
+   {
+    "id": "noes",
+    "title": "猛鬼街",
+    "subtitle": "斯普林伍德 · 第七夜",
+    "rating": "B",
+    "band": "进阶",
+    "turns": 12,
+    "brief": "保持清醒，或者学会在梦里打赢他。睡着的人不会醒过来——他们只是不再起床。",
+    "accent": "#7a4a3c",
+    "cleared": false,
+    "sides": 4,
+    "main": 1500,
+    "locked": false
+   },
+   {
+    "id": "mummy",
+    "title": "神鬼传奇",
+    "subtitle": "哈姆纳塔 · 亡灵之城",
+    "rating": "A",
+    "band": "高难",
+    "turns": 14,
+    "brief": "在伊莫顿恢复全部力量之前处理掉他。他打不死——他只能被念回去。",
+    "accent": "#a8843c",
+    "cleared": false,
+    "sides": 4,
+    "main": 3000,
+    "locked": false
+   },
+   {
+    "id": "lotr",
+    "title": "魔戒",
+    "subtitle": "中土 · 第三纪元末",
+    "rating": "A",
+    "band": "高难",
+    "turns": 16,
+    "brief": "把戒指送到末日火山。路上每一次「我拿着它更安全」，都会让你更接近另一个人。",
+    "accent": "#8a7a3c",
+    "cleared": false,
+    "sides": 4,
+    "main": 3000,
+    "locked": false
+   },
+   {
+    "id": "sst",
+    "title": "星河战队",
+    "subtitle": "克伦达苏 · 前哨站",
+    "rating": "A",
+    "band": "高难",
+    "turns": 12,
+    "brief": "守到撤离艇来。虫子的数量是无限的，你的弹药不是——所以活下来的人，都是会算数的人。",
+    "accent": "#5a6b7a",
+    "cleared": false,
+    "sides": 4,
+    "main": 3000,
+    "locked": false
+   }
+  ],
+  "run": null,
+  "shop": {
+   "attr": [
+    {
+     "key": "str",
+     "label": "力量",
+     "cur": 10,
+     "cost": 500,
+     "can": false
+    },
+    {
+     "key": "agi",
+     "label": "敏捷",
+     "cur": 10,
+     "cost": 500,
+     "can": false
+    },
+    {
+     "key": "con",
+     "label": "体质",
+     "cur": 10,
+     "cost": 500,
+     "can": false
+    },
+    {
+     "key": "int",
+     "label": "智力",
+     "cur": 10,
+     "cost": 500,
+     "can": false
+    },
+    {
+     "key": "per",
+     "label": "感知",
+     "cur": 10,
+     "cost": 500,
+     "can": false
+    }
+   ],
+   "bloodlines": [
+    {
+     "id": "soldier",
+     "name": "强化兵人体质",
+     "tier": "D",
+     "sys": "物系",
+     "price": 600,
+     "plot": "D",
+     "attrs": {
+      "con": 2
+     },
+     "ability": "「痛觉抑制」：受创后不降行动力。",
+     "cost": "理智上限 −5。",
+     "geneCap": 2,
+     "owned": false,
+     "can": false
+    },
+    {
+     "id": "nightvision",
+     "name": "夜视改造",
+     "tier": "D",
+     "sys": "科技",
+     "price": 500,
+     "plot": "D",
+     "attrs": {
+      "per": 2
+     },
+     "ability": "「暗视」：黑暗环境判定 +10。",
+     "cost": "强光下判定 −10。",
+     "geneCap": 2,
+     "owned": false,
+     "can": false
+    },
+    {
+     "id": "lightbody",
+     "name": "轻身之术",
+     "tier": "D",
+     "sys": "物系",
+     "price": 550,
+     "plot": "D",
+     "attrs": {
+      "agi": 2
+     },
+     "ability": "「壁行」：每副本 1 次垂直短距移动，直接脱离被围。",
+     "cost": "负重上限减半。",
+     "geneCap": 2,
+     "owned": false,
+     "can": false
+    },
+    {
+     "id": "wolfcub",
+     "name": "初级狼人",
+     "tier": "D",
+     "sys": "物系",
+     "price": 650,
+     "plot": "D",
+     "attrs": {
+      "str": 2,
+      "per": 1
+     },
+     "ability": "「嗅觉」：追踪判定 +15。",
+     "cost": "银制武器对你伤害 +2。",
+     "geneCap": 2,
+     "owned": false,
+     "can": false
+    },
+    {
+     "id": "zombie",
+     "name": "丧尸血统",
+     "tier": "D",
+     "sys": "亡灵",
+     "price": 500,
+     "plot": "D",
+     "attrs": {
+      "con": 3
+     },
+     "ability": "「不死躯」：感染类伤害免疫。",
+     "cost": "所有 NPC 初始好感 −1；无法进入人群场景。",
+     "geneCap": 2,
+     "owned": false,
+     "can": false
+    },
+    {
+     "id": "synthetic",
+     "name": "合成人",
+     "tier": "D",
+     "sys": "科技",
+     "price": 700,
+     "plot": "D",
+     "attrs": {
+      "con": 1,
+      "int": 2
+     },
+     "ability": "「无氧」：毒气、窒息环境免疫。",
+     "cost": "治疗类道具效果减半。",
+     "geneCap": 2,
+     "owned": false,
+     "can": false
+    },
+    {
+     "id": "spider",
+     "name": "蛛形基因变异",
+     "tier": "C",
+     "sys": "物系",
+     "price": 1500,
+     "plot": "C",
+     "attrs": {
+      "agi": 4,
+      "per": 2
+     },
+     "ability": "「黏附」攀爬必成功；「蛛丝」每回合 1 次拉拽。",
+     "cost": "体质上限 −2；每副本结束要恢复一天。",
+     "geneCap": 3,
+     "owned": false,
+     "can": false
+    },
+    {
+     "id": "greywolf",
+     "name": "灰狼血统",
+     "tier": "C",
+     "sys": "物系",
+     "price": 1600,
+     "plot": "C",
+     "attrs": {
+      "str": 3,
+      "per": 3
+     },
+     "ability": "「气味追踪」+20；「狂化」生命低于 30% 时伤害 +50%。",
+     "cost": "狂化期间无法使用道具。",
+     "geneCap": 3,
+     "owned": false,
+     "can": false
+    },
+    {
+     "id": "telekine",
+     "name": "低阶念动力",
+     "tier": "C",
+     "sys": "魂系",
+     "price": 1400,
+     "plot": "C",
+     "attrs": {
+      "int": 3
+     },
+     "ability": "「念动」每副本 3 次，隔空移动 5kg 内物体。",
+     "cost": "每次使用理智 −5。",
+     "geneCap": 3,
+     "owned": false,
+     "can": false
+    },
+    {
+     "id": "vampire",
+     "name": "血族子爵",
+     "tier": "C",
+     "sys": "亡灵",
+     "price": 2000,
+     "plot": "C",
+     "attrs": {
+      "agi": 4,
+      "per": 4,
+      "int": 2
+     },
+     "ability": "「魅惑」使一个目标放下戒备一回合；「血愈」每回合回 3 生命。",
+     "cost": "阳光伤害；每副本要饮血一次。",
+     "geneCap": 3,
+     "owned": false,
+     "can": false
+    },
+    {
+     "id": "firewitch",
+     "name": "火焰巫人",
+     "tier": "C",
+     "sys": "魔法",
+     "price": 1500,
+     "plot": "C",
+     "attrs": {
+      "int": 3,
+      "con": 1
+     },
+     "ability": "「引火」每副本 3 次，点燃一处可燃物，可用来声东击西。",
+     "cost": "潮湿环境无法使用。",
+     "geneCap": 3,
+     "owned": false,
+     "can": false
+    },
+    {
+     "id": "tvirus",
+     "name": "T 病毒进化",
+     "tier": "C",
+     "sys": "科技",
+     "price": 1800,
+     "plot": "C",
+     "attrs": {
+      "str": 3,
+      "con": 3
+     },
+     "ability": "「再生」每 3 回合自动回 8 生命。",
+     "cost": "每副本结束理智 −15；外貌会让你越来越不被信任。",
+     "geneCap": 3,
+     "owned": false,
+     "can": false
+    },
+    {
+     "id": "nen",
+     "name": "念能力者",
+     "tier": "C",
+     "sys": "异系",
+     "price": 1700,
+     "plot": "C",
+     "attrs": {
+      "per": 4,
+      "int": 2
+     },
+     "ability": "「圆」侦查半径扩大，能感知墙后的活物。",
+     "cost": "使用后一回合无法行动。",
+     "geneCap": 3,
+     "owned": false,
+     "can": false
+    },
+    {
+     "id": "deepone",
+     "name": "深潜者血脉",
+     "tier": "B",
+     "sys": "物系",
+     "price": 5000,
+     "plot": "B",
+     "attrs": {
+      "con": 6,
+      "str": 4
+     },
+     "ability": "水下呼吸；固定减伤 3。",
+     "cost": "阳光环境判定 −10；理智上限 −10。",
+     "geneCap": 4,
+     "owned": false,
+     "can": false
+    },
+    {
+     "id": "heavybone",
+     "name": "重装骨骼",
+     "tier": "B",
+     "sys": "物系",
+     "price": 4800,
+     "plot": "B",
+     "attrs": {
+      "con": 5,
+      "str": 5
+     },
+     "ability": "「骨甲」每副本 2 次，完全无视一次伤害。",
+     "cost": "敏捷上限 −2。",
+     "geneCap": 4,
+     "owned": false,
+     "can": false
+    },
+    {
+     "id": "ghost",
+     "name": "幽灵体",
+     "tier": "B",
+     "sys": "亡灵",
+     "price": 5200,
+     "plot": "B",
+     "attrs": {
+      "agi": 6,
+      "per": 4
+     },
+     "ability": "「虚化」每副本 3 次，免伤并穿墙一格。",
+     "cost": "无法装备重型武器；力量判定 −15。",
+     "geneCap": 4,
+     "owned": false,
+     "can": false
+    },
+    {
+     "id": "xenomorph",
+     "name": "异形血统",
+     "tier": "B",
+     "sys": "科技",
+     "price": 5500,
+     "plot": "B",
+     "attrs": {
+      "str": 5,
+      "agi": 5,
+      "con": 3
+     },
+     "ability": "「酸血」受近战伤害时反弹；「攀壁」无视地形。",
+     "cost": "无法使用人类武器；NPC 见到你必然敌对。",
+     "geneCap": 4,
+     "owned": false,
+     "can": false
+    },
+    {
+     "id": "angel",
+     "name": "天使血统",
+     "tier": "B",
+     "sys": "魔法",
+     "price": 6000,
+     "plot": "B",
+     "attrs": {
+      "int": 4,
+      "per": 4
+     },
+     "ability": "「圣光」对亡灵、恶魔类伤害翻倍；每副本 1 次群体治疗 20。",
+     "cost": "被「概念级邪恶」优先锁定。",
+     "geneCap": 4,
+     "owned": false,
+     "can": false
+    },
+    {
+     "id": "seeker",
+     "name": "求法者",
+     "tier": "B",
+     "sys": "修真",
+     "price": 5800,
+     "plot": "B",
+     "attrs": {
+      "int": 5,
+      "con": 3
+     },
+     "ability": "「符箓」每副本 3 张，可封一次攻击或封一扇门。",
+     "cost": "制符要消耗一回合。",
+     "geneCap": 4,
+     "owned": false,
+     "can": false
+    },
+    {
+     "id": "netherblood",
+     "name": "幽冥之血",
+     "tier": "A",
+     "sys": "亡灵",
+     "price": 12000,
+     "plot": "A",
+     "attrs": {
+      "agi": 8,
+      "per": 6
+     },
+     "ability": "「彼岸」每副本 1 次，把一名队友从死亡判定里拉回来。",
+     "cost": "你本人永久失去复活资格。",
+     "geneCap": 4,
+     "owned": false,
+     "can": false
+    },
+    {
+     "id": "thousandface",
+     "name": "千面之相",
+     "tier": "A",
+     "sys": "异系",
+     "price": 11000,
+     "plot": "A",
+     "attrs": {
+      "int": 8,
+      "per": 8
+     },
+     "ability": "「拟态」完美复制见过的人的外观与声音。",
+     "cost": "每副本有 1 次失控概率，当场暴露身份。",
+     "geneCap": 4,
+     "owned": false,
+     "can": false
+    },
+    {
+     "id": "saiyan",
+     "name": "赛亚人",
+     "tier": "A",
+     "sys": "物系",
+     "price": 14000,
+     "plot": "A",
+     "attrs": {
+      "str": 8,
+      "agi": 6,
+      "con": 6
+     },
+     "ability": "「濒死觉醒」生命归零后复活一次，并全属性 +4。",
+     "cost": "某局结束若没经历过濒死，下一局全属性 −2。",
+     "geneCap": 5,
+     "owned": false,
+     "can": false
+    },
+    {
+     "id": "dragonblood",
+     "name": "祖龙血脉",
+     "tier": "A",
+     "sys": "修真",
+     "price": 13000,
+     "plot": "A",
+     "attrs": {
+      "con": 7,
+      "int": 6,
+      "str": 4
+     },
+     "ability": "「威压」每副本 1 次，全部敌人一回合无法行动。",
+     "cost": "每副本开局理智 −10。",
+     "geneCap": 5,
+     "owned": false,
+     "can": false
+    },
+    {
+     "id": "trueancestor",
+     "name": "完美真祖",
+     "tier": "S",
+     "sys": "异系",
+     "price": 48000,
+     "plot": "S",
+     "attrs": {
+      "str": 10,
+      "agi": 10,
+      "con": 10,
+      "int": 10,
+      "per": 10
+     },
+     "ability": "免疫一切物理与常规超自然伤害；每副本 1 次直接改写一次判定结果。",
+     "cost": "每副本必须亲手杀死一个你认识的人（NPC 或队友），否则全属性归 10。",
+     "geneCap": 5,
+     "owned": false,
+     "can": false
+    }
+   ],
+   "skills": [
+    {
+     "id": "brawl",
+     "name": "基础格斗专精",
+     "tier": "D",
+     "type": "被动",
+     "desc": "力量判定 +10。徒手伤害 +2。",
+     "price": 500,
+     "plot": "D",
+     "owned": true,
+     "can": false
+    },
+    {
+     "id": "dodge",
+     "name": "急停闪避",
+     "tier": "D",
+     "type": "主动",
+     "desc": "每副本 3 次，减免一次至少 15 点的伤害。",
+     "price": 400,
+     "plot": "D",
+     "owned": false,
+     "can": false
+    },
+    {
+     "id": "firstaid",
+     "name": "现场急救",
+     "tier": "D",
+     "type": "主动",
+     "desc": "恢复 30 生命。对 NPC 用会加忠诚。",
+     "price": 600,
+     "plot": "D",
+     "owned": false,
+     "can": false
+    },
+    {
+     "id": "gadget",
+     "name": "器物直觉",
+     "tier": "D",
+     "type": "被动",
+     "desc": "智力判定 +10。破解机械、读终端、关阀门都用它。",
+     "price": 450,
+     "plot": "D",
+     "owned": false,
+     "can": false
+    },
+    {
+     "id": "breacher",
+     "name": "破门术",
+     "tier": "C",
+     "type": "主动",
+     "desc": "每副本 1 次，强制破开一扇门或一段封锁。",
+     "price": 1200,
+     "plot": "C",
+     "owned": false,
+     "can": false
+    },
+    {
+     "id": "holdbreath",
+     "name": "屏息",
+     "tier": "C",
+     "type": "主动",
+     "desc": "潜行、躲藏判定 +25。",
+     "price": 1100,
+     "plot": "C",
+     "owned": false,
+     "can": false
+    },
+    {
+     "id": "insight",
+     "name": "识破",
+     "tier": "C",
+     "type": "主动",
+     "desc": "揭穿一次谎言或伪装，包括队友的假情报。",
+     "price": 1300,
+     "plot": "C",
+     "owned": false,
+     "can": false
+    },
+    {
+     "id": "tactics",
+     "name": "战术推演",
+     "tier": "C",
+     "type": "主动",
+     "desc": "提前看到下两个回合的选项。",
+     "price": 1500,
+     "plot": "C",
+     "owned": false,
+     "can": false
+    },
+    {
+     "id": "afterimage",
+     "name": "残影步",
+     "tier": "B",
+     "type": "主动",
+     "desc": "本回合先手，并额外获得一次闪避。",
+     "price": 4000,
+     "plot": "B",
+     "owned": false,
+     "can": false
+    },
+    {
+     "id": "fieldmedic",
+     "name": "战地医师",
+     "tier": "B",
+     "type": "主动",
+     "desc": "把濒死单位拉回 30 生命。每副本 1 次。",
+     "price": 3500,
+     "plot": "B",
+     "owned": false,
+     "can": false
+    },
+    {
+     "id": "soulresist",
+     "name": "灵魂抗性",
+     "tier": "B",
+     "type": "被动",
+     "desc": "理智损失减半，并免疫一次精神控制。",
+     "price": 3800,
+     "plot": "B",
+     "owned": false,
+     "can": false
+    },
+    {
+     "id": "onemore",
+     "name": "一次机会",
+     "tier": "A",
+     "type": "主动",
+     "desc": "每局 1 次，重掷任何一次失败判定。",
+     "price": 10000,
+     "plot": "A",
+     "owned": false,
+     "can": false
+    }
+   ],
+   "items": [
+    {
+     "id": "medkit",
+     "name": "急救针",
+     "tier": "D",
+     "type": "消耗",
+     "desc": "恢复 40 生命。",
+     "price": 300,
+     "have": 1,
+     "can": false
+    },
+    {
+     "id": "sedative",
+     "name": "镇定剂",
+     "tier": "D",
+     "type": "消耗",
+     "desc": "恢复 25 理智。",
+     "price": 250,
+     "have": 0,
+     "can": false
+    },
+    {
+     "id": "flare",
+     "name": "照明棒",
+     "tier": "D",
+     "type": "消耗",
+     "desc": "照亮一处，驱散黑暗惩罚，也能看清藏在暗处的东西。",
+     "price": 200,
+     "have": 0,
+     "can": false
+    },
+    {
+     "id": "breach",
+     "name": "破拆包",
+     "tier": "C",
+     "type": "消耗",
+     "desc": "破坏一处封锁结构。比不上破门术，但谁都能用。",
+     "price": 1800,
+     "plot": "C",
+     "have": 0,
+     "can": false
+    },
+    {
+     "id": "antidote",
+     "name": "广谱解药",
+     "tier": "C",
+     "type": "消耗",
+     "desc": "解一次感染、毒素或变异。用掉就没了。",
+     "price": 900,
+     "plot": "C",
+     "have": 0,
+     "can": false
+    },
+    {
+     "id": "anchor",
+     "name": "锚点符",
+     "tier": "C",
+     "type": "消耗",
+     "desc": "标记一个位置，可强返一次，脱离战线。",
+     "price": 900,
+     "plot": "C",
+     "have": 0,
+     "can": false
+    },
+    {
+     "id": "soullamp",
+     "name": "魂灯",
+     "tier": "B",
+     "type": "装备",
+     "desc": "生命归零时多撑两个回合。一次一充，副本内不可再充。",
+     "price": 4200,
+     "plot": "B",
+     "have": 0,
+     "can": false
+    }
+   ],
+   "purify": {
+    "karma": 0,
+    "cost": 0,
+    "can": false
+   }
+  },
+  "log": [],
+  "perm": {
+   "allowSpend": true,
+   "autoRun": false
+  }
+ },
+ "run": {
+  "runner": {
+   "name": "大肥鱼",
+   "attrs": [
+    {
+     "key": "str",
+     "label": "力量",
+     "value": 10,
+     "base": 10,
+     "bonus": 0
+    },
+    {
+     "key": "agi",
+     "label": "敏捷",
+     "value": 10,
+     "base": 10,
+     "bonus": 0
+    },
+    {
+     "key": "con",
+     "label": "体质",
+     "value": 10,
+     "base": 10,
+     "bonus": 0
+    },
+    {
+     "key": "int",
+     "label": "智力",
+     "value": 10,
+     "base": 10,
+     "bonus": 0
+    },
+    {
+     "key": "per",
+     "label": "感知",
+     "value": 10,
+     "base": 10,
+     "bonus": 0
+    }
+   ],
+   "hp": 100,
+   "hpMax": 100,
+   "san": 77,
+   "sanMax": 80,
+   "gene": {
+    "tier": 0,
+    "karma": 0,
+    "cap": 1
+   },
+   "bloodline": null,
+   "skills": [
+    {
+     "id": "brawl",
+     "name": "基础格斗专精",
+     "tier": "D",
+     "type": "被动",
+     "desc": "力量判定 +10。徒手伤害 +2。"
+    }
+   ],
+   "inv": [
+    {
+     "id": "medkit",
+     "n": 2,
+     "name": "急救针",
+     "tier": "D",
+     "desc": "恢复 40 生命。",
+     "type": "消耗"
+    },
+    {
+     "id": "sedative",
+     "n": 1,
+     "name": "镇定剂",
+     "tier": "D",
+     "desc": "恢复 25 理智。",
+     "type": "消耗"
+    }
+   ]
+  },
+  "wallet": {
+   "points": 6200,
+   "plots": {
+    "D": 2,
+    "C": 2,
+    "B": 0,
+    "A": 0,
+    "S": 0
+   }
+  },
+  "meta": {
+   "runs": 0,
+   "cleared": 0,
+   "failed": 0,
+   "mercyUsed": false,
+   "bestPoints": 0,
+   "clearedWorlds": [
+    "re1"
+   ]
+  },
+  "stats": {
+   "kills": 0,
+   "saved": 0,
+   "deepestTurn": 6
+  },
+  "worlds": [
+   {
+    "id": "re1",
+    "title": "生化危机 1",
+    "subtitle": "蜂巢 · 地下三百米",
+    "rating": "D",
+    "band": "新手",
+    "turns": 14,
+    "brief": "活到列车启动。这里原本有五百个人，现在还有几个，我们不告诉你。",
+    "accent": "#c2413a",
+    "cleared": false,
+    "sides": 4,
+    "main": 1000,
+    "locked": false
+   },
+   {
+    "id": "fd2",
+    "title": "死神来了 2",
+    "subtitle": "180 号公路 · 18:07",
+    "rating": "C",
+    "band": "新手",
+    "turns": 12,
+    "brief": "活到天亮。本世界没有可战斗的敌人——你唯一能做的，是看出它下一步要杀谁，然后决定救不救。",
+    "accent": "#8a6d3b",
+    "cleared": false,
+    "sides": 4,
+    "main": 1000,
+    "locked": false
+   },
+   {
+    "id": "re2",
+    "title": "生化危机 2",
+    "subtitle": "浣熊市 · 警局与下水道",
+    "rating": "C",
+    "band": "新手",
+    "turns": 12,
+    "brief": "在净化开始前离开城区。这里有一个找哥哥的女人、一个第一天上班的警察，和一个一直在找她的东西。",
+    "accent": "#a83c46",
+    "cleared": false,
+    "sides": 4,
+    "main": 1200,
+    "locked": false
+   },
+   {
+    "id": "jp1",
+    "title": "侏罗纪公园",
+    "subtitle": "努布拉岛 · 暴雨夜",
+    "rating": "C",
+    "band": "新手",
+    "turns": 12,
+    "brief": "在直升机来之前活下来。这里没有诅咒，没有鬼，只有一群被人造出来、然后没人管的动物。",
+    "accent": "#3f7a5c",
+    "cleared": false,
+    "sides": 4,
+    "main": 1200,
+    "locked": false
+   },
+   {
+    "id": "a2",
+    "title": "异形 2",
+    "subtitle": "哈德利的希望 · LV-426",
+    "rating": "B",
+    "band": "进阶",
+    "turns": 14,
+    "brief": "把活人带出去，然后炸掉这里。敌人会随回合变多，弹药不会。",
+    "accent": "#4c6b8a",
+    "cleared": false,
+    "sides": 4,
+    "main": 1500,
+    "locked": false
+   },
+   {
+    "id": "juon",
+    "title": "咒怨",
+    "subtitle": "东京都 · 佐伯家",
+    "rating": "B",
+    "band": "进阶",
+    "turns": 12,
+    "brief": "活到天亮。这里没有可以打死的东西——进门的人会被标记，然后它有的是时间。",
+    "accent": "#6b5f8a",
+    "cleared": false,
+    "sides": 4,
+    "main": 1500,
+    "locked": false
+   },
+   {
+    "id": "noes",
+    "title": "猛鬼街",
+    "subtitle": "斯普林伍德 · 第七夜",
+    "rating": "B",
+    "band": "进阶",
+    "turns": 12,
+    "brief": "保持清醒，或者学会在梦里打赢他。睡着的人不会醒过来——他们只是不再起床。",
+    "accent": "#7a4a3c",
+    "cleared": false,
+    "sides": 4,
+    "main": 1500,
+    "locked": false
+   },
+   {
+    "id": "mummy",
+    "title": "神鬼传奇",
+    "subtitle": "哈姆纳塔 · 亡灵之城",
+    "rating": "A",
+    "band": "高难",
+    "turns": 14,
+    "brief": "在伊莫顿恢复全部力量之前处理掉他。他打不死——他只能被念回去。",
+    "accent": "#a8843c",
+    "cleared": false,
+    "sides": 4,
+    "main": 3000,
+    "locked": false
+   },
+   {
+    "id": "lotr",
+    "title": "魔戒",
+    "subtitle": "中土 · 第三纪元末",
+    "rating": "A",
+    "band": "高难",
+    "turns": 16,
+    "brief": "把戒指送到末日火山。路上每一次「我拿着它更安全」，都会让你更接近另一个人。",
+    "accent": "#8a7a3c",
+    "cleared": false,
+    "sides": 4,
+    "main": 3000,
+    "locked": false
+   },
+   {
+    "id": "sst",
+    "title": "星河战队",
+    "subtitle": "克伦达苏 · 前哨站",
+    "rating": "A",
+    "band": "高难",
+    "turns": 12,
+    "brief": "守到撤离艇来。虫子的数量是无限的，你的弹药不是——所以活下来的人，都是会算数的人。",
+    "accent": "#5a6b7a",
+    "cleared": false,
+    "sides": 4,
+    "main": 3000,
+    "locked": false
+   }
+  ],
+  "run": {
+   "worldId": "re1",
+   "title": "生化危机 1",
+   "rating": "D",
+   "accent": "#c2413a",
+   "turn": 6,
+   "turns": 14,
+   "pressure": {
+    "label": "距离蜂巢封锁",
+    "left": 9,
+    "max": 14
+   },
+   "scene": "红后机房",
+   "text": "机房中央悬着一个小女孩的全息影像，穿白裙子，赤着脚。\n\n「你们不该下来的。」她说，声音很平静，「我把他们关在里面，是为了不让它出去。现在你们把门打开了。」",
+   "opts": [
+    {
+     "i": 1,
+     "label": "拔掉红后的主电源",
+     "kind": "flat",
+     "dc": null,
+     "dcLabel": null,
+     "attrLabel": null,
+     "note": "全息影像熄灭前，她说了句「谢谢」",
+     "need": null,
+     "ok": true,
+     "reason": ""
+    },
+    {
+     "i": 2,
+     "label": "先问她「它」是什么",
+     "kind": "flat",
+     "dc": null,
+     "dcLabel": null,
+     "attrLabel": null,
+     "note": "获得关键情报，但要多花时间",
+     "need": null,
+     "ok": true,
+     "reason": ""
+    },
+    {
+     "i": 3,
+     "label": "让卡普兰黑进系统，自己警戒",
+     "kind": "check",
+     "dc": 45,
+     "dcLabel": "普通",
+     "attrLabel": "感知",
+     "note": null,
+     "need": null,
+     "ok": true,
+     "reason": ""
+    }
+   ],
+   "trail": [
+    {
+     "turn": 1,
+     "scene": "罗德山庄 · 玄关",
+     "label": "反问她「你们在找什么」",
+     "success": true,
+     "kind": "check",
+     "roll": "26+20=46",
+     "dc": 45
+    },
+    {
+     "turn": 2,
+     "scene": "列车车厢",
+     "label": "检查列车上的装备箱",
+     "success": true,
+     "kind": "check",
+     "roll": "96+20=116",
+     "dc": 40
+    },
+    {
+     "turn": 3,
+     "scene": "蜂巢 · 入口闸门",
+     "label": "直接滚进走廊",
+     "success": true,
+     "kind": "check",
+     "roll": "81+20=101",
+     "dc": 45
+    },
+    {
+     "turn": 4,
+     "scene": "B 区 · 激光走廊",
+     "label": "原地不动，看激光的规律",
+     "success": true,
+     "kind": "check",
+     "roll": "42+20=62",
+     "dc": 50
+    },
+    {
+     "turn": 5,
+     "scene": "实验室 · 培养区",
+     "label": "查看终端记录",
+     "success": true,
+     "kind": "check",
+     "roll": "32+20=52",
+     "dc": 45
+    }
+   ],
+   "settled": false,
+   "report": null,
+   "geneOffer": null,
+   "sides": [
+    {
+     "desc": "让马特·艾迪森活着登上列车",
+     "points": 2000,
+     "plot": "C"
+    },
+    {
+     "desc": "击杀或困住「舔食者」",
+     "points": 1500,
+     "plot": "C"
+    },
+    {
+     "desc": "取得 T 病毒样本",
+     "points": 1000,
+     "plot": "D"
+    },
+    {
+     "desc": "得知斯宾塞真正在做什么",
+     "points": 600,
+     "plot": null
+    }
+   ]
+  },
+  "shop": {
+   "attr": [
+    {
+     "key": "str",
+     "label": "力量",
+     "cur": 10,
+     "cost": 500,
+     "can": true
+    },
+    {
+     "key": "agi",
+     "label": "敏捷",
+     "cur": 10,
+     "cost": 500,
+     "can": true
+    },
+    {
+     "key": "con",
+     "label": "体质",
+     "cur": 10,
+     "cost": 500,
+     "can": true
+    },
+    {
+     "key": "int",
+     "label": "智力",
+     "cur": 10,
+     "cost": 500,
+     "can": true
+    },
+    {
+     "key": "per",
+     "label": "感知",
+     "cur": 10,
+     "cost": 500,
+     "can": true
+    }
+   ],
+   "bloodlines": [
+    {
+     "id": "soldier",
+     "name": "强化兵人体质",
+     "tier": "D",
+     "sys": "物系",
+     "price": 600,
+     "plot": "D",
+     "attrs": {
+      "con": 2
+     },
+     "ability": "「痛觉抑制」：受创后不降行动力。",
+     "cost": "理智上限 −5。",
+     "geneCap": 2,
+     "owned": false,
+     "can": true
+    },
+    {
+     "id": "nightvision",
+     "name": "夜视改造",
+     "tier": "D",
+     "sys": "科技",
+     "price": 500,
+     "plot": "D",
+     "attrs": {
+      "per": 2
+     },
+     "ability": "「暗视」：黑暗环境判定 +10。",
+     "cost": "强光下判定 −10。",
+     "geneCap": 2,
+     "owned": false,
+     "can": true
+    },
+    {
+     "id": "lightbody",
+     "name": "轻身之术",
+     "tier": "D",
+     "sys": "物系",
+     "price": 550,
+     "plot": "D",
+     "attrs": {
+      "agi": 2
+     },
+     "ability": "「壁行」：每副本 1 次垂直短距移动，直接脱离被围。",
+     "cost": "负重上限减半。",
+     "geneCap": 2,
+     "owned": false,
+     "can": true
+    },
+    {
+     "id": "wolfcub",
+     "name": "初级狼人",
+     "tier": "D",
+     "sys": "物系",
+     "price": 650,
+     "plot": "D",
+     "attrs": {
+      "str": 2,
+      "per": 1
+     },
+     "ability": "「嗅觉」：追踪判定 +15。",
+     "cost": "银制武器对你伤害 +2。",
+     "geneCap": 2,
+     "owned": false,
+     "can": true
+    },
+    {
+     "id": "zombie",
+     "name": "丧尸血统",
+     "tier": "D",
+     "sys": "亡灵",
+     "price": 500,
+     "plot": "D",
+     "attrs": {
+      "con": 3
+     },
+     "ability": "「不死躯」：感染类伤害免疫。",
+     "cost": "所有 NPC 初始好感 −1；无法进入人群场景。",
+     "geneCap": 2,
+     "owned": false,
+     "can": true
+    },
+    {
+     "id": "synthetic",
+     "name": "合成人",
+     "tier": "D",
+     "sys": "科技",
+     "price": 700,
+     "plot": "D",
+     "attrs": {
+      "con": 1,
+      "int": 2
+     },
+     "ability": "「无氧」：毒气、窒息环境免疫。",
+     "cost": "治疗类道具效果减半。",
+     "geneCap": 2,
+     "owned": false,
+     "can": true
+    },
+    {
+     "id": "spider",
+     "name": "蛛形基因变异",
+     "tier": "C",
+     "sys": "物系",
+     "price": 1500,
+     "plot": "C",
+     "attrs": {
+      "agi": 4,
+      "per": 2
+     },
+     "ability": "「黏附」攀爬必成功；「蛛丝」每回合 1 次拉拽。",
+     "cost": "体质上限 −2；每副本结束要恢复一天。",
+     "geneCap": 3,
+     "owned": false,
+     "can": true
+    },
+    {
+     "id": "greywolf",
+     "name": "灰狼血统",
+     "tier": "C",
+     "sys": "物系",
+     "price": 1600,
+     "plot": "C",
+     "attrs": {
+      "str": 3,
+      "per": 3
+     },
+     "ability": "「气味追踪」+20；「狂化」生命低于 30% 时伤害 +50%。",
+     "cost": "狂化期间无法使用道具。",
+     "geneCap": 3,
+     "owned": false,
+     "can": true
+    },
+    {
+     "id": "telekine",
+     "name": "低阶念动力",
+     "tier": "C",
+     "sys": "魂系",
+     "price": 1400,
+     "plot": "C",
+     "attrs": {
+      "int": 3
+     },
+     "ability": "「念动」每副本 3 次，隔空移动 5kg 内物体。",
+     "cost": "每次使用理智 −5。",
+     "geneCap": 3,
+     "owned": false,
+     "can": true
+    },
+    {
+     "id": "vampire",
+     "name": "血族子爵",
+     "tier": "C",
+     "sys": "亡灵",
+     "price": 2000,
+     "plot": "C",
+     "attrs": {
+      "agi": 4,
+      "per": 4,
+      "int": 2
+     },
+     "ability": "「魅惑」使一个目标放下戒备一回合；「血愈」每回合回 3 生命。",
+     "cost": "阳光伤害；每副本要饮血一次。",
+     "geneCap": 3,
+     "owned": false,
+     "can": true
+    },
+    {
+     "id": "firewitch",
+     "name": "火焰巫人",
+     "tier": "C",
+     "sys": "魔法",
+     "price": 1500,
+     "plot": "C",
+     "attrs": {
+      "int": 3,
+      "con": 1
+     },
+     "ability": "「引火」每副本 3 次，点燃一处可燃物，可用来声东击西。",
+     "cost": "潮湿环境无法使用。",
+     "geneCap": 3,
+     "owned": false,
+     "can": true
+    },
+    {
+     "id": "tvirus",
+     "name": "T 病毒进化",
+     "tier": "C",
+     "sys": "科技",
+     "price": 1800,
+     "plot": "C",
+     "attrs": {
+      "str": 3,
+      "con": 3
+     },
+     "ability": "「再生」每 3 回合自动回 8 生命。",
+     "cost": "每副本结束理智 −15；外貌会让你越来越不被信任。",
+     "geneCap": 3,
+     "owned": false,
+     "can": true
+    },
+    {
+     "id": "nen",
+     "name": "念能力者",
+     "tier": "C",
+     "sys": "异系",
+     "price": 1700,
+     "plot": "C",
+     "attrs": {
+      "per": 4,
+      "int": 2
+     },
+     "ability": "「圆」侦查半径扩大，能感知墙后的活物。",
+     "cost": "使用后一回合无法行动。",
+     "geneCap": 3,
+     "owned": false,
+     "can": true
+    },
+    {
+     "id": "deepone",
+     "name": "深潜者血脉",
+     "tier": "B",
+     "sys": "物系",
+     "price": 5000,
+     "plot": "B",
+     "attrs": {
+      "con": 6,
+      "str": 4
+     },
+     "ability": "水下呼吸；固定减伤 3。",
+     "cost": "阳光环境判定 −10；理智上限 −10。",
+     "geneCap": 4,
+     "owned": false,
+     "can": false
+    },
+    {
+     "id": "heavybone",
+     "name": "重装骨骼",
+     "tier": "B",
+     "sys": "物系",
+     "price": 4800,
+     "plot": "B",
+     "attrs": {
+      "con": 5,
+      "str": 5
+     },
+     "ability": "「骨甲」每副本 2 次，完全无视一次伤害。",
+     "cost": "敏捷上限 −2。",
+     "geneCap": 4,
+     "owned": false,
+     "can": false
+    },
+    {
+     "id": "ghost",
+     "name": "幽灵体",
+     "tier": "B",
+     "sys": "亡灵",
+     "price": 5200,
+     "plot": "B",
+     "attrs": {
+      "agi": 6,
+      "per": 4
+     },
+     "ability": "「虚化」每副本 3 次，免伤并穿墙一格。",
+     "cost": "无法装备重型武器；力量判定 −15。",
+     "geneCap": 4,
+     "owned": false,
+     "can": false
+    },
+    {
+     "id": "xenomorph",
+     "name": "异形血统",
+     "tier": "B",
+     "sys": "科技",
+     "price": 5500,
+     "plot": "B",
+     "attrs": {
+      "str": 5,
+      "agi": 5,
+      "con": 3
+     },
+     "ability": "「酸血」受近战伤害时反弹；「攀壁」无视地形。",
+     "cost": "无法使用人类武器；NPC 见到你必然敌对。",
+     "geneCap": 4,
+     "owned": false,
+     "can": false
+    },
+    {
+     "id": "angel",
+     "name": "天使血统",
+     "tier": "B",
+     "sys": "魔法",
+     "price": 6000,
+     "plot": "B",
+     "attrs": {
+      "int": 4,
+      "per": 4
+     },
+     "ability": "「圣光」对亡灵、恶魔类伤害翻倍；每副本 1 次群体治疗 20。",
+     "cost": "被「概念级邪恶」优先锁定。",
+     "geneCap": 4,
+     "owned": false,
+     "can": false
+    },
+    {
+     "id": "seeker",
+     "name": "求法者",
+     "tier": "B",
+     "sys": "修真",
+     "price": 5800,
+     "plot": "B",
+     "attrs": {
+      "int": 5,
+      "con": 3
+     },
+     "ability": "「符箓」每副本 3 张，可封一次攻击或封一扇门。",
+     "cost": "制符要消耗一回合。",
+     "geneCap": 4,
+     "owned": false,
+     "can": false
+    },
+    {
+     "id": "netherblood",
+     "name": "幽冥之血",
+     "tier": "A",
+     "sys": "亡灵",
+     "price": 12000,
+     "plot": "A",
+     "attrs": {
+      "agi": 8,
+      "per": 6
+     },
+     "ability": "「彼岸」每副本 1 次，把一名队友从死亡判定里拉回来。",
+     "cost": "你本人永久失去复活资格。",
+     "geneCap": 4,
+     "owned": false,
+     "can": false
+    },
+    {
+     "id": "thousandface",
+     "name": "千面之相",
+     "tier": "A",
+     "sys": "异系",
+     "price": 11000,
+     "plot": "A",
+     "attrs": {
+      "int": 8,
+      "per": 8
+     },
+     "ability": "「拟态」完美复制见过的人的外观与声音。",
+     "cost": "每副本有 1 次失控概率，当场暴露身份。",
+     "geneCap": 4,
+     "owned": false,
+     "can": false
+    },
+    {
+     "id": "saiyan",
+     "name": "赛亚人",
+     "tier": "A",
+     "sys": "物系",
+     "price": 14000,
+     "plot": "A",
+     "attrs": {
+      "str": 8,
+      "agi": 6,
+      "con": 6
+     },
+     "ability": "「濒死觉醒」生命归零后复活一次，并全属性 +4。",
+     "cost": "某局结束若没经历过濒死，下一局全属性 −2。",
+     "geneCap": 5,
+     "owned": false,
+     "can": false
+    },
+    {
+     "id": "dragonblood",
+     "name": "祖龙血脉",
+     "tier": "A",
+     "sys": "修真",
+     "price": 13000,
+     "plot": "A",
+     "attrs": {
+      "con": 7,
+      "int": 6,
+      "str": 4
+     },
+     "ability": "「威压」每副本 1 次，全部敌人一回合无法行动。",
+     "cost": "每副本开局理智 −10。",
+     "geneCap": 5,
+     "owned": false,
+     "can": false
+    },
+    {
+     "id": "trueancestor",
+     "name": "完美真祖",
+     "tier": "S",
+     "sys": "异系",
+     "price": 48000,
+     "plot": "S",
+     "attrs": {
+      "str": 10,
+      "agi": 10,
+      "con": 10,
+      "int": 10,
+      "per": 10
+     },
+     "ability": "免疫一切物理与常规超自然伤害；每副本 1 次直接改写一次判定结果。",
+     "cost": "每副本必须亲手杀死一个你认识的人（NPC 或队友），否则全属性归 10。",
+     "geneCap": 5,
+     "owned": false,
+     "can": false
+    }
+   ],
+   "skills": [
+    {
+     "id": "brawl",
+     "name": "基础格斗专精",
+     "tier": "D",
+     "type": "被动",
+     "desc": "力量判定 +10。徒手伤害 +2。",
+     "price": 500,
+     "plot": "D",
+     "owned": true,
+     "can": false
+    },
+    {
+     "id": "dodge",
+     "name": "急停闪避",
+     "tier": "D",
+     "type": "主动",
+     "desc": "每副本 3 次，减免一次至少 15 点的伤害。",
+     "price": 400,
+     "plot": "D",
+     "owned": false,
+     "can": true
+    },
+    {
+     "id": "firstaid",
+     "name": "现场急救",
+     "tier": "D",
+     "type": "主动",
+     "desc": "恢复 30 生命。对 NPC 用会加忠诚。",
+     "price": 600,
+     "plot": "D",
+     "owned": false,
+     "can": true
+    },
+    {
+     "id": "gadget",
+     "name": "器物直觉",
+     "tier": "D",
+     "type": "被动",
+     "desc": "智力判定 +10。破解机械、读终端、关阀门都用它。",
+     "price": 450,
+     "plot": "D",
+     "owned": false,
+     "can": true
+    },
+    {
+     "id": "breacher",
+     "name": "破门术",
+     "tier": "C",
+     "type": "主动",
+     "desc": "每副本 1 次，强制破开一扇门或一段封锁。",
+     "price": 1200,
+     "plot": "C",
+     "owned": false,
+     "can": true
+    },
+    {
+     "id": "holdbreath",
+     "name": "屏息",
+     "tier": "C",
+     "type": "主动",
+     "desc": "潜行、躲藏判定 +25。",
+     "price": 1100,
+     "plot": "C",
+     "owned": false,
+     "can": true
+    },
+    {
+     "id": "insight",
+     "name": "识破",
+     "tier": "C",
+     "type": "主动",
+     "desc": "揭穿一次谎言或伪装，包括队友的假情报。",
+     "price": 1300,
+     "plot": "C",
+     "owned": false,
+     "can": true
+    },
+    {
+     "id": "tactics",
+     "name": "战术推演",
+     "tier": "C",
+     "type": "主动",
+     "desc": "提前看到下两个回合的选项。",
+     "price": 1500,
+     "plot": "C",
+     "owned": false,
+     "can": true
+    },
+    {
+     "id": "afterimage",
+     "name": "残影步",
+     "tier": "B",
+     "type": "主动",
+     "desc": "本回合先手，并额外获得一次闪避。",
+     "price": 4000,
+     "plot": "B",
+     "owned": false,
+     "can": false
+    },
+    {
+     "id": "fieldmedic",
+     "name": "战地医师",
+     "tier": "B",
+     "type": "主动",
+     "desc": "把濒死单位拉回 30 生命。每副本 1 次。",
+     "price": 3500,
+     "plot": "B",
+     "owned": false,
+     "can": false
+    },
+    {
+     "id": "soulresist",
+     "name": "灵魂抗性",
+     "tier": "B",
+     "type": "被动",
+     "desc": "理智损失减半，并免疫一次精神控制。",
+     "price": 3800,
+     "plot": "B",
+     "owned": false,
+     "can": false
+    },
+    {
+     "id": "onemore",
+     "name": "一次机会",
+     "tier": "A",
+     "type": "主动",
+     "desc": "每局 1 次，重掷任何一次失败判定。",
+     "price": 10000,
+     "plot": "A",
+     "owned": false,
+     "can": false
+    }
+   ],
+   "items": [
+    {
+     "id": "medkit",
+     "name": "急救针",
+     "tier": "D",
+     "type": "消耗",
+     "desc": "恢复 40 生命。",
+     "price": 300,
+     "have": 2,
+     "can": true
+    },
+    {
+     "id": "sedative",
+     "name": "镇定剂",
+     "tier": "D",
+     "type": "消耗",
+     "desc": "恢复 25 理智。",
+     "price": 250,
+     "have": 1,
+     "can": true
+    },
+    {
+     "id": "flare",
+     "name": "照明棒",
+     "tier": "D",
+     "type": "消耗",
+     "desc": "照亮一处，驱散黑暗惩罚，也能看清藏在暗处的东西。",
+     "price": 200,
+     "have": 0,
+     "can": true
+    },
+    {
+     "id": "breach",
+     "name": "破拆包",
+     "tier": "C",
+     "type": "消耗",
+     "desc": "破坏一处封锁结构。比不上破门术，但谁都能用。",
+     "price": 1800,
+     "plot": "C",
+     "have": 0,
+     "can": true
+    },
+    {
+     "id": "antidote",
+     "name": "广谱解药",
+     "tier": "C",
+     "type": "消耗",
+     "desc": "解一次感染、毒素或变异。用掉就没了。",
+     "price": 900,
+     "plot": "C",
+     "have": 0,
+     "can": true
+    },
+    {
+     "id": "anchor",
+     "name": "锚点符",
+     "tier": "C",
+     "type": "消耗",
+     "desc": "标记一个位置，可强返一次，脱离战线。",
+     "price": 900,
+     "plot": "C",
+     "have": 0,
+     "can": true
+    },
+    {
+     "id": "soullamp",
+     "name": "魂灯",
+     "tier": "B",
+     "type": "装备",
+     "desc": "生命归零时多撑两个回合。一次一充，副本内不可再充。",
+     "price": 4200,
+     "plot": "B",
+     "have": 0,
+     "can": false
+    }
+   ],
+   "purify": {
+    "karma": 0,
+    "cost": 0,
+    "can": false
+   }
+  },
+  "log": [
+   {
+    "at": "2026-11-02T08:43:06.902Z",
+    "kind": "good",
+    "text": "第 5 回合 · 实验室 · 培养区｜查看终端记录（52 vs 45）"
+   },
+   {
+    "at": "2026-11-02T08:43:06.900Z",
+    "kind": "good",
+    "text": "第 4 回合 · B 区 · 激光走廊｜原地不动，看激光的规律（62 vs 50）"
+   },
+   {
+    "at": "2026-11-02T08:43:06.897Z",
+    "kind": "good",
+    "text": "第 3 回合 · 蜂巢 · 入口闸门｜直接滚进走廊（101 vs 45）"
+   },
+   {
+    "at": "2026-11-02T08:43:06.894Z",
+    "kind": "good",
+    "text": "第 2 回合 · 列车车厢｜检查列车上的装备箱（116 vs 40）"
+   },
+   {
+    "at": "2026-11-02T08:43:06.891Z",
+    "kind": "good",
+    "text": "第 1 回合 · 罗德山庄 · 玄关｜反问她「你们在找什么」（46 vs 45）"
+   },
+   {
+    "at": "2026-11-02T08:43:06.889Z",
+    "kind": "run",
+    "text": "进入副本：生化危机 1"
+   }
+  ],
+  "perm": {
+   "allowSpend": true,
+   "autoRun": false
+  }
+ },
+ "settle": {
+  "runner": {
+   "name": "大肥鱼",
+   "attrs": [
+    {
+     "key": "str",
+     "label": "力量",
+     "value": 10,
+     "base": 10,
+     "bonus": 0
+    },
+    {
+     "key": "agi",
+     "label": "敏捷",
+     "value": 10,
+     "base": 10,
+     "bonus": 0
+    },
+    {
+     "key": "con",
+     "label": "体质",
+     "value": 10,
+     "base": 10,
+     "bonus": 0
+    },
+    {
+     "key": "int",
+     "label": "智力",
+     "value": 10,
+     "base": 10,
+     "bonus": 0
+    },
+    {
+     "key": "per",
+     "label": "感知",
+     "value": 10,
+     "base": 10,
+     "bonus": 0
+    }
+   ],
+   "hp": 37,
+   "hpMax": 100,
+   "san": 48,
+   "sanMax": 80,
+   "gene": {
+    "tier": 0,
+    "karma": 0,
+    "cap": 1
+   },
+   "bloodline": null,
+   "skills": [
+    {
+     "id": "brawl",
+     "name": "基础格斗专精",
+     "tier": "D",
+     "type": "被动",
+     "desc": "力量判定 +10。徒手伤害 +2。"
+    }
+   ],
+   "inv": [
+    {
+     "id": "medkit",
+     "n": 2,
+     "name": "急救针",
+     "tier": "D",
+     "desc": "恢复 40 生命。",
+     "type": "消耗"
+    },
+    {
+     "id": "sedative",
+     "n": 1,
+     "name": "镇定剂",
+     "tier": "D",
+     "desc": "恢复 25 理智。",
+     "type": "消耗"
+    }
+   ]
+  },
+  "wallet": {
+   "points": 9200,
+   "plots": {
+    "D": 2,
+    "C": 2,
+    "B": 0,
+    "A": 0,
+    "S": 0
+   }
+  },
+  "meta": {
+   "runs": 1,
+   "cleared": 1,
+   "failed": 0,
+   "mercyUsed": false,
+   "bestPoints": 3000,
+   "clearedWorlds": [
+    "re1"
+   ]
+  },
+  "stats": {
+   "kills": 1,
+   "saved": 0,
+   "deepestTurn": 15
+  },
+  "worlds": [
+   {
+    "id": "re1",
+    "title": "生化危机 1",
+    "subtitle": "蜂巢 · 地下三百米",
+    "rating": "D",
+    "band": "新手",
+    "turns": 14,
+    "brief": "活到列车启动。这里原本有五百个人，现在还有几个，我们不告诉你。",
+    "accent": "#c2413a",
+    "cleared": true,
+    "sides": 4,
+    "main": 1000,
+    "locked": false
+   },
+   {
+    "id": "fd2",
+    "title": "死神来了 2",
+    "subtitle": "180 号公路 · 18:07",
+    "rating": "C",
+    "band": "新手",
+    "turns": 12,
+    "brief": "活到天亮。本世界没有可战斗的敌人——你唯一能做的，是看出它下一步要杀谁，然后决定救不救。",
+    "accent": "#8a6d3b",
+    "cleared": false,
+    "sides": 4,
+    "main": 1000,
+    "locked": false
+   },
+   {
+    "id": "re2",
+    "title": "生化危机 2",
+    "subtitle": "浣熊市 · 警局与下水道",
+    "rating": "C",
+    "band": "新手",
+    "turns": 12,
+    "brief": "在净化开始前离开城区。这里有一个找哥哥的女人、一个第一天上班的警察，和一个一直在找她的东西。",
+    "accent": "#a83c46",
+    "cleared": false,
+    "sides": 4,
+    "main": 1200,
+    "locked": false
+   },
+   {
+    "id": "jp1",
+    "title": "侏罗纪公园",
+    "subtitle": "努布拉岛 · 暴雨夜",
+    "rating": "C",
+    "band": "新手",
+    "turns": 12,
+    "brief": "在直升机来之前活下来。这里没有诅咒，没有鬼，只有一群被人造出来、然后没人管的动物。",
+    "accent": "#3f7a5c",
+    "cleared": false,
+    "sides": 4,
+    "main": 1200,
+    "locked": false
+   },
+   {
+    "id": "a2",
+    "title": "异形 2",
+    "subtitle": "哈德利的希望 · LV-426",
+    "rating": "B",
+    "band": "进阶",
+    "turns": 14,
+    "brief": "把活人带出去，然后炸掉这里。敌人会随回合变多，弹药不会。",
+    "accent": "#4c6b8a",
+    "cleared": false,
+    "sides": 4,
+    "main": 1500,
+    "locked": false
+   },
+   {
+    "id": "juon",
+    "title": "咒怨",
+    "subtitle": "东京都 · 佐伯家",
+    "rating": "B",
+    "band": "进阶",
+    "turns": 12,
+    "brief": "活到天亮。这里没有可以打死的东西——进门的人会被标记，然后它有的是时间。",
+    "accent": "#6b5f8a",
+    "cleared": false,
+    "sides": 4,
+    "main": 1500,
+    "locked": false
+   },
+   {
+    "id": "noes",
+    "title": "猛鬼街",
+    "subtitle": "斯普林伍德 · 第七夜",
+    "rating": "B",
+    "band": "进阶",
+    "turns": 12,
+    "brief": "保持清醒，或者学会在梦里打赢他。睡着的人不会醒过来——他们只是不再起床。",
+    "accent": "#7a4a3c",
+    "cleared": false,
+    "sides": 4,
+    "main": 1500,
+    "locked": false
+   },
+   {
+    "id": "mummy",
+    "title": "神鬼传奇",
+    "subtitle": "哈姆纳塔 · 亡灵之城",
+    "rating": "A",
+    "band": "高难",
+    "turns": 14,
+    "brief": "在伊莫顿恢复全部力量之前处理掉他。他打不死——他只能被念回去。",
+    "accent": "#a8843c",
+    "cleared": false,
+    "sides": 4,
+    "main": 3000,
+    "locked": false
+   },
+   {
+    "id": "lotr",
+    "title": "魔戒",
+    "subtitle": "中土 · 第三纪元末",
+    "rating": "A",
+    "band": "高难",
+    "turns": 16,
+    "brief": "把戒指送到末日火山。路上每一次「我拿着它更安全」，都会让你更接近另一个人。",
+    "accent": "#8a7a3c",
+    "cleared": false,
+    "sides": 4,
+    "main": 3000,
+    "locked": false
+   },
+   {
+    "id": "sst",
+    "title": "星河战队",
+    "subtitle": "克伦达苏 · 前哨站",
+    "rating": "A",
+    "band": "高难",
+    "turns": 12,
+    "brief": "守到撤离艇来。虫子的数量是无限的，你的弹药不是——所以活下来的人，都是会算数的人。",
+    "accent": "#5a6b7a",
+    "cleared": false,
+    "sides": 4,
+    "main": 3000,
+    "locked": false
+   }
+  ],
+  "run": {
+   "worldId": "re1",
+   "title": "生化危机 1",
+   "rating": "D",
+   "accent": "#c2413a",
+   "turn": 15,
+   "turns": 14,
+   "pressure": {
+    "label": "距离蜂巢封锁",
+    "left": 0,
+    "max": 14
+   },
+   "scene": "",
+   "text": "",
+   "opts": [],
+   "trail": [
+    {
+     "turn": 1,
+     "scene": "罗德山庄 · 玄关",
+     "label": "反问她「你们在找什么」",
+     "success": true,
+     "kind": "check",
+     "roll": "26+20=46",
+     "dc": 45
+    },
+    {
+     "turn": 2,
+     "scene": "列车车厢",
+     "label": "检查列车上的装备箱",
+     "success": true,
+     "kind": "check",
+     "roll": "96+20=116",
+     "dc": 40
+    },
+    {
+     "turn": 3,
+     "scene": "蜂巢 · 入口闸门",
+     "label": "直接滚进走廊",
+     "success": true,
+     "kind": "check",
+     "roll": "81+20=101",
+     "dc": 45
+    },
+    {
+     "turn": 4,
+     "scene": "B 区 · 激光走廊",
+     "label": "原地不动，看激光的规律",
+     "success": true,
+     "kind": "check",
+     "roll": "42+20=62",
+     "dc": 50
+    },
+    {
+     "turn": 5,
+     "scene": "实验室 · 培养区",
+     "label": "查看终端记录",
+     "success": true,
+     "kind": "check",
+     "roll": "32+20=52",
+     "dc": 45
+    },
+    {
+     "turn": 6,
+     "scene": "红后机房",
+     "label": "拔掉红后的主电源",
+     "success": true,
+     "kind": "flat",
+     "roll": null,
+     "dc": null
+    },
+    {
+     "turn": 7,
+     "scene": "实验室 · 停电",
+     "label": "屏住呼吸，靠墙不动",
+     "success": true,
+     "kind": "check",
+     "roll": "53+20=73",
+     "dc": 45
+    },
+    {
+     "turn": 8,
+     "scene": "走廊 · 舔食者",
+     "label": "正面开战",
+     "success": true,
+     "kind": "check",
+     "roll": "91+20+10=121",
+     "dc": 60
+    },
+    {
+     "turn": 9,
+     "scene": "配电间 · 斯宾塞",
+     "label": "答应他，先拿到解药",
+     "success": true,
+     "kind": "flat",
+     "roll": null,
+     "dc": null
+    },
+    {
+     "turn": 10,
+     "scene": "B 区 · 回程",
+     "label": "告诉他实话",
+     "success": true,
+     "kind": "flat",
+     "roll": null,
+     "dc": null
+    },
+    {
+     "turn": 11,
+     "scene": "列车站台",
+     "label": "回去找",
+     "success": false,
+     "kind": "check",
+     "roll": "16+20=36",
+     "dc": 50
+    },
+    {
+     "turn": 12,
+     "scene": "列车 · 启动",
+     "label": "打开车顶检修口，上去打",
+     "success": false,
+     "kind": "check",
+     "roll": "18+20+10=48",
+     "dc": 65
+    },
+    {
+     "turn": 13,
+     "scene": "列车 · 最后一节",
+     "label": "用解药救他",
+     "success": true,
+     "kind": "flat",
+     "roll": null,
+     "dc": null
+    },
+    {
+     "turn": 14,
+     "scene": "出口 · 白光",
+     "label": "走出去",
+     "success": true,
+     "kind": "flat",
+     "roll": null,
+     "dc": null
+    }
+   ],
+   "settled": true,
+   "report": {
+    "rank": "cleared",
+    "alive": true,
+    "rows": [
+     {
+      "kind": "main",
+      "label": "主线 · 在蜂巢封锁前乘列车离开",
+      "points": 1000,
+      "plot": null
+     },
+     {
+      "kind": "side",
+      "label": "支线 · 让马特·艾迪森活着登上列车",
+      "points": 2000,
+      "plot": "C"
+     },
+     {
+      "kind": "side",
+      "label": "未达成 · 击杀或困住「舔食者」",
+      "points": 0,
+      "plot": null,
+      "miss": true
+     },
+     {
+      "kind": "side",
+      "label": "未达成 · 取得 T 病毒样本",
+      "points": 0,
+      "plot": null,
+      "miss": true
+     },
+     {
+      "kind": "side",
+      "label": "未达成 · 得知斯宾塞真正在做什么",
+      "points": 0,
+      "plot": null,
+      "miss": true
+     }
+    ],
+    "points": 3000,
+    "plots": {
+     "C": 1
+    },
+    "ending": {
+     "title": "一个不该活的人",
+     "text": "马特下了车，站在白光里回头看你。他想说什么，但最后只是点了点头。\n\n在主神的记录里，他应该在第十二个刻度就已经死了。"
+    },
+    "worldTitle": "生化危机 1",
+    "turns": 15
+   },
+   "geneOffer": null,
+   "sides": [
+    {
+     "desc": "让马特·艾迪森活着登上列车",
+     "points": 2000,
+     "plot": "C"
+    },
+    {
+     "desc": "击杀或困住「舔食者」",
+     "points": 1500,
+     "plot": "C"
+    },
+    {
+     "desc": "取得 T 病毒样本",
+     "points": 1000,
+     "plot": "D"
+    },
+    {
+     "desc": "得知斯宾塞真正在做什么",
+     "points": 600,
+     "plot": null
+    }
+   ]
+  },
+  "shop": {
+   "attr": [
+    {
+     "key": "str",
+     "label": "力量",
+     "cur": 10,
+     "cost": 500,
+     "can": true
+    },
+    {
+     "key": "agi",
+     "label": "敏捷",
+     "cur": 10,
+     "cost": 500,
+     "can": true
+    },
+    {
+     "key": "con",
+     "label": "体质",
+     "cur": 10,
+     "cost": 500,
+     "can": true
+    },
+    {
+     "key": "int",
+     "label": "智力",
+     "cur": 10,
+     "cost": 500,
+     "can": true
+    },
+    {
+     "key": "per",
+     "label": "感知",
+     "cur": 10,
+     "cost": 500,
+     "can": true
+    }
+   ],
+   "bloodlines": [
+    {
+     "id": "soldier",
+     "name": "强化兵人体质",
+     "tier": "D",
+     "sys": "物系",
+     "price": 600,
+     "plot": "D",
+     "attrs": {
+      "con": 2
+     },
+     "ability": "「痛觉抑制」：受创后不降行动力。",
+     "cost": "理智上限 −5。",
+     "geneCap": 2,
+     "owned": false,
+     "can": true
+    },
+    {
+     "id": "nightvision",
+     "name": "夜视改造",
+     "tier": "D",
+     "sys": "科技",
+     "price": 500,
+     "plot": "D",
+     "attrs": {
+      "per": 2
+     },
+     "ability": "「暗视」：黑暗环境判定 +10。",
+     "cost": "强光下判定 −10。",
+     "geneCap": 2,
+     "owned": false,
+     "can": true
+    },
+    {
+     "id": "lightbody",
+     "name": "轻身之术",
+     "tier": "D",
+     "sys": "物系",
+     "price": 550,
+     "plot": "D",
+     "attrs": {
+      "agi": 2
+     },
+     "ability": "「壁行」：每副本 1 次垂直短距移动，直接脱离被围。",
+     "cost": "负重上限减半。",
+     "geneCap": 2,
+     "owned": false,
+     "can": true
+    },
+    {
+     "id": "wolfcub",
+     "name": "初级狼人",
+     "tier": "D",
+     "sys": "物系",
+     "price": 650,
+     "plot": "D",
+     "attrs": {
+      "str": 2,
+      "per": 1
+     },
+     "ability": "「嗅觉」：追踪判定 +15。",
+     "cost": "银制武器对你伤害 +2。",
+     "geneCap": 2,
+     "owned": false,
+     "can": true
+    },
+    {
+     "id": "zombie",
+     "name": "丧尸血统",
+     "tier": "D",
+     "sys": "亡灵",
+     "price": 500,
+     "plot": "D",
+     "attrs": {
+      "con": 3
+     },
+     "ability": "「不死躯」：感染类伤害免疫。",
+     "cost": "所有 NPC 初始好感 −1；无法进入人群场景。",
+     "geneCap": 2,
+     "owned": false,
+     "can": true
+    },
+    {
+     "id": "synthetic",
+     "name": "合成人",
+     "tier": "D",
+     "sys": "科技",
+     "price": 700,
+     "plot": "D",
+     "attrs": {
+      "con": 1,
+      "int": 2
+     },
+     "ability": "「无氧」：毒气、窒息环境免疫。",
+     "cost": "治疗类道具效果减半。",
+     "geneCap": 2,
+     "owned": false,
+     "can": true
+    },
+    {
+     "id": "spider",
+     "name": "蛛形基因变异",
+     "tier": "C",
+     "sys": "物系",
+     "price": 1500,
+     "plot": "C",
+     "attrs": {
+      "agi": 4,
+      "per": 2
+     },
+     "ability": "「黏附」攀爬必成功；「蛛丝」每回合 1 次拉拽。",
+     "cost": "体质上限 −2；每副本结束要恢复一天。",
+     "geneCap": 3,
+     "owned": false,
+     "can": true
+    },
+    {
+     "id": "greywolf",
+     "name": "灰狼血统",
+     "tier": "C",
+     "sys": "物系",
+     "price": 1600,
+     "plot": "C",
+     "attrs": {
+      "str": 3,
+      "per": 3
+     },
+     "ability": "「气味追踪」+20；「狂化」生命低于 30% 时伤害 +50%。",
+     "cost": "狂化期间无法使用道具。",
+     "geneCap": 3,
+     "owned": false,
+     "can": true
+    },
+    {
+     "id": "telekine",
+     "name": "低阶念动力",
+     "tier": "C",
+     "sys": "魂系",
+     "price": 1400,
+     "plot": "C",
+     "attrs": {
+      "int": 3
+     },
+     "ability": "「念动」每副本 3 次，隔空移动 5kg 内物体。",
+     "cost": "每次使用理智 −5。",
+     "geneCap": 3,
+     "owned": false,
+     "can": true
+    },
+    {
+     "id": "vampire",
+     "name": "血族子爵",
+     "tier": "C",
+     "sys": "亡灵",
+     "price": 2000,
+     "plot": "C",
+     "attrs": {
+      "agi": 4,
+      "per": 4,
+      "int": 2
+     },
+     "ability": "「魅惑」使一个目标放下戒备一回合；「血愈」每回合回 3 生命。",
+     "cost": "阳光伤害；每副本要饮血一次。",
+     "geneCap": 3,
+     "owned": false,
+     "can": true
+    },
+    {
+     "id": "firewitch",
+     "name": "火焰巫人",
+     "tier": "C",
+     "sys": "魔法",
+     "price": 1500,
+     "plot": "C",
+     "attrs": {
+      "int": 3,
+      "con": 1
+     },
+     "ability": "「引火」每副本 3 次，点燃一处可燃物，可用来声东击西。",
+     "cost": "潮湿环境无法使用。",
+     "geneCap": 3,
+     "owned": false,
+     "can": true
+    },
+    {
+     "id": "tvirus",
+     "name": "T 病毒进化",
+     "tier": "C",
+     "sys": "科技",
+     "price": 1800,
+     "plot": "C",
+     "attrs": {
+      "str": 3,
+      "con": 3
+     },
+     "ability": "「再生」每 3 回合自动回 8 生命。",
+     "cost": "每副本结束理智 −15；外貌会让你越来越不被信任。",
+     "geneCap": 3,
+     "owned": false,
+     "can": true
+    },
+    {
+     "id": "nen",
+     "name": "念能力者",
+     "tier": "C",
+     "sys": "异系",
+     "price": 1700,
+     "plot": "C",
+     "attrs": {
+      "per": 4,
+      "int": 2
+     },
+     "ability": "「圆」侦查半径扩大，能感知墙后的活物。",
+     "cost": "使用后一回合无法行动。",
+     "geneCap": 3,
+     "owned": false,
+     "can": true
+    },
+    {
+     "id": "deepone",
+     "name": "深潜者血脉",
+     "tier": "B",
+     "sys": "物系",
+     "price": 5000,
+     "plot": "B",
+     "attrs": {
+      "con": 6,
+      "str": 4
+     },
+     "ability": "水下呼吸；固定减伤 3。",
+     "cost": "阳光环境判定 −10；理智上限 −10。",
+     "geneCap": 4,
+     "owned": false,
+     "can": false
+    },
+    {
+     "id": "heavybone",
+     "name": "重装骨骼",
+     "tier": "B",
+     "sys": "物系",
+     "price": 4800,
+     "plot": "B",
+     "attrs": {
+      "con": 5,
+      "str": 5
+     },
+     "ability": "「骨甲」每副本 2 次，完全无视一次伤害。",
+     "cost": "敏捷上限 −2。",
+     "geneCap": 4,
+     "owned": false,
+     "can": false
+    },
+    {
+     "id": "ghost",
+     "name": "幽灵体",
+     "tier": "B",
+     "sys": "亡灵",
+     "price": 5200,
+     "plot": "B",
+     "attrs": {
+      "agi": 6,
+      "per": 4
+     },
+     "ability": "「虚化」每副本 3 次，免伤并穿墙一格。",
+     "cost": "无法装备重型武器；力量判定 −15。",
+     "geneCap": 4,
+     "owned": false,
+     "can": false
+    },
+    {
+     "id": "xenomorph",
+     "name": "异形血统",
+     "tier": "B",
+     "sys": "科技",
+     "price": 5500,
+     "plot": "B",
+     "attrs": {
+      "str": 5,
+      "agi": 5,
+      "con": 3
+     },
+     "ability": "「酸血」受近战伤害时反弹；「攀壁」无视地形。",
+     "cost": "无法使用人类武器；NPC 见到你必然敌对。",
+     "geneCap": 4,
+     "owned": false,
+     "can": false
+    },
+    {
+     "id": "angel",
+     "name": "天使血统",
+     "tier": "B",
+     "sys": "魔法",
+     "price": 6000,
+     "plot": "B",
+     "attrs": {
+      "int": 4,
+      "per": 4
+     },
+     "ability": "「圣光」对亡灵、恶魔类伤害翻倍；每副本 1 次群体治疗 20。",
+     "cost": "被「概念级邪恶」优先锁定。",
+     "geneCap": 4,
+     "owned": false,
+     "can": false
+    },
+    {
+     "id": "seeker",
+     "name": "求法者",
+     "tier": "B",
+     "sys": "修真",
+     "price": 5800,
+     "plot": "B",
+     "attrs": {
+      "int": 5,
+      "con": 3
+     },
+     "ability": "「符箓」每副本 3 张，可封一次攻击或封一扇门。",
+     "cost": "制符要消耗一回合。",
+     "geneCap": 4,
+     "owned": false,
+     "can": false
+    },
+    {
+     "id": "netherblood",
+     "name": "幽冥之血",
+     "tier": "A",
+     "sys": "亡灵",
+     "price": 12000,
+     "plot": "A",
+     "attrs": {
+      "agi": 8,
+      "per": 6
+     },
+     "ability": "「彼岸」每副本 1 次，把一名队友从死亡判定里拉回来。",
+     "cost": "你本人永久失去复活资格。",
+     "geneCap": 4,
+     "owned": false,
+     "can": false
+    },
+    {
+     "id": "thousandface",
+     "name": "千面之相",
+     "tier": "A",
+     "sys": "异系",
+     "price": 11000,
+     "plot": "A",
+     "attrs": {
+      "int": 8,
+      "per": 8
+     },
+     "ability": "「拟态」完美复制见过的人的外观与声音。",
+     "cost": "每副本有 1 次失控概率，当场暴露身份。",
+     "geneCap": 4,
+     "owned": false,
+     "can": false
+    },
+    {
+     "id": "saiyan",
+     "name": "赛亚人",
+     "tier": "A",
+     "sys": "物系",
+     "price": 14000,
+     "plot": "A",
+     "attrs": {
+      "str": 8,
+      "agi": 6,
+      "con": 6
+     },
+     "ability": "「濒死觉醒」生命归零后复活一次，并全属性 +4。",
+     "cost": "某局结束若没经历过濒死，下一局全属性 −2。",
+     "geneCap": 5,
+     "owned": false,
+     "can": false
+    },
+    {
+     "id": "dragonblood",
+     "name": "祖龙血脉",
+     "tier": "A",
+     "sys": "修真",
+     "price": 13000,
+     "plot": "A",
+     "attrs": {
+      "con": 7,
+      "int": 6,
+      "str": 4
+     },
+     "ability": "「威压」每副本 1 次，全部敌人一回合无法行动。",
+     "cost": "每副本开局理智 −10。",
+     "geneCap": 5,
+     "owned": false,
+     "can": false
+    },
+    {
+     "id": "trueancestor",
+     "name": "完美真祖",
+     "tier": "S",
+     "sys": "异系",
+     "price": 48000,
+     "plot": "S",
+     "attrs": {
+      "str": 10,
+      "agi": 10,
+      "con": 10,
+      "int": 10,
+      "per": 10
+     },
+     "ability": "免疫一切物理与常规超自然伤害；每副本 1 次直接改写一次判定结果。",
+     "cost": "每副本必须亲手杀死一个你认识的人（NPC 或队友），否则全属性归 10。",
+     "geneCap": 5,
+     "owned": false,
+     "can": false
+    }
+   ],
+   "skills": [
+    {
+     "id": "brawl",
+     "name": "基础格斗专精",
+     "tier": "D",
+     "type": "被动",
+     "desc": "力量判定 +10。徒手伤害 +2。",
+     "price": 500,
+     "plot": "D",
+     "owned": true,
+     "can": false
+    },
+    {
+     "id": "dodge",
+     "name": "急停闪避",
+     "tier": "D",
+     "type": "主动",
+     "desc": "每副本 3 次，减免一次至少 15 点的伤害。",
+     "price": 400,
+     "plot": "D",
+     "owned": false,
+     "can": true
+    },
+    {
+     "id": "firstaid",
+     "name": "现场急救",
+     "tier": "D",
+     "type": "主动",
+     "desc": "恢复 30 生命。对 NPC 用会加忠诚。",
+     "price": 600,
+     "plot": "D",
+     "owned": false,
+     "can": true
+    },
+    {
+     "id": "gadget",
+     "name": "器物直觉",
+     "tier": "D",
+     "type": "被动",
+     "desc": "智力判定 +10。破解机械、读终端、关阀门都用它。",
+     "price": 450,
+     "plot": "D",
+     "owned": false,
+     "can": true
+    },
+    {
+     "id": "breacher",
+     "name": "破门术",
+     "tier": "C",
+     "type": "主动",
+     "desc": "每副本 1 次，强制破开一扇门或一段封锁。",
+     "price": 1200,
+     "plot": "C",
+     "owned": false,
+     "can": true
+    },
+    {
+     "id": "holdbreath",
+     "name": "屏息",
+     "tier": "C",
+     "type": "主动",
+     "desc": "潜行、躲藏判定 +25。",
+     "price": 1100,
+     "plot": "C",
+     "owned": false,
+     "can": true
+    },
+    {
+     "id": "insight",
+     "name": "识破",
+     "tier": "C",
+     "type": "主动",
+     "desc": "揭穿一次谎言或伪装，包括队友的假情报。",
+     "price": 1300,
+     "plot": "C",
+     "owned": false,
+     "can": true
+    },
+    {
+     "id": "tactics",
+     "name": "战术推演",
+     "tier": "C",
+     "type": "主动",
+     "desc": "提前看到下两个回合的选项。",
+     "price": 1500,
+     "plot": "C",
+     "owned": false,
+     "can": true
+    },
+    {
+     "id": "afterimage",
+     "name": "残影步",
+     "tier": "B",
+     "type": "主动",
+     "desc": "本回合先手，并额外获得一次闪避。",
+     "price": 4000,
+     "plot": "B",
+     "owned": false,
+     "can": false
+    },
+    {
+     "id": "fieldmedic",
+     "name": "战地医师",
+     "tier": "B",
+     "type": "主动",
+     "desc": "把濒死单位拉回 30 生命。每副本 1 次。",
+     "price": 3500,
+     "plot": "B",
+     "owned": false,
+     "can": false
+    },
+    {
+     "id": "soulresist",
+     "name": "灵魂抗性",
+     "tier": "B",
+     "type": "被动",
+     "desc": "理智损失减半，并免疫一次精神控制。",
+     "price": 3800,
+     "plot": "B",
+     "owned": false,
+     "can": false
+    },
+    {
+     "id": "onemore",
+     "name": "一次机会",
+     "tier": "A",
+     "type": "主动",
+     "desc": "每局 1 次，重掷任何一次失败判定。",
+     "price": 10000,
+     "plot": "A",
+     "owned": false,
+     "can": false
+    }
+   ],
+   "items": [
+    {
+     "id": "medkit",
+     "name": "急救针",
+     "tier": "D",
+     "type": "消耗",
+     "desc": "恢复 40 生命。",
+     "price": 300,
+     "have": 2,
+     "can": true
+    },
+    {
+     "id": "sedative",
+     "name": "镇定剂",
+     "tier": "D",
+     "type": "消耗",
+     "desc": "恢复 25 理智。",
+     "price": 250,
+     "have": 1,
+     "can": true
+    },
+    {
+     "id": "flare",
+     "name": "照明棒",
+     "tier": "D",
+     "type": "消耗",
+     "desc": "照亮一处，驱散黑暗惩罚，也能看清藏在暗处的东西。",
+     "price": 200,
+     "have": 0,
+     "can": true
+    },
+    {
+     "id": "breach",
+     "name": "破拆包",
+     "tier": "C",
+     "type": "消耗",
+     "desc": "破坏一处封锁结构。比不上破门术，但谁都能用。",
+     "price": 1800,
+     "plot": "C",
+     "have": 0,
+     "can": true
+    },
+    {
+     "id": "antidote",
+     "name": "广谱解药",
+     "tier": "C",
+     "type": "消耗",
+     "desc": "解一次感染、毒素或变异。用掉就没了。",
+     "price": 900,
+     "plot": "C",
+     "have": 0,
+     "can": true
+    },
+    {
+     "id": "anchor",
+     "name": "锚点符",
+     "tier": "C",
+     "type": "消耗",
+     "desc": "标记一个位置，可强返一次，脱离战线。",
+     "price": 900,
+     "plot": "C",
+     "have": 0,
+     "can": true
+    },
+    {
+     "id": "soullamp",
+     "name": "魂灯",
+     "tier": "B",
+     "type": "装备",
+     "desc": "生命归零时多撑两个回合。一次一充，副本内不可再充。",
+     "price": 4200,
+     "plot": "B",
+     "have": 0,
+     "can": false
+    }
+   ],
+   "purify": {
+    "karma": 0,
+    "cost": 0,
+    "can": false
+   }
+  },
+  "log": [
+   {
+    "at": "2026-11-02T08:43:06.931Z",
+    "kind": "settle",
+    "text": "生化危机 1｜一个不该活的人｜+3000"
+   },
+   {
+    "at": "2026-11-02T08:43:06.928Z",
+    "kind": "good",
+    "text": "第 14 回合 · 出口 · 白光｜走出去"
+   },
+   {
+    "at": "2026-11-02T08:43:06.925Z",
+    "kind": "good",
+    "text": "第 13 回合 · 列车 · 最后一节｜用解药救他"
+   },
+   {
+    "at": "2026-11-02T08:43:06.922Z",
+    "kind": "bad",
+    "text": "第 12 回合 · 列车 · 启动｜打开车顶检修口，上去打（48 vs 65）"
+   },
+   {
+    "at": "2026-11-02T08:43:06.919Z",
+    "kind": "bad",
+    "text": "第 11 回合 · 列车站台｜回去找（36 vs 50）"
+   },
+   {
+    "at": "2026-11-02T08:43:06.917Z",
+    "kind": "good",
+    "text": "第 10 回合 · B 区 · 回程｜告诉他实话"
+   },
+   {
+    "at": "2026-11-02T08:43:06.914Z",
+    "kind": "good",
+    "text": "第 9 回合 · 配电间 · 斯宾塞｜答应他，先拿到解药"
+   },
+   {
+    "at": "2026-11-02T08:43:06.911Z",
+    "kind": "good",
+    "text": "第 8 回合 · 走廊 · 舔食者｜正面开战（121 vs 60）"
+   },
+   {
+    "at": "2026-11-02T08:43:06.908Z",
+    "kind": "good",
+    "text": "第 7 回合 · 实验室 · 停电｜屏住呼吸，靠墙不动（73 vs 45）"
+   },
+   {
+    "at": "2026-11-02T08:43:06.905Z",
+    "kind": "good",
+    "text": "第 6 回合 · 红后机房｜拔掉红后的主电源"
+   },
+   {
+    "at": "2026-11-02T08:43:06.902Z",
+    "kind": "good",
+    "text": "第 5 回合 · 实验室 · 培养区｜查看终端记录（52 vs 45）"
+   },
+   {
+    "at": "2026-11-02T08:43:06.900Z",
+    "kind": "good",
+    "text": "第 4 回合 · B 区 · 激光走廊｜原地不动，看激光的规律（62 vs 50）"
+   },
+   {
+    "at": "2026-11-02T08:43:06.897Z",
+    "kind": "good",
+    "text": "第 3 回合 · 蜂巢 · 入口闸门｜直接滚进走廊（101 vs 45）"
+   },
+   {
+    "at": "2026-11-02T08:43:06.894Z",
+    "kind": "good",
+    "text": "第 2 回合 · 列车车厢｜检查列车上的装备箱（116 vs 40）"
+   },
+   {
+    "at": "2026-11-02T08:43:06.891Z",
+    "kind": "good",
+    "text": "第 1 回合 · 罗德山庄 · 玄关｜反问她「你们在找什么」（46 vs 45）"
+   },
+   {
+    "at": "2026-11-02T08:43:06.889Z",
+    "kind": "run",
+    "text": "进入副本：生化危机 1"
+   }
+  ],
+  "perm": {
+   "allowSpend": true,
+   "autoRun": false
+  }
+ }
+}
