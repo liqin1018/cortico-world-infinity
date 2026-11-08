@@ -1,6 +1,6 @@
 {
   "name": "cortico-world-infinity",
-  "version": "0.5.2",
+  "version": "0.6.1",
   "description": "给 Coopanion 桌宠的无限流世界：她是一个被主神选中的轮回者，穿梭进电影世界里完成任务、活着回来、拿奖励点换血统和基因锁。单机、不联网、不额外调用模型。\n\nQQ 交流群：745879632",
   "type": "module",
   "main": "./src/index.js",
@@ -46,20 +46,11 @@
     "test": "node test/all.mjs && node test/sim.mjs",
     "check": "node test/deploy-check.mjs"
   },
-  "publishConfig": {
-    "access": "public",
-    "registry": "https://registry.npmjs.org/"
-  },
   "cortico": {
     "kind": "world",
     "api": 6,
     "displayName": "大肥鱼之无限流",
     "icon": "assets/icon.svg",
-    "screenshots": [
-      "docs/home.png",
-      "docs/run.png",
-      "docs/settle.png"
-    ],
     "webUiClient": "webui/client.js",
     "describe": "describe.json",
     "tags": [
@@ -76,6 +67,11 @@
         "displayName": "Infinity Runner",
         "description": "Your desktop pet got drafted by the Main God. Between runs she waits in the void; entering a movie world turns into a turn-based crawl of d100 checks, action picks and survival math. Survive and you earn reward points and plot tokens for bloodlines, stats and gene locks - and a bloodline can be deepened three times, each layer stronger and less human. Ten film worlds, each with one companion whose trust buys you a single death; the ones you saved remember you. She writes a journal entry after every run. Single-player, offline, no extra model calls.\n\nQQ group: 745879632"
       }
-    }
+    },
+    "screenshots": [
+      "docs/home.png",
+      "docs/run.png",
+      "docs/settle.png"
+    ]
   }
 }

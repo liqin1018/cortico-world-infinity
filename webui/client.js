@@ -83,7 +83,12 @@ const CSS = `
 .mg-lock { flex:1; height:30px; border-radius:7px; border:1px solid var(--line); background:var(--bg1);
   display:flex; align-items:center; justify-content:center; font-size:10px; color:var(--dim3); letter-spacing:.06em; }
 .mg-lock.on { background:linear-gradient(135deg,#4a2222,#2e1a24); border-color:#7a4444; color:#e8a0a0; }
-.mg-lock.cur { box-shadow:inset 0 0 0 1px var(--acc), 0 0 14px rgba(139,124,246,.22); color:var(--acc2); }
+.mg-lock.next { border-style:dashed; border-color:var(--line2); color:var(--dim2); }
+.mg-lock.next::after { content:none; }
+.mg-buy { display:flex; align-items:center; gap:8px; margin-top:10px; padding:8px 10px;
+  border-radius:8px; background:rgba(255,255,255,.028); border:1px solid var(--line); }
+.mg-buy-t { flex:1; font-size:10.5px; color:var(--dim); line-height:1.55; }
+.mg-buy-t b { color:var(--txt); font-weight:600; margin-right:5px; font-size:11.5px; }
 
 .mg-line { display:flex; gap:8px; font-size:11.5px; color:var(--dim); padding:5px 0; line-height:1.55; }
 .mg-line b { color:var(--txt); font-weight:500; }
@@ -423,18 +428,38 @@ function mount(ctx) {
 
       h('div', { class: 'mg-card' },
         h('div', { class: 'mg-h row' }, '基因锁', h('span', { class: 'spacer' }),
-          h('span', { class: 'mg-tag soft', text: `承载上限 ${r.gene.cap} 阶` })),
+          h('span', { class: 'mg-tag soft', text: `当前 ${r.gene.tier} 阶 / 上限 ${r.gene.cap} 阶` })),
         h('div', { class: 'mg-locks' },
           [1, 2, 3, 4, 5].map((i) => h('div', {
-            class: `mg-lock ${r.gene.tier >= i ? 'on' : ''} ${r.gene.tier + 1 === i ? 'cur' : ''}`,
+            class: `mg-lock ${r.gene.tier >= i ? 'on' : ''} ${r.gene.tier + 1 === i ? 'next' : ''}`,
             text: `${ROMAN[i - 1]}阶`,
           })),
         ),
         h('div', { class: 'mg-line', style: { marginTop: '8px' } },
           h('span', { text: r.gene.tier === 0
-            ? '还没开锁。第一次濒死时主神会给一次机会——那不是奖励，是赌。'
-            : `已开到 ${r.gene.tier} 阶。心魔 ${r.gene.karma}/${r.gene.karmaCap}，装满就入魔。` }),
+            ? `还没开锁。生命掉到 ${r.gene.danger}% 以下（或直接归零）时，主神会给一次机会——一局只有一次，赌输了就是死。`
+            : `已开到 ${r.gene.tier} 阶。生命掉到 ${r.gene.danger}% 以下还能再赌一次（一局一次）。心魔 ${r.gene.karma}/${r.gene.karmaCap}，装满就入魔。` }),
         ),
+        r.geneBuy
+          ? h('div', { class: 'mg-buy' },
+            h('div', { class: 'mg-buy-t' },
+              h('b', { text: `下一阶 · ${r.geneBuy.name}` }),
+              h('span', { text: r.geneBuy.overCap
+                ? `承载上限只有 ${r.geneBuy.cap} 阶，先把血统往上叠浓度`
+                : `${fmt(r.geneBuy.cost.points)} 点 + ${r.geneBuy.plotN ?? 1} 个 ${r.geneBuy.cost.plot} 级剧情 · 心魔 +${r.geneBuy.cost.karma}` })),
+            r.geneBuy.overCap
+              ? h('span', { class: 'mg-tag warn', text: '承载不足' })
+              : h('button', {
+                class: 'mg-btn xs ' + (r.geneBuy.can ? 'acc' : ''),
+                disabled: busy || !r.geneBuy.can,
+                text: r.geneBuy.can ? '强行开锁' : '不够',
+                onclick: () => {
+                  if (!confirm(`让主神强行开「${r.geneBuy.name}」？\n价钱：${fmt(r.geneBuy.cost.points)} 点 + ${r.geneBuy.plotN ?? 1} 个 ${r.geneBuy.cost.plot} 级剧情\n心魔 +${r.geneBuy.cost.karma}，不是你自己悟出来的。`)) return;
+                  act('do', 'gene');
+                },
+              }),
+          )
+          : null,
       ),
 
       h('div', { class: 'mg-card' },
@@ -604,6 +629,7 @@ function mount(ctx) {
     const tabs = [
       ['attr', '属性'],
       ['bloodline', '血统'],
+      ['gene', '基因锁'],
       ['skill', '技能'],
       ['item', '道具'],
     ];
@@ -651,6 +677,52 @@ function mount(ctx) {
           }),
         ));
       }
+    }
+
+    if (shopTab === 'gene') {
+      const g = s.gene;
+      const buy = g.buy;
+      const ROWS = g.list.map((x) => h('div', {
+        class: 'mg-item', style: { flexDirection: 'column', alignItems: 'stretch', gap: '6px' },
+      },
+        h('div', { style: { display: 'flex', alignItems: 'center', gap: '7px' } },
+          h('span', { style: { fontSize: '12.5px', fontWeight: '600' }, text: x.name }),
+          h('span', { class: `mg-tag ${x.owned ? 'soft' : ''}`, text: x.owned ? '已开' : (x.next ? '下一阶' : '未到') }),
+          h('span', { class: 'mg-tag soft', text: `赌 ${Math.round(x.chance * 100)}%` }),
+          h('span', { class: 'mg-tag soft', text: `判定 +${x.gain * 2}` }),
+          h('span', { style: { marginLeft: 'auto', color: x.owned ? 'var(--dim3)' : 'var(--gold)', fontSize: '11.5px', fontVariantNumeric: 'tabular-nums' } },
+            x.cost ? `${fmt(x.cost.points)}${x.cost.plotN ?? 1 > 1 ? '' : ''} + ${x.cost.plotN ?? 1}${x.cost.plot}` : '—'),
+          x.next && buy
+            ? h('button', {
+              class: 'mg-btn xs ' + (buy.can ? 'acc' : ''), style: { marginLeft: '8px' },
+              disabled: busy || !buy.can,
+              // 买不起和「承载上限不够」是两回事，别都写「不够」——后者要先升血统浓度
+              text: buy.can ? '强行开锁' : (buy.overCap ? '上限不足' : '不够'),
+              onclick: () => {
+                if (!confirm(`让主神强行开「${x.name}」？\n价钱：${fmt(x.cost.points)} 点 + ${x.cost.plotN ?? 1} 个 ${x.cost.plot} 级剧情\n心魔 +${x.cost.karma}，不是你自己悟出来的。`)) return;
+                act('do', 'gene');
+              },
+            })
+            : null,
+        ),
+        h('div', { style: { fontSize: '10.5px', color: 'var(--dim3)' },
+          text: `心魔 +${x.karma}　濒死或生命 ≤25% 时可以赌一次，赌输直接死。` }),
+      ));
+
+      body = h('div', {},
+        h('div', { class: 'mg-card', style: { marginBottom: '12px' } },
+          h('div', { class: 'mg-h row' }, '当前基因锁', h('span', { class: 'spacer' }),
+            h('span', { class: 'mg-tag soft', text: `${g.tier} 阶 / 上限 ${g.cap} 阶` })),
+          h('div', { class: 'mg-line' }, h('span', {
+            text: `心魔 ${g.karma}/${g.karmaCap}，装满 ${g.karmaCap} 级就入魔——入魔进不了副本，得先净化。`,
+          })),
+          h('div', { class: 'mg-line' }, h('span', {
+            text: '两条路：在副本里快死的时候赌一次（免费，赌输就是死），或者回这里花钱让主神把锁撬开。'
+              + '每开一阶永久 +2 判定、理智上限 +5，但它不是免费的——撬锁必涨心魔。',
+          })),
+        ),
+        h('div', { class: 'mg-list' }, ROWS),
+      );
     }
 
     if (shopTab === 'bloodline') {

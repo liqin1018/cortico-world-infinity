@@ -690,13 +690,86 @@ export const GENE_TIERS = {
   4: { name: '四阶', chance: 0.15, gain: 15, karma: 3, desc: '心灵之光' },
 };
 
-/** 该不该给她一次开锁的机会：生命见底、还没到顶、本局没开过。 */
+/**
+ * 强行开锁的价目表。
+ *
+ * 这是「赌」之外的第二条路：不用等濒死，回主神空间掏钱让主神把锁撬开。
+ * 越往上越离谱，而且每一阶都要一个对应等级的支线剧情——攒了一堆 C/B
+ * 花不出去的人，终于有个地方倒。
+ */
+export const GENE_BUY = {
+  1: { points: 12000, plot: 'C', karma: 1 },
+  2: { points: 30000, plot: 'B', karma: 1 },
+  3: { points: 80000, plot: 'A', karma: 2 },
+  // 四阶原本要 1 个 S 级剧情——但十个副本最高只到 A，S 剧情根本掉不出来，
+  // 等于把四阶锁死。改成两个 A。
+  4: { points: 200000, plot: 'A', plotN: 2, karma: 2 },
+};
+
+/** 下一阶能不能买、要多少钱。到顶返回 null。 */
+export function geneBuyOffer(state) {
+  const next = (state.runner.gene.tier ?? 0) + 1;
+  const cost = GENE_BUY[next];
+  if (!cost) return null;
+  const cap = geneCapOf(state);
+  const row = GENE_TIERS[next];
+  const plotN = cost.plotN ?? 1;
+  return {
+    tier: next, name: row ? row.name : `${next} 阶`, cost, cap, plotN,
+    overCap: next > cap,
+    can: next <= cap
+      && state.wallet.points >= cost.points
+      && (state.wallet.plots[cost.plot] ?? 0) >= plotN,
+  };
+}
+
+/** 花钱开锁。不占回合，只能在主神空间做。 */
+export function unlockGene(state) {
+  if (state.run && !state.run.settled) return { ok: false, message: '副本里做不了这个，先出来。' };
+  const offer = geneBuyOffer(state);
+  if (!offer) return { ok: false, message: '已经开到四阶了，再往上引擎里没有内容。' };
+  if (offer.overCap) {
+    return { ok: false, message: `承载上限只有 ${offer.cap} 阶。先把血统往上叠浓度，再来撬下一阶。` };
+  }
+  const { cost } = offer;
+  if (state.wallet.points < cost.points) return { ok: false, message: `点数差 ${cost.points - state.wallet.points}` };
+  const plotN = cost.plotN ?? 1;
+  if ((state.wallet.plots[cost.plot] ?? 0) < plotN) return { ok: false, message: `缺 ${plotN} 个 ${cost.plot} 级支线剧情` };
+
+  state.wallet.points -= cost.points;
+  state.wallet.plots[cost.plot] -= plotN;
+  state.runner.gene.tier = offer.tier;
+  state.runner.gene.karma = Math.min(karmaCap(state), state.runner.gene.karma + cost.karma);
+  norm(state);
+  pushLog(state, 'good', `主神强行开锁：${offer.name}（心魔 +${cost.karma}）`);
+  return {
+    ok: true,
+    message: `${offer.name}被撬开了。不是你自己在濒死时悟的——是主神把手伸进来掰开的。`
+      + `心魔 +${cost.karma}，现在 ${state.runner.gene.karma}/${karmaCap(state)}。`,
+  };
+}
+
+/** 生命占比。 */
+export function hpPct(state) {
+  return state.runner.hp / Math.max(1, maxHp(state));
+}
+
+/**
+ * 残血线。过了这条线就可以赌，不必等到归零。
+ *
+ * 原来的条件只有「生命归零」，结果是很荒诞的：她越强，血越厚，越不可能被打到 0，
+ * 于是基因锁永远是 0 阶。而她的自动逻辑 45% 血就开始打针——两套机制互相拆台。
+ */
+export const GENE_DANGER = 0.25;
+
+/** 该不该给她一次开锁的机会：快死了、还没到顶、本局没赌过。 */
 export function shouldOfferGene(state) {
   if (!state.run) return false;
-  if (state.runner.hp > 0) return false;
   if (state.runner.gene.tier >= 4) return false;
+  if (state.run.geneTried) return false;
   if (state.run.geneOfferAt === state.run.turn) return false;
-  return true;
+  if (state.runner.hp <= 0) return true;
+  return hpPct(state) <= GENE_DANGER;
 }
 
 export function geneOffer(state) {
@@ -722,6 +795,7 @@ export function attemptGene(state, accept) {
   const offer = geneOffer(state);
   if (!offer) return { ok: false, error: '现在没有开锁的机会' };
   state.run.geneOfferAt = state.run.turn;
+  state.run.geneTried = true;
 
   if (!accept) {
     state.runner.hp = 0;
@@ -735,7 +809,9 @@ export function attemptGene(state, accept) {
 
   if (passed) {
     state.runner.gene.tier = offer.tier;
-    state.runner.hp = 1;
+    // 原来写的是 hp = 1。在「只有归零才触发」的年代那是「勉强活着」，
+    // 但触发放宽到残血之后，1 点血等于开锁成功反而掉血——所以改成回到三成生命。
+    state.runner.hp = Math.max(1, Math.round(maxHp(state) * 0.3));
     state.run.flags.__geneBoost = (state.run.flags.__geneBoost ?? 0) + offer.gain;
     lines.push(`基因锁 ${offer.name} · 解锁`, `本副本判定 +${offer.gain * 2}`);
   } else {
@@ -759,13 +835,16 @@ export function attemptGene(state, accept) {
  */
 export function checkBonus(state, attr) {
   const boost = (state.run?.flags?.__geneBoost ?? 0) * 2;
+  // 基因锁本身也要值钱：每阶永久 +2 判定。否则开锁只是一次性的本局 buff，
+  // 四阶加起来的永久收益只有 20 点理智上限，没人会为它去赌命。
+  const tierBonus = (state.runner.gene.tier ?? 0) * 2;
   const def = mateOf(state);
   const m = state.run?.mate;
   let bondBonus = 0;
   if (def?.bond && m?.alive && def.bond.attr === attr && m.trust >= (def.bond.min ?? 2)) {
     bondBonus = def.bond.bonus ?? 0;
   }
-  return boost + bondBonus + skillAttrBonus(state.runner.skills, attr);
+  return boost + tierBonus + bondBonus + skillAttrBonus(state.runner.skills, attr);
 }
 
 /* ---------------- 结算 ---------------- */
@@ -1104,14 +1183,24 @@ export function useGear(state, key) {
 }
 
 /** 净化心魔：点数 + 一次「心魔战」的抽象化——这里只结算代价。 */
-export function purify(state) {  if (state.runner.gene.karma <= 0) return { ok: false, message: '身上没有心魔' };
-  const cost = 3000 * state.runner.gene.karma;
-  if (state.wallet.points < cost) return { ok: false, message: `净化 ${state.runner.gene.karma} 级心魔要 ${cost} 点，还差 ${cost - state.wallet.points}` };
+export function purify(state) {
+  if (state.runner.gene.karma <= 0) return { ok: false, message: '身上没有心魔' };
+  const full = 3000 * state.runner.gene.karma;
+  // 入魔之后进不了副本，如果同时又拿不出净化费，就是永久卡死。
+  // 所以钱不够的时候主神照样净化，把手上的点数刮干净为止——它不做亏本买卖，
+  // 但也不会把人困在门外。
+  const cost = Math.min(full, state.wallet.points);
+  const broke = cost < full;
   state.wallet.points -= cost;
   const before = state.runner.gene.karma;
   state.runner.gene.karma = 0;
   state.runner.san = Math.max(1, Math.floor(maxSan(state) * 0.6));
-  return { ok: true, message: `净化掉了 ${before} 级心魔，代价是 ${cost} 点。理智掉到六成。` };
+  return {
+    ok: true,
+    message: broke
+      ? `净化掉了 ${before} 级心魔。你拿不出 ${full} 点，主神把剩下的 ${cost} 点全刮走了。理智掉到六成。`
+      : `净化掉了 ${before} 级心魔，代价是 ${cost} 点。理智掉到六成。`,
+  };
 }
 
 /* ---------------- 日志 ---------------- */

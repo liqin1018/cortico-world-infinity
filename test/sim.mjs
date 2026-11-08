@@ -93,9 +93,10 @@ for (const cmd of [
   console.log(`  ${cmd[0]}(${cmd[1]}) → ${r.ok ? 'OK' : '拒绝'}：${r.message}`);
 }
 
-console.log('\n=== 再跑一局 fd2 ===');
+console.log('\n=== 再跑一局 fd2（第一次判定用支线保底） ===');
 console.log(world.enter('fd2').message.split('\n').slice(-6).join('\n'));
 guard = 0;
+let insuredOnce = false;
 while (guard++ < 30) {
   const st = world.ensure();
   if (!st.run || st.run.settled) break;
@@ -106,12 +107,28 @@ while (guard++ < 30) {
   }
   const ok = world.payload().run.opts.filter((o) => o.ok);
   if (!ok.length) break;
-  const r = await world.pick(ok[0].i);
+  const target = ok.find((o) => o.kind === 'check') ?? ok[0];
+  const useInsure = !insuredOnce && target.kind === 'check' && world.payload().insure?.can;
+  if (useInsure) insuredOnce = true;
+  const r = await world.pick(target.i, useInsure);
+  if (useInsure) {
+    const line = r.message.split('\n').find((l) => l.includes('押上'));
+    console.log(`  （保底：${line ?? '判定直接过了，没扣剧情'}）`);
+  }
   if (r.settled) break;
 }
 if (world.ensure().run?.report) {
   const r = world.ensure().run.report;
-  console.log('fd2 结局：' + r.ending.title + '　' + r.points + ' 点');
+  const mt = r.mate ? `${r.mate.name}（${r.mate.status}）` : '无';
+  console.log(`fd2 结局：${r.ending.title}　${r.points} 点　同伴：${mt}`);
+}
+
+console.log('\n=== 手记 ===');
+const post = world.payload().journals?.[0];
+if (post) {
+  for (const line of post.text.split('\n')) console.log('  │ ' + line);
+} else {
+  console.log('  （没有手记）');
 }
 
 console.log('\n=== 事件 ===');

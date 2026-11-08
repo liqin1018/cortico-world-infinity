@@ -22,7 +22,7 @@ import {
   shouldOfferGene, geneOffer, attemptGene, settleRun, commitRun, clearRun,
   buyAttr, buyBloodline, buySkill, buyItem, purify, attrCost, pushLog, ATTR_MAX, useGear,
   gradeBloodline, gradeOf, gradeCost, karmaCap, GRADE_MAX, DIFFICULTY,
-  SWAP_MULT, bloodlinePrice,
+  SWAP_MULT, bloodlinePrice, geneBuyOffer, unlockGene, GENE_DANGER, GENE_TIERS, GENE_BUY,
   mateGuard, mateOutcome, mateOf, canInsure, cheapestPlot, maybeJoinMate,
 } from './engine.js';
 import { loadState, saveState, statePath, JOURNAL_KEEP, createState } from './state.js';
@@ -225,7 +225,15 @@ export class InfinityWorld {
     // 在副本里：先处理濒死，再选一个动作
     if (shouldOfferGene(s)) {
       const offer = geneOffer(s);
-      // 她自己会赌。这是这个世界的味道：明知道会失败，还是会赌。
+      const canHeal = (s.runner.inv.medkit ?? 0) > 0 || s.runner.skills.includes('firstaid');
+      const dying = s.runner.hp <= 0;
+      // 她自己会赌，但不是无脑赌：一二阶值得（60%/45%），三四阶只有真站不住了才赌。
+      // 手里还有针、血又没见底的时候，先治伤——开锁是赌命，不是抽奖。
+      const worth = dying || !canHeal || (offer?.chance ?? 0) >= 0.45;
+      if (!worth) {
+        if (this.autoUse(s)) this.save();
+        return;
+      }
       const out = attemptGene(s, true);
       s.auto = { lastAt: new Date().toISOString(), steps: (s.auto?.steps ?? 0) + 1 };
       this.save();
@@ -261,9 +269,13 @@ export class InfinityWorld {
     const cleared = s.meta.clearedWorlds ?? [];
     const fresh = byRating(WORLD_LIST.filter((w) => !cleared.includes(w.id)));
     if (fresh.length) return fresh[0].id;
-    // 全通关了：去刷一个能赢的，别让她一遍遍死在 A 级里
-    const grindable = WORLD_LIST.filter((w) => w.rating !== 'A' && w.rating !== 'S');
-    return (grindable.at(-1) ?? WORLD_LIST[0]).id;
+    // 全通关了：轮换。
+    // 原来固定挑「评级最高的非 A 本」，结果 80 局里 70 局都进了猛鬼街——
+    // 同伴记忆、手记、支线全是南希，看着像游戏只有一张地图。
+    const ring = byRating(WORLD_LIST.slice());
+    const i = (s.meta.grindCursor ?? 0) % ring.length;
+    s.meta.grindCursor = i + 1;
+    return ring[i].id;
   }
 
   /**
@@ -329,7 +341,8 @@ export class InfinityWorld {
 
     // 1. 心魔：满了就进不了副本，先净化。这条最优先，否则下面的钱都白花。
     for (let i = 0; i < 4 && s.runner.gene.karma > 0; i += 1) {
-      if (!can(3000 * s.runner.gene.karma)) break;
+      // 不再检查「够不够 3000×心魔」：净化现在允许破产，钱不够就把身上刮干净。
+      // 否则一次强行开锁把心魔顶满 + 手头没点数 = 永远进不了副本。
       const r = purify(s);
       if (!r.ok) break;
       note('净化了心魔');
@@ -367,7 +380,19 @@ export class InfinityWorld {
       note(`血统浓度升到第 ${c.next} 层`);
     }
 
-    // 5. 技能：买没学过的、买得起里最贵的那个。
+    // 5. 基因锁：买得起就撬。攒着的那堆 C/B 剧情终于有地方倒。
+    //    心魔会顶到上限（浓度三层之后上限只有 1，撬一次就满），那就入魔，
+    //    下一次进这里第一步就是净化——不要为了「留余量」把自己永久卡在二阶。
+    for (let i = 0; i < 4; i += 1) {
+      const offer = geneBuyOffer(s);
+      if (!offer || !offer.can) break;
+      if (s.runner.gene.karma >= karmaCap(s)) break;
+      const r = unlockGene(s);
+      if (!r.ok) break;
+      note(`让主神强行开了${offer.name}`);
+    }
+
+    // 6. 技能：买没学过的、买得起里最贵的那个。
     for (let i = 0; i < 8; i += 1) {
       const pick = SKILLS
         .filter((k) => !s.runner.skills.includes(k.id) && can(k.price) && plotOk(k.plot))
@@ -378,7 +403,7 @@ export class InfinityWorld {
       note(`学会了 ${pick.name}`);
     }
 
-    // 6. 零钱：全塞进当前最低的那项属性。总有地方放得下。
+    // 7. 零钱：全塞进当前最低的那项属性。总有地方放得下。
     for (let i = 0; i < 240; i += 1) {
       const open = ATTR_KEYS.filter((k) => s.runner.attrs[k] < ATTR_MAX);
       if (!open.length) break;
@@ -504,9 +529,11 @@ export class InfinityWorld {
       '属性：' + ATTR_KEYS.map((k) => `${ATTR_LABEL[k]} ${a[k]}${a[k] !== base[k] ? `(+${a[k] - base[k]})` : ''}`).join('　'),
     );
     L.push(`生命 ${s.runner.hp}/${maxHp(s)}　理智 ${s.runner.san}/${maxSan(s)}`);
+    const gb = geneBuyOffer(s);
     L.push(
       `基因锁：${s.runner.gene.tier === 0 ? '没开' : s.runner.gene.tier + ' 阶'}`
-      + `（心魔 ${s.runner.gene.karma}/${karmaCap(s)}，当前血统承载上限 ${geneCapOf(s)} 阶）`,
+      + `（心魔 ${s.runner.gene.karma}/${karmaCap(s)}，当前血统承载上限 ${geneCapOf(s)} 阶）`
+      + (gb && gb.can ? `。攒够了：花 ${gb.cost.points} 点 + ${gb.plotN ?? 1} 个 ${gb.cost.plot} 级剧情能让主神强行开${gb.name}` : ''),
     );
     const g = gradeOf(s);
     L.push(`血统：${bl
@@ -817,8 +844,11 @@ export class InfinityWorld {
     );
   }
 
-  doAction(action, key, n, tag) {
+  doAction(action, key, n, tag, fromPanel = false) {
     const s = this.ensure();
+    // 面板点「重铸」时会带 swap。第三个参数（n）留给 item 的个数，
+    // 但面板一行只传得了三个位置参数，所以两处都认一下，别再踩同一脚的坑。
+    const isSwap = tag === 'swap' || n === 'swap';
 
     // 用东西不进兑换：这个动作在副本里也能做，所以放在「副本里不能兑换」之前。
     if (action === 'use') {
@@ -832,12 +862,21 @@ export class InfinityWorld {
     if (s.run && !s.run.settled) {
       return { ok: false, message: '副本里做不了兑换，先出来。' };
     }
-    if (!this.cfg('allowSpend', true)) {
-      return { ok: false, denied: true, message: '主人还没让我自己花点数。想兑换的话在面板上点，或者去设置里把「允许她自己花点数」打开。' };
+    // 这个开关管的是「她自己能不能花」，不是「你能不能花」。
+    // 原来面板点击也走同一条判断，于是关掉开关之后连手动兑换都被拦——
+    // 和配置说明里「关掉的话兑换只能由你在面板上点」正好相反。
+    if (!fromPanel && !this.cfg('allowSpend', true)) {
+      return { ok: false, denied: true, message: '主人还没让我自己花点数。想让主神开锁、换血统，你在面板上点就行；要我也能自己花，去配置里把「允许她自己花点数」打开。' };
     }
 
     if (action === 'purify') {
       const r = purify(s);
+      this.save();
+      return { ok: r.ok, message: r.message };
+    }
+
+    if (action === 'gene') {
+      const r = unlockGene(s);
       this.save();
       return { ok: r.ok, message: r.message };
     }
@@ -862,13 +901,14 @@ export class InfinityWorld {
     if (action === 'bloodline') {
       const bl = this.resolveKey(BLOODLINES, key);
       // 换血统是不可逆的终身决定，默认不让她自己拍板；真换得由面板显式带 swap。
-      if (s.runner.bloodline && tag !== 'swap') {
+      if (s.runner.bloodline && !isSwap) {
         return {
           ok: false,
-          message: `身上已经有「${bloodlineOf(s)?.name}」了。想换另一条得走「剥离重铸」——价钱 ×${SWAP_MULT}、浓度清零、旧的不会回来。要更强不走换血统，走 action=grade。`,
+          message: `身上已经有「${bloodlineOf(s)?.name}」了。血统一次只能有一条：想换另一条要走「剥离重铸」——`
+            + `兑换 → 血统，点那条的「重铸」，价钱是原价的 ${SWAP_MULT} 倍，浓度清零，旧的那条不会回来。`
+            + '这一步只能由主人在面板上按，她自己做不了。想让它更强是往上叠浓度，不是换一条。',
         };
       }
-      if (!this.cfg('allowSpend', true)) return { ok: false, message: '不允许自己花点数。' };
       if (!bl) {
         const swapping = !!s.runner.bloodline;
         const affordable = BLOODLINES.filter((b) => s.wallet.points >= bloodlinePrice(b, swapping)
@@ -878,7 +918,7 @@ export class InfinityWorld {
           message: `没找到「${key}」。现在买得起的：${affordable.slice(0, 12).map((b) => `${b.name}（${bloodlinePrice(b, swapping)} 点${b.plot ? '+' + b.plot : ''}）`).join('、') || '一个都买不起'}`,
         };
       }
-      const r = buyBloodline(s, bl.id, { swap: tag === 'swap' });
+      const r = buyBloodline(s, bl.id, { swap: isSwap });
       this.save();
       return { ok: r.ok, message: r.message };
     }
@@ -962,7 +1002,8 @@ export class InfinityWorld {
         hpMax: maxHp(s),
         san: s.runner.san,
         sanMax: maxSan(s),
-        gene: { tier: s.runner.gene.tier, karma: s.runner.gene.karma, cap: geneCapOf(s), karmaCap: karmaCap(s) },
+        gene: { tier: s.runner.gene.tier, karma: s.runner.gene.karma, cap: geneCapOf(s), karmaCap: karmaCap(s), danger: Math.round(GENE_DANGER * 100) },
+        geneBuy: geneBuyOffer(s),
         bloodline: bl
           ? {
             id: bl.id,
@@ -1107,6 +1148,25 @@ export class InfinityWorld {
           can: base[k] < ATTR_MAX && s.wallet.points >= attrCost(base[k]),
         })),
 
+        // 基因锁：赌是赌，买是买，价目摊开给人看。
+        gene: {
+          tier: s.runner.gene.tier,
+          karma: s.runner.gene.karma,
+          karmaCap: karmaCap(s),
+          cap: geneCapOf(s),
+          buy: geneBuyOffer(s),
+          list: Object.entries(GENE_TIERS).map(([k, row]) => ({
+            tier: Number(k),
+            name: row.name,
+            chance: row.chance,
+            gain: row.gain,
+            karma: row.karma,
+            owned: s.runner.gene.tier >= Number(k),
+            next: s.runner.gene.tier + 1 === Number(k),
+            cost: GENE_BUY[k] ?? null,
+          })),
+        },
+
         // 血统浓度：买过一次之后唯一还能往上走的路。
         grade: (() => {
           const cost = gradeCost(s);
@@ -1227,7 +1287,7 @@ export class InfinityWorld {
         if (method === 'gene') return await this.gene(args[0]);
         if (method === 'flee') return this.flee();
         if (method === 'leave') return this.leave();
-        if (method === 'do') return this.doAction(args[0], args[1], args[2], args[3]);
+        if (method === 'do') return this.doAction(args[0], args[1], args[2], args[3], true);
         if (method === 'use') return this.doAction('use', args[0]);
         if (method === 'setting') return this.setOption(args[0], args[1]);
         if (method === 'reset') return this.resetAll();

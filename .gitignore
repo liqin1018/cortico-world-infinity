@@ -2,3 +2,8 @@ node_modules/
 .smoke-data*/
 .tmp-check/
 *.log
+dist/
+demo/index.html
+test/_shot-*.html
+test/_shot-*.png
+.DS_Store
