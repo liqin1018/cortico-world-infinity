@@ -23,7 +23,8 @@ import {
   buyAttr, buyBloodline, buySkill, buyItem, purify, attrCost, pushLog, ATTR_MAX, useGear,
   gradeBloodline, gradeOf, gradeCost, karmaCap, GRADE_MAX, DIFFICULTY,
   SWAP_MULT, bloodlinePrice, geneBuyOffer, unlockGene, GENE_DANGER, GENE_TIERS, GENE_BUY,
-  mateGuard, mateOutcome, mateOf, canInsure, cheapestPlot, maybeJoinMate,
+  MELT, meltPlot,
+  mateGuard, mateOutcome, mateOf, canInsure, cheapestPlot, maybeJoinMate, sideProgress,
 } from './engine.js';
 import { loadState, saveState, statePath, JOURNAL_KEEP, createState } from './state.js';
 import { writeJournal } from './journal.js';
@@ -555,6 +556,18 @@ export class InfinityWorld {
     const plots = Object.entries(s.wallet.plots).filter(([, n]) => n > 0)
       .map(([t, n]) => `${t}×${n}`).join(' ');
     L.push(`奖励点 ${s.wallet.points}　支线剧情 ${plots || '无'}`);
+    // 点数够买 S 血统、却一个 S 剧情都没有——这时候她最容易反复去试，然后把
+    // 「不足」当成 bug 念给主人听。先说清楚 S 从哪来，只在真缺的时候占这一行。
+    if ((s.wallet.plots.S ?? 0) === 0 && s.wallet.points >= 48000) {
+      L.push('（S 级剧情只能从 A 级本全清拿：4 条支线全达成 + 同伴活着出来，一局一笔）');
+    }
+    // 堆到够熔一轮就说一声，否则这些数字在她眼里只是「有」，不是「能用」。
+    const meltable = Object.entries(MELT)
+      .filter(([t, r]) => (s.wallet.plots[t] ?? 0) >= r.n)
+      .map(([t, r]) => `${t}→${r.to}`);
+    if (meltable.length) {
+      L.push(`（够熔铸了：${meltable.join('、')}。mg_do action=melt key=C 熔一次，key=C all 全部熔掉）`);
+    }
 
     if (!s.run) {
       L.push('');
@@ -881,6 +894,14 @@ export class InfinityWorld {
       return { ok: r.ok, message: r.message };
     }
 
+    if (action === 'melt') {
+      // 熔铸只动剧情、不动点数，所以不看 allowSpend——那个开关管的是钱。
+      const all = n === 'all' || tag === 'all' || n === true;
+      const r = meltPlot(s, String(key ?? '').toUpperCase(), all);
+      this.save();
+      return { ok: r.ok, message: r.message };
+    }
+
     if (action === 'attr') {
       const k = String(key ?? '').trim().toLowerCase();
       const map = { 力量: 'str', 敏捷: 'agi', 体质: 'con', 智力: 'int', 感知: 'per' };
@@ -1129,12 +1150,17 @@ export class InfinityWorld {
           settled: s.run.settled,
           report: s.run.report ?? null,
           geneOffer: offer,
+          // 四条支线现在走到哪了。S 级剧情要的是「全部达成 + 同伴没死」，
+          // 这个条件必须每一回合都看得见，否则等于没有。
+          sides: sideProgress(s),
+          sReward: w.rating === 'A'
+            ? { total: w.sides.length, need: w.sides.length, mateOk: s.run.mate?.alive !== false }
+            : null,
           // 这一局还剩多少次闪避 / 复活 / 重掷，面板要让主人看得见。
           gear: s.run.gear ?? null,
           mate: s.run.mate
             ? { name: s.run.mate.name, trust: s.run.mate.trust, alive: s.run.mate.alive, how: s.run.mate.how }
             : null,
-          sides: w.sides.map((x) => ({ desc: x.desc, points: x.points, plot: x.plot })),
         }
         : null,
 
@@ -1147,6 +1173,17 @@ export class InfinityWorld {
           cost: base[k] >= ATTR_MAX ? null : attrCost(base[k]),
           can: base[k] < ATTR_MAX && s.wallet.points >= attrCost(base[k]),
         })),
+
+        // 剧情熔铸：中期以后 C/B 会堆成山，这里是唯一的回收口。
+        melt: {
+          rules: Object.entries(MELT).map(([from, r]) => ({
+            from,
+            to: r.to,
+            n: r.n,
+            have: s.wallet.plots[from] ?? 0,
+            times: Math.floor((s.wallet.plots[from] ?? 0) / r.n),
+          })),
+        },
 
         // 基因锁：赌是赌，买是买，价目摊开给人看。
         gene: {

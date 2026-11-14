@@ -144,7 +144,11 @@ export function gearInit(state) {
   const g = {
     dodge: 0, heal: 0, breach: 0, reroll: 0, autoPass: 0,
     revive: 0, reviveHp: 0, sanShield: 0, armor: 0,
+    // 五阶的「领域」单独一格，不并进 autoPass——不然玩家会以为那是剧本干涉道具在生效。
+    domain: 0,
   };
+  // 领域：每局一次，把一次失败的判定直接改写成功。不花道具、不退、不占回合。
+  if ((state.runner.gene.tier ?? 0) >= 5) g.domain = 1;
   for (const id of state.runner.skills ?? []) {
     const h = SKILL_BY_ID[id]?.hook ?? {};
     if (h.dodge) g.dodge += h.dodge;
@@ -195,9 +199,11 @@ export function maxSan(state) {
 
 export function geneCapOf(state) {
   const bl = bloodlineOf(state);
-  // 封在 4 而不是 5：引擎里 GENE_TIERS 只做到四阶，五阶是版本末期内容。
-  // 显示一个开不到的数字只会让人以为哪里坏了。
-  return Math.min(4, (bl ? bl.geneCap : 1) + gradeOf(state));
+  const cap = (bl ? bl.geneCap : 1) + gradeOf(state);
+  // 五阶是「领域」，只有 S 级血统本身承载得住——叠浓度叠不上去。
+  // A 级血统叠到三层也只到 4，这不是数值不够，是物种不对。
+  if (bl && bl.tier === 'S') return Math.min(5, cap);
+  return Math.min(4, cap);
 }
 
 export function norm(state) {
@@ -353,6 +359,25 @@ export function startRun(state, worldId) {
 
 export function worldOf(state) {
   return state.run ? BY_ID[state.run.worldId] ?? null : null;
+}
+
+/**
+ * 支线进度。
+ *
+ * 原来只有「进本之前」能看到四条支线叫什么，进去之后就看不见了——
+ * 而 S 级剧情要的正是「四条全达成」。不给进度条，那个条件等于不存在。
+ */
+export function sideProgress(state) {
+  const w = worldOf(state);
+  if (!w) return null;
+  const hit = new Set(w.assess(viewOf(state)));
+  return w.sides.map((side) => ({
+    id: side.id,
+    desc: side.desc,
+    plot: side.plot,
+    points: side.points,
+    done: hit.has(side.id),
+  }));
 }
 
 export function nodeOf(state) {
@@ -541,6 +566,44 @@ export function addItem(state, id, n = 1) {
 
 export const PLOT_ORDER = ['D', 'C', 'B', 'A', 'S'];
 
+/**
+ * 剧情熔铸：把低等级的凭证交给主神，换一张高一级的。
+ *
+ * 折价很狠——十张 C 换一张 B，五张 A 换一张 S。这不是汇率，是**回收**：
+ * 主神拿走的是具体的东西（救过谁、改了哪条主线），拼不回来，只能给你一张空白的高级券。
+ *
+ * 为什么需要这个口子：玩到后期会攒下两三百个 C。而 C 的用途是有上限的——
+ * 技能和道具各买一次，血统只能有一条，浓度只有三层。没有回收，
+ * 中期以后的剧情就只是一串点不动的数字。
+ *
+ * D 不收：它只有「押保底」一个用途，本来就该一直处于快用完的状态。
+ */
+export const MELT = {
+  C: { n: 10, to: 'B' },
+  B: { n: 10, to: 'A' },
+  A: { n: 5, to: 'S' },
+};
+
+export function meltPlot(state, from, all = false) {
+  const rule = MELT[from];
+  if (!rule) return { ok: false, message: '这一档熔不了。C → B、B → A、A → S，只能往上走。' };
+  if (state.run && !state.run.settled) return { ok: false, message: '副本里做不了这个，先出来。' };
+  const have = state.wallet.plots[from] ?? 0;
+  if (have < rule.n) {
+    return { ok: false, message: `${rule.n} 个 ${from} 级才能熔 1 个 ${rule.to} 级，现在只有 ${have} 个。` };
+  }
+  const times = all ? Math.floor(have / rule.n) : 1;
+  state.wallet.plots[from] -= times * rule.n;
+  state.wallet.plots[rule.to] = (state.wallet.plots[rule.to] ?? 0) + times;
+  pushLog(state, 'good', `熔铸：${times * rule.n} 个 ${from} → ${times} 个 ${rule.to}`);
+  return {
+    ok: true,
+    times,
+    message: `${times * rule.n} 个 ${from} 级换成了 ${times} 个 ${rule.to} 级。`
+      + '主神收走的是具体的事，还回来的是一张空白券。',
+  };
+}
+
 /** 手头最便宜的那一档支线剧情。押注按这个扣，不让玩家拿 A 级去保一次 DC45。 */
 export function cheapestPlot(state) {
   for (const t of PLOT_ORDER) {
@@ -613,7 +676,12 @@ export function pickOption(state, index, opts = {}) {
     let auto = null;
     if (!r.success) {
       const g = gearOf(state);
-      if (g?.autoPass > 0) {
+      if (g?.domain > 0) {
+        // 领域排在道具前面：它是白给的，道具是花钱买的，先花不心疼的。
+        g.domain -= 1;
+        r = { ...r, success: true };
+        auto = '领域';
+      } else if (g?.autoPass > 0) {
         g.autoPass -= 1;
         r = { ...r, success: true };
         auto = '剧本干涉';
@@ -658,6 +726,9 @@ export function pickOption(state, index, opts = {}) {
     roll: result.roll ? `${result.roll.roll}+${result.roll.attrMod}${result.roll.bonus ? '+' + result.roll.bonus : ''}=${result.roll.total}` : null,
     dc: result.roll?.dc ?? null,
     insure: result.insure,
+    // 「过」是怎么过的：领域改的、道具改的、还是重掷。不记下来玩家只会看到
+    // 一个没掷过的判定写着「过」，然后怀疑骰子坏了。
+    auto: result.auto ?? null,
   });
 
   pushLog(state, result.success ? 'good' : 'bad',
@@ -688,6 +759,9 @@ export const GENE_TIERS = {
   2: { name: '二阶', chance: 0.45, gain: 10, karma: 1, desc: '掌控身体' },
   3: { name: '三阶', chance: 0.3, gain: 12, karma: 2, desc: '模拟思维' },
   4: { name: '四阶', chance: 0.15, gain: 15, karma: 3, desc: '心灵之光' },
+  // 五阶不是「更强」，是换了一层规则：领域。所以它只给 S 级血统开，
+  // 赌局成功率压到 5%——这一阶基本是买来的，不是赌来的。
+  5: { name: '五阶', chance: 0.05, gain: 20, karma: 4, desc: '领域' },
 };
 
 /**
@@ -704,6 +778,9 @@ export const GENE_BUY = {
   // 四阶原本要 1 个 S 级剧情——但十个副本最高只到 A，S 剧情根本掉不出来，
   // 等于把四阶锁死。改成两个 A。
   4: { points: 200000, plot: 'A', plotN: 2, karma: 2 },
+  // 五阶要的是两张 S：一张来自 A 级本完美通关，一张来自熔铸。
+  // 心魔 +4，撬完必入魔——领域不是白拿的。
+  5: { points: 250000, plot: 'S', plotN: 2, karma: 4 },
 };
 
 /** 下一阶能不能买、要多少钱。到顶返回 null。 */
@@ -739,13 +816,17 @@ export function unlockGene(state) {
   state.wallet.points -= cost.points;
   state.wallet.plots[cost.plot] -= plotN;
   state.runner.gene.tier = offer.tier;
-  state.runner.gene.karma = Math.min(karmaCap(state), state.runner.gene.karma + cost.karma);
+  const karmaBefore = state.runner.gene.karma;
+  state.runner.gene.karma = Math.min(karmaCap(state), karmaBefore + cost.karma);
+  // 心魔有上限，实际涨的可能比价目表上写的少。报数字要报真的那个，
+  // 否则「心魔 +4」之后一看只涨了 3，玩家会以为哪里漏了。
+  const karmaUp = state.runner.gene.karma - karmaBefore;
   norm(state);
-  pushLog(state, 'good', `主神强行开锁：${offer.name}（心魔 +${cost.karma}）`);
+  pushLog(state, 'good', `主神强行开锁：${offer.name}（心魔 +${karmaUp}）`);
   return {
     ok: true,
     message: `${offer.name}被撬开了。不是你自己在濒死时悟的——是主神把手伸进来掰开的。`
-      + `心魔 +${cost.karma}，现在 ${state.runner.gene.karma}/${karmaCap(state)}。`,
+      + `心魔 +${karmaUp}，现在 ${state.runner.gene.karma}/${karmaCap(state)}。`,
   };
 }
 
@@ -765,7 +846,10 @@ export const GENE_DANGER = 0.25;
 /** 该不该给她一次开锁的机会：快死了、还没到顶、本局没赌过。 */
 export function shouldOfferGene(state) {
   if (!state.run) return false;
-  if (state.runner.gene.tier >= 4) return false;
+  if (state.runner.gene.tier >= 5) return false;
+  // 承载不够的阶位不能靠赌越过去。否则 A 级血统也能赌出五阶，
+  // 「只有 S 级血统承载得住领域」这条设定当场失效。
+  if (geneOffer(state)?.overCap) return false;
   if (state.run.geneTried) return false;
   if (state.run.geneOfferAt === state.run.turn) return false;
   if (state.runner.hp <= 0) return true;
@@ -893,6 +977,26 @@ export function settleRun(state) {
     } else {
       rows.push({ kind: 'mate', label: `同伴 · ${mate.name} 没能出来${mate.how ? `（${mate.how}）` : ''}`, points: 0, plot: null, bad: true, minor: true });
     }
+  }
+
+  // S 级剧情：完美通关。
+  //
+  // 0.6.1 之前 S 剧情的产出是 0——十个副本的支线最高只到 A，而兑换页上有九条
+  // S 血统加一个主神碎片在等它。等于摆了一整层买不到的东西。
+  //
+  // 现在只有一个来源：**A 级本四条支线全达成，且没有把同行的同伴留下**。
+  // 不追溯、不给第二次机会——它就是「你把整条线走通了」这件事本身的凭证。
+  const allSides = alive && w.sides.length > 0 && w.sides.every((side) => hitSet.has(side.id));
+  const mateLost = mate?.status === 'lost';
+  if (w.rating === 'A' && allSides && !mateLost) {
+    plots.S = (plots.S ?? 0) + 1;
+    rows.push({
+      kind: 'bonus',
+      label: '完美通关 · 主神额外记的一笔',
+      points: 0,
+      plot: 'S',
+      reward: true,
+    });
   }
 
   for (const p of w.penalties(viewOf(state)) ?? []) {

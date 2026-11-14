@@ -242,11 +242,27 @@ const CSS = `
 .mg-chip.tog { margin-left:auto; }
 
 /* ── 副本卡支线清单 ─────────────────────────────────────────────────── */
+.mg-quest { margin-top:9px; padding-top:8px; border-top:1px solid #221d33; }
+.mg-quest .qh { display:flex; align-items:center; gap:6px; font-size:9.5px; letter-spacing:.08em; color:var(--dim3); }
+.mg-quest .qn { margin-left:auto; color:var(--dim2); font-variant-numeric:tabular-nums; letter-spacing:0; }
+.mg-quest .qi { display:flex; align-items:baseline; gap:5px; font-size:10px; color:var(--dim3); line-height:1.8; }
+.mg-quest .qi.on { color:var(--dim2); }
+.mg-quest .qm { width:9px; flex:none; color:var(--dim3); }
+.mg-quest .qi.on .qm { color:var(--acc2); }
+.mg-quest .qt { flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.mg-quest .qs { margin-top:5px; font-size:9.5px; color:var(--gold); line-height:1.6; opacity:.8; }
+.mg-quest .qs.off { color:var(--dim3); opacity:1; }
+
 .mg-sides { font-size:10px; color:var(--dim3); line-height:1.8; margin-top:9px; position:relative; }
 .mg-sides b { color:var(--dim2); font-weight:400; }
 
 /* ── 结算附注行 ─────────────────────────────────────────────────────── */
 .mg-row.minor { padding:4px 2px 7px 26px; border-bottom:none; font-size:10.5px; }
+/* 完美通关那一笔：S 剧情不带点数，所以不能靠「+数字」抢眼，得靠颜色 */
+.mg-gear .dom { color:var(--gold); }
+.mg-row.reward { background:rgba(224,182,76,.055); border-bottom-color:#3a3020; }
+.mg-row.reward .l { color:var(--gold); }
+.mg-row.reward .v { color:var(--gold); }
 .mg-row.minor .l { color:var(--dim3); }
 .mg-row.minor .v { color:var(--dim2); font-size:11px; }
 
@@ -575,6 +591,9 @@ function mount(ctx) {
           '前两次会触发「主神怜悯」，只清点数不抹杀。')),
         h('div', { class: 'mg-line' }, h('span', {},
           '支线剧情（D/C/B/A/S）比点数稀有，只能靠改变原剧情拿到——救一个本该死的人、放走一个本该发生的结局。')),
+        h('div', { class: 'mg-line' }, h('span', {},
+          'S 级只有一个来源：A 级副本（神鬼传奇 / 魔戒 / 星河战队）四条支线全达成，且没有把同伴留在里面。',
+          '一局最多一笔，不追溯。')),
       ),
 
       h('div', { class: 'mg-card', style: { marginTop: '11px' } },
@@ -630,6 +649,7 @@ function mount(ctx) {
       ['attr', '属性'],
       ['bloodline', '血统'],
       ['gene', '基因锁'],
+      ['melt', '熔铸'],
       ['skill', '技能'],
       ['item', '道具'],
     ];
@@ -677,6 +697,59 @@ function mount(ctx) {
           }),
         ));
       }
+    }
+
+    if (shopTab === 'melt') {
+      const rules = s.melt?.rules ?? [];
+      body = h('div', {},
+        h('div', { class: 'mg-card', style: { marginBottom: '12px' } },
+          h('div', { class: 'mg-h row' }, '剧情熔铸', h('span', { class: 'spacer' }),
+            h('span', { class: 'mg-tag soft', text: '只往上，不往下' })),
+          h('div', { class: 'mg-line' }, h('span', {
+            text: '低等级的支线剧情交给主神，换一张高一级的。折价很狠——十张 C 才换一张 B。',
+          })),
+          h('div', { class: 'mg-line' }, h('span', {
+            text: '它拿走的是具体的事（救过谁、改了哪条主线），还回来的是一张空白券。不可逆。',
+          })),
+          h('div', { class: 'mg-line' }, h('span', {
+            text: 'D 级不参与：它只有「押保底」一个用途，本来就该一直快用完。',
+          })),
+        ),
+        h('div', { class: 'mg-list' }, rules.map((rl) => h('div', {
+          class: 'mg-item', style: { flexDirection: 'column', alignItems: 'stretch', gap: '7px' },
+        },
+          h('div', { style: { display: 'flex', alignItems: 'center', gap: '8px' } },
+            h('span', { style: { fontSize: '13px', fontWeight: '600', fontVariantNumeric: 'tabular-nums' }, text: `${rl.n} × ${rl.from}` }),
+            h('span', { style: { color: 'var(--dim3)', fontSize: '11px' }, text: '→' }),
+            h('span', { style: { fontSize: '13px', fontWeight: '600', color: 'var(--gold)' }, text: `1 × ${rl.to}` }),
+            h('span', { class: 'mg-tag soft', style: { marginLeft: '4px' }, text: `手上 ${rl.have} 个 ${rl.from}` }),
+            h('span', { style: { marginLeft: 'auto', color: rl.times > 0 ? 'var(--acc2)' : 'var(--dim3)', fontSize: '11px' },
+              text: rl.times > 0 ? `够熔 ${rl.times} 次` : '还不够' }),
+            rl.times > 0
+              ? h('button', {
+                class: 'mg-btn xs acc', style: { marginLeft: '8px' },
+                disabled: busy,
+                text: '熔一次',
+                onclick: () => {
+                  if (!confirm(`把 ${rl.n} 个 ${rl.from} 级剧情熔成 1 个 ${rl.to} 级？\n不可逆。`)) return;
+                  act('do', 'melt', rl.from);
+                },
+              })
+              : null,
+            rl.times > 1
+              ? h('button', {
+                class: 'mg-btn xs', style: { marginLeft: '6px' },
+                disabled: busy,
+                text: `全熔（${rl.times}）`,
+                onclick: () => {
+                  if (!confirm(`把 ${rl.times * rl.n} 个 ${rl.from} 级全熔成 ${rl.times} 个 ${rl.to} 级？\n不可逆。`)) return;
+                  act('do', 'melt', rl.from, 'all');
+                },
+              })
+              : null,
+          ),
+        ))),
+      );
     }
 
     if (shopTab === 'gene') {
@@ -949,6 +1022,7 @@ function mount(ctx) {
           onclick: () => act('use', u.id),
         })),
         r.gear ? h('span', { class: 'mg-gear' },
+          r.gear.domain ? h('span', { class: 'dom', text: `领域 ${r.gear.domain}` }) : null,
           r.gear.dodge ? h('span', { text: `闪避 ${r.gear.dodge}` }) : null,
           r.gear.reroll ? h('span', { text: `重掷 ${r.gear.reroll}` }) : null,
           r.gear.autoPass ? h('span', { text: `改判 ${r.gear.autoPass}` }) : null,
@@ -998,6 +1072,32 @@ function mount(ctx) {
             h('div', { class: 'tr' }, [1, 2, 3].map((i) => h('i', { class: i <= d.mate.trust ? 'on' : '' }))),
           )
           : null,
+        r.sides?.length
+          ? h('div', { class: 'mg-quest' },
+            h('div', { class: 'qh' },
+              h('span', { text: '支线' }),
+              h('span', { class: 'qn', text: `${r.sides.filter((x) => x.done).length}/${r.sides.length}` })),
+            r.sides.map((x) => h('div', { class: `qi ${x.done ? 'on' : ''}`, title: x.desc },
+              h('span', { class: 'qm', text: x.done ? '✓' : '○' }),
+              // 有的支线只给点数、不给剧情，这时候不能写「（null）」
+              h('span', { class: 'qt', text: x.plot ? `${x.desc}（${x.plot}）` : x.desc }))),
+            // S 只有 A 级本掉，而且只在她没把同伴留下的前提下。
+            // 这行必须一直在——不然她挑最安全的路走完，谁也不知道差在哪一条。
+            r.sReward
+              ? (() => {
+                const all = r.sides.every((x) => x.done);
+                const ok = all && r.sReward.mateOk;
+                const text = ok
+                  ? '四条都达成了。带着同伴活着出去，主神会多记一笔 S 级剧情。'
+                  : all
+                    // 4/4 但同伴没出来：不能写「还差 0 条」，那等于骗人
+                    ? '四条都达成了，但同伴没能出来——这一笔拿不到了。'
+                    : `全部达成 + 同伴没死 → 额外 1 个 S 级剧情（还差 ${r.sides.filter((x) => !x.done).length} 条）`;
+                return h('div', { class: `qs ${ok ? '' : 'off'}`, text });
+              })()
+              : null,
+          )
+          : null,
       ),
 
       h('div', { class: 'mg-box scroll' },
@@ -1006,7 +1106,9 @@ function mount(ctx) {
           ? r.trail.map((t) => h('div', { class: 'mg-trail' },
             h('span', { class: 'n', text: `第${t.turn}` }),
             h('span', { class: 'l', text: t.label, title: `${t.scene}｜${t.label}${t.roll ? `（${t.roll} vs ${t.dc}）` : ''}` }),
-            t.roll ? h('span', { class: `r ${t.success ? 'ok' : 'no'}`, text: t.success ? '过' : '折' }) : h('span', { class: 'r', text: '—' }),
+            t.auto
+              ? h('span', { class: 'r ok', text: t.auto, title: `${t.auto}把这次判定改成了过` })
+              : t.roll ? h('span', { class: `r ${t.success ? 'ok' : 'no'}`, text: t.success ? '过' : '折' }) : h('span', { class: 'r', text: '—' }),
           ))
           : h('div', { style: { fontSize: '10.5px', color: 'var(--dim3)' }, text: '还没走。' }),
       ),
@@ -1040,8 +1142,11 @@ function mount(ctx) {
     if (!rep) return h('div', { class: 'mg-empty', text: '结算数据丢了。回主神空间重来一局吧。' });
 
     const rows = rep.rows.map((row, i) => {
-      const cls = `${row.bad ? 'bad' : row.miss ? 'miss' : ''}${row.minor ? ' minor' : ''}`;
-      const v = row.points ? `${row.points > 0 ? '+' : ''}${fmt(row.points)}` : '—';
+      const cls = `${row.bad ? 'bad' : row.miss ? 'miss' : ''}${row.minor ? ' minor' : ''}${row.reward ? ' reward' : ''}`;
+      // 支线剧情不带点数，只带一张凭证。这一行原来会显示「—」，看着像没给东西。
+      const v = row.points
+        ? `${row.points > 0 ? '+' : ''}${fmt(row.points)}`
+        : (row.plot && !row.miss ? `${row.plot} ×1` : '—');
       return h('div', { class: `mg-row ${cls}`, style: { animationDelay: `${i * 70}ms` } },
         h('span', { class: 'l' }, row.label, row.plot ? h('span', { class: 'mg-tag ' + row.plot, style: { marginLeft: '7px' }, text: `${row.plot} 级` }) : null),
         h('span', { class: `v ${row.points ? '' : 'zero'}` }, v),
@@ -1051,7 +1156,9 @@ function mount(ctx) {
     const trail = (r.trail ?? []).map((t) => h('div', { class: 'mg-trail' },
       h('span', { class: 'n', text: `第${t.turn}` }),
       h('span', { class: 'l', text: t.label, title: t.scene }),
-      t.roll ? h('span', { class: `r ${t.success ? 'ok' : 'no'}`, text: t.success ? '过' : '折' }) : h('span', { class: 'r', text: '—' }),
+      t.auto ? h('span', { class: 'r ok', text: t.auto }) : t.roll
+        ? h('span', { class: `r ${t.success ? 'ok' : 'no'}`, text: t.success ? '过' : '折' })
+        : h('span', { class: 'r', text: '—' }),
     ));
 
     return h('div', {},

@@ -29,15 +29,15 @@ export const TOOL_SPECS = [
   },
   {
     name: 'mg_do',
-    description: '兑换和用东西。attr 点属性（str/agi/con/int/per，上限 40）；bloodline 融合血统（152 条，D→S，只在身上还没有血统时可用）；grade 把血统往上叠一层浓度（更强，但理智上限降、心魔更容易满）；skill 学技能（16 条）；item 买道具（消耗/装备）；purify 净化心魔；gene 让主神强行开下一阶基因锁（只在主神空间，按阶收费，心魔 +1~2）。use 是把手上的消耗品或治疗技能用掉（副本里也能用，比如还剩 12 血时打一针）。血统一旦有了就不能由你换——换血统要主人在面板「兑换 → 血统」里点「重铸」，你只能告诉她，别反复试。key 填中文名或编号；不确定买什么先 mg_status 看点数。',
+    description: '兑换和用东西。attr 点属性（str/agi/con/int/per，上限 40）；bloodline 融合血统（152 条，D→S，只在身上还没有血统时可用）；grade 把血统往上叠一层浓度（更强，但理智上限降、心魔更容易满）；skill 学技能（16 条）；item 买道具（消耗/装备）；purify 净化心魔；gene 让主神强行开下一阶基因锁（只在主神空间，按阶收费，心魔 +1~4）；melt 把低等级支线剧情熔成高一级（C→B 十张、B→A 十张、A→S 五张）。use 是把手上的消耗品或治疗技能用掉（副本里也能用，比如还剩 12 血时打一针）。血统一旦有了就不能由你换——换血统要主人在面板「兑换 → 血统」里点「重铸」，你只能告诉她，别反复试。key 填中文名或编号；不确定买什么先 mg_status 看点数。',
     tags: ['write'],
     parameters: {
       type: 'object',
       additionalProperties: false,
       required: ['action'],
       properties: {
-        action: { type: 'string', enum: ['attr', 'bloodline', 'grade', 'gene', 'skill', 'item', 'purify', 'use'], description: '要办的事。' },
-        key: { type: 'string', description: 'attr 是属性名；bloodline/skill/item/use 是名字或编号；grade/gene/purify 不用填。' },
+        action: { type: 'string', enum: ['attr', 'bloodline', 'grade', 'gene', 'melt', 'skill', 'item', 'purify', 'use'], description: '要办的事。' },
+        key: { type: 'string', description: 'attr 是属性名；bloodline/skill/item/use 是名字或编号；melt 填等级（C/B/A）；grade/gene/purify 不用填。' },
         n: { type: 'integer', minimum: 1, maximum: 5, description: 'item 用：买几个，默认 1。' },
       },
     },
@@ -66,7 +66,7 @@ export const TOOL_SUMMARIES = {
     en: 'Enters a world, picks an action, decides on a gene lock, flees or returns.',
   },
   mg_do: {
-    zh: '点属性、换血统、升浓度、开基因锁、学技能、买道具、净化心魔，以及局内用掉消耗品。',
+    zh: '点属性、换血统、升浓度、开基因锁、熔铸剧情、学技能、买道具、净化心魔，以及局内用掉消耗品。',
     en: 'Spends points on stats, bloodlines, skills, items, or purification.',
   },
   mg_chronicle: {

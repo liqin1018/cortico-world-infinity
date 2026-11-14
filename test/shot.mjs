@@ -17,7 +17,10 @@ const VIEWS = [
   ['home', [], 'home'],
   ['shop', ['兑换', '血统'], 'shop'],
   ['shop', ['兑换', '基因锁'], 'shop-gene'],
+  ['shop', ['兑换', '熔铸'], 'shop-melt'],
   ['run', [], 'run'],
+  // A 级本的推演页：真实存档这一局在 C 本里，S 那行提示要单独造一个视角才截得到
+  ['run-a', [], 'run-a'],
   ['settle', [], 'settle'],
   ['journal', ['手记'], 'journal'],
   ['settings', ['设置'], 'settings'],
@@ -40,6 +43,23 @@ body{padding:18px;font-family:"PingFang SC","Microsoft YaHei",system-ui,sans-ser
 #app{max-width:1080px;margin:0 auto}</style></head>
 <body><div id="app"></div>
 <script>window.__data = ${data};</script>
+${name === 'shop-melt' ? `<script>// 真实存档预览里 C 只有 4 个，三条都不够熔，按钮不出现。造一份堆成山的。
+(() => {
+  const p = window.__data.shop;
+  p.wallet.plots = { D: 23, C: 278, B: 188, A: 26, S: 0 };
+  p.shop.melt.rules = [
+    { from: 'C', to: 'B', n: 10, have: 278, times: 27 },
+    { from: 'B', to: 'A', n: 10, have: 188, times: 18 },
+    { from: 'A', to: 'S', n: 5, have: 26, times: 5 },
+  ];
+})();</script>` : ''}
+${name === 'run-a' ? `<script>window.__data['run-a'] = (() => {
+  const d = JSON.parse(JSON.stringify(window.__data.run));
+  d.run.rating = 'A';
+  d.run.sReward = { total: 4, need: 4, mateOk: true };
+  d.run.sides = d.run.sides.map((x, i) => Object.assign({}, x, { done: i < 2 }));
+  return d;
+})();</script>` : ''}
 <script>${src}</script>
 <script>
 window.__panels.panels.infinity.mount({
@@ -53,4 +73,4 @@ ${clickJs}
   writeFileSync(new URL(`./_shot-${name}.html`, import.meta.url), html, 'utf8');
   console.log(`  _shot-${name}.html${clicks.length ? `（点：${clicks.join(' → ')}）` : ''}`);
 }
-console.log('七张都写好了，用浏览器打开或用 Chrome --headless --screenshot 截图。');
+console.log('九张都写好了，用浏览器打开或用 Chrome --headless --screenshot 截图。');

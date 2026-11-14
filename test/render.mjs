@@ -114,6 +114,29 @@ for (const [key, payload] of Object.entries(data)) {
   }
 }
 
+// 副本推演右栏：支线进度 —— 没达成的画○，达成了画✓；A 级本还要有 S 的进度提示
+{
+  // 借 run 视图造一个 A 级本：真实数据是 C 本，sReward 为 null，测不到那行提示。
+  const aRun = JSON.parse(JSON.stringify(data.run));
+  aRun.run.rating = 'A';
+  aRun.run.sReward = { total: 4, need: 4, mateOk: true };
+  aRun.run.sides = aRun.run.sides.map((x, i) => ({ ...x, done: i < 2 }));
+
+  const root = new El('div');
+  await mount({ root, invoke: async (m) => (m === 'state' ? aRun : { ok: true }), interval: () => 0 });
+  await new Promise((r) => setTimeout(r, 30));
+  const nodes = walk(root);
+  const quest = nodes.find((n) => has(n, 'mg-quest'));
+  const items = quest ? walk(quest).filter((n) => has(n, 'qi')) : [];
+  const done = items.filter((n) => has(n, 'on')).length;
+  const hint = quest ? walk(quest).find((n) => /S 级剧情/.test(n._text ?? '')) : null;
+  console.log(`\n推演·支线：${items.length} 条（已完成 ${done}）　S 提示：${hint ? hint._text.slice(0, 34) + '…' : '没有'}`);
+  if (!quest) { fail += 1; console.log('✗ 推演页没有支线进度'); }
+  if (items.length !== 4) { fail += 1; console.log('✗ 支线应该有四条'); }
+  if (done !== 2) { fail += 1; console.log(`✗ 应该标出 2 条已完成，实际 ${done}`); }
+  if (!hint) { fail += 1; console.log('✗ A 级本没写 S 的获取条件'); }
+}
+
 // 主神空间左栏：基因锁卡 —— 五格、当前阶高亮、下一阶虚线、强行开锁入口
 {
   const root = new El('div');
@@ -221,8 +244,39 @@ for (const [key, payload] of Object.entries(data)) {
   const tiers = rows.map((r) => r.children[0]?.children?.[0]?.textContent ?? '');
   console.log(`\n兑换·基因锁：页签 ${okGene ? '有' : '没有'}　${rows.length} 行（${tiers.join('/')}）　开锁按钮「${btn?.textContent ?? '—'}」`);
   if (!okGene) { fail += 1; console.log('✗ 兑换页没有「基因锁」页签'); }
-  if (rows.length !== 4) { fail += 1; console.log('✗ 基因锁价目应该四行'); }
+  if (rows.length !== 5) { fail += 1; console.log('✗ 基因锁价目应该五行（一到五阶）'); }
   if (!btn) { fail += 1; console.log('✗ 下一阶没有开锁按钮'); }
+}
+
+// 兑换 → 熔铸：三条规则、每条显示手上有多少、够不够
+{
+  // 真实存档预览里 C 只有 4 个，三条都不够熔，按钮不出现也就测不到。
+  // 这里造一份「堆成山」的家底，把「熔一次 / 全熔」两个按钮逼出来。
+  const md = JSON.parse(JSON.stringify(data.shop));
+  md.shop.melt.rules = [
+    { from: 'C', to: 'B', n: 10, have: 278, times: 27 },
+    { from: 'B', to: 'A', n: 10, have: 5, times: 0 },
+    { from: 'A', to: 'S', n: 5, have: 26, times: 5 },
+  ];
+  const root = new El('div');
+  await mount({ root, invoke: async () => md, interval: () => 0 });
+  await new Promise((r) => setTimeout(r, 30));
+  const click = (label) => {
+    const b = walk(root).find((n) => (has(n, 'mg-tab') || has(n, 'mg-chip')) && n.textContent.trim().startsWith(label));
+    if (b) b.listeners.click?.forEach((f) => f());
+    return Boolean(b);
+  };
+  click('兑换');
+  await new Promise((r) => setTimeout(r, 20));
+  const ok = click('熔铸');
+  await new Promise((r) => setTimeout(r, 20));
+  const rows = walk(root).filter((n) => has(n, 'mg-item'));
+  const btns = walk(root).filter((n) => has(n, 'mg-btn') && /熔/.test(n.textContent));
+  console.log(`\n兑换·熔铸：页签 ${ok ? '有' : '没有'}　${rows.length} 条规则　按钮 ${btns.length} 个（${btns.map((b) => b.textContent).join('/')}）`);
+  if (!ok) { fail += 1; console.log('✗ 兑换页没有「熔铸」页签'); }
+  if (rows.length !== 3) { fail += 1; console.log('✗ 熔铸应该三条规则（C→B / B→A / A→S）'); }
+  // C 够 27 次、B 不够、A 够 5 次 → 四条按钮（两个「熔一次」+「全熔 27」+「全熔 5」）
+  if (btns.length !== 4) { fail += 1; console.log(`✗ 按钮应该 4 个（够熔的两档各两个），实际 ${btns.length}`); }
 }
 
 // 设置页：难度三档 + 自动花钱开关 + 重开按钮

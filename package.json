@@ -1,6 +1,6 @@
 {
   "name": "cortico-world-infinity",
-  "version": "0.6.1",
+  "version": "0.6.3",
   "description": "给 Coopanion 桌宠的无限流世界：她是一个被主神选中的轮回者，穿梭进电影世界里完成任务、活着回来、拿奖励点换血统和基因锁。单机、不联网、不额外调用模型。\n\nQQ 交流群：745879632",
   "type": "module",
   "main": "./src/index.js",

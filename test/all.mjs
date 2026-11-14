@@ -17,7 +17,7 @@ import { ITEM_BY_ID } from '../src/content/items.js';
 import { BLOODLINE_BY_ID } from '../src/content/bloodlines.js';
 import {
   mateGuard, maybeJoinMate, karmaCap, geneCapOf, maxHp, maxSan, attrsOf, bloodlinePrice,
-  shouldOfferGene, geneOffer, attemptGene, unlockGene, geneBuyOffer, GENE_DANGER,
+  shouldOfferGene, geneOffer, attemptGene, unlockGene, geneBuyOffer, GENE_DANGER, settleRun, clearRun,
 } from '../src/engine.js';
 
 const EFFECT_KEYS = new Set([
@@ -532,6 +532,148 @@ console.log('\n=== 全通关后轮换刷本 ===');
     bad(`轮换 12 次只出现了 ${new Set(order).size} 个副本，应该 10 个都轮到`);
   }
   if (order[0] === order[1]) bad('轮换时连续两次挑了同一个副本');
+}
+
+
+/* ---------------- 剧情熔铸 ---------------- */
+console.log('\n=== 剧情熔铸（C/B/A 堆成山怎么清） ===');
+{
+  const dataDir = mkdtempSync(join(tmpdir(), 'inf-melt-'));
+  const world = new InfinityWorld({ botName: 't', dataDir, cfg: { autoRun: false, allowSpend: true }, persist: () => {} });
+  await world.start({ pushEvent: async () => {}, log: { warn: () => {} } });
+  const s = world.ensure();
+  s.wallet.plots = { D: 23, C: 278, B: 188, A: 26, S: 0 };
+
+  const one = world.doAction('melt', 'C');
+  console.log(`  熔一次 C：${one.ok ? one.message.slice(0, 30) : one.message}　→ C${s.wallet.plots.C} B${s.wallet.plots.B}`);
+  if (s.wallet.plots.C !== 268 || s.wallet.plots.B !== 189) bad(`熔一次应该是 C 278→268、B 188→189，实际 C${s.wallet.plots.C} B${s.wallet.plots.B}`);
+
+  const allC = world.doAction('melt', 'C', 'all');
+  console.log(`  全熔 C：${allC.message.slice(0, 36)}　→ C${s.wallet.plots.C} B${s.wallet.plots.B}`);
+  if (s.wallet.plots.C !== 8) bad(`全熔后 C 应该剩 8，实际 ${s.wallet.plots.C}`);
+
+  const allA = world.doAction('melt', 'A', 'all');
+  console.log(`  全熔 A：${allA.message.slice(0, 36)}　→ A${s.wallet.plots.A} S${s.wallet.plots.S}`);
+  if (s.wallet.plots.A !== 1) bad(`26 个 A 应该剩 1，实际 ${s.wallet.plots.A}`);
+  if (s.wallet.plots.S !== 5) bad(`26 个 A 应该熔出 5 个 S，实际 ${s.wallet.plots.S}`);
+
+  s.wallet.plots.B = 5;
+  const noB = world.doAction('melt', 'B');
+  console.log(`  B 只有 5 个时熔：${noB.ok ? '成了（不该）' : noB.message}`);
+  if (noB.ok) bad('5 个 B 不该能熔（要 10 个）');
+
+  const noD = world.doAction('melt', 'D');
+  console.log(`  熔 D：${noD.ok ? '成了（不该）' : noD.message}`);
+  if (noD.ok) bad('D 级不该能熔');
+
+  // 副本里不能熔
+  s.wallet.plots.C = 100;
+  world.enter('re1');
+  const inRun = world.doAction('melt', 'C', 'all');
+  console.log(`  副本里熔：${inRun.ok ? '成了（不该）' : inRun.message}`);
+  if (inRun.ok) bad('副本里不该能熔铸');
+  if (s.run) world.leave();
+}
+
+/* ---------------- 五阶：只有 S 级血统承载得住 ---------------- */
+console.log('\n=== 五阶基因锁（领域） ===');
+{
+  const dataDir = mkdtempSync(join(tmpdir(), 'inf-g5-'));
+  const world = new InfinityWorld({ botName: 't', dataDir, cfg: { autoRun: false, allowSpend: true }, persist: () => {} });
+  await world.start({ pushEvent: async () => {}, log: { warn: () => {} } });
+  const s = world.ensure();
+  s.wallet.points = 2000000;
+  s.wallet.plots = { D: 9, C: 9, B: 9, A: 9, S: 9 };
+
+  world.doAction('bloodline', 'ex23'); // A 级赛亚人，承载 4
+  for (let i = 0; i < 3; i += 1) world.doAction('grade'); // 叠到三层
+  const aCap = geneCapOf(s);
+  console.log(`  A 级「传说中的赛亚人」+ 浓度 ${s.runner.bloodlineGrade} → 承载 ${aCap} 阶`);
+  if (aCap !== 4) bad(`A 级血统叠满浓度也只该到 4 阶，实际 ${aCap}`);
+
+  for (let i = 0; i < 4; i += 1) world.doAction('gene');
+  console.log(`  撬到 ${s.runner.gene.tier} 阶（A 血统的上限）`);
+  const blocked5 = geneBuyOffer(s);
+  console.log(`  下一阶：${blocked5 ? `${blocked5.name}　承载 ${blocked5.cap} 阶　${blocked5.overCap ? '承载不足' : '可买'}` : '没有'}`);
+  if (!blocked5?.overCap) bad('A 级血统不该承载得起五阶');
+
+  // 换成 S 级血统
+  const sw = await world.webUi().invoke('infinity', 'do', ['bloodline', 'bl084', 'swap']);
+  console.log(`  重铸成「至尊小超人」：${sw.ok ? '成' : sw.message}`);
+  const sCap = geneCapOf(s);
+  console.log(`  承载 ${sCap} 阶（浓度归零，S 血统本身就有 5）`);
+  if (sCap !== 5) bad(`S 级血统应该承载 5 阶，实际 ${sCap}`);
+
+  const off5 = geneBuyOffer(s);
+  console.log(`  五阶：${off5.cost.points} 点 + ${off5.plotN} 个 ${off5.cost.plot} 剧情 + 心魔 ${off5.cost.karma}　${off5.can ? '能撬' : '还不够'}`);
+  if (!off5.can) bad(`两百万点 + 9 个 S 应该能撬五阶（${off5.can ? '' : off5.overCap ? '承载不足' : '资源不够'}）`);
+
+  const r5 = world.doAction('gene');
+  console.log(`  撬开：${r5.ok ? r5.message.slice(0, 40) : r5.message}`);
+  if (s.runner.gene.tier !== 5) bad(`应该到五阶，实际 ${s.runner.gene.tier}`);
+  // 五阶的代价写的是 +4，但心魔有上限（浓度 0 时只有 3）——撬完一定是满的。
+  if (s.runner.gene.karma !== Math.min(karmaCap(s), 4)) {
+    bad(`五阶该把心魔顶到 ${Math.min(karmaCap(s), 4)}，实际 ${s.runner.gene.karma}`);
+  }
+
+  // 领域：进本之后每局一次免费改判
+  s.runner.hp = maxHp(s);
+  if (s.runner.gene.karma >= karmaCap(s)) { s.wallet.points += 99999; world.doAction('purify'); }
+  world.enter('re2');
+  const g = s.run.gear;
+  console.log(`  进本后：领域 ${g.domain} 次　改判 ${g.autoPass} 次（道具给的）　心魔 ${s.runner.gene.karma}`);
+  if (g.domain !== 1) bad(`五阶进本应该带 1 次领域，实际 ${g.domain}`);
+  if (s.run) world.leave();
+}
+
+/* ---------------- S 级剧情：A 级本完美通关 ---------------- */
+console.log('\n=== S 级剧情（A 级本完美通关） ===');
+{
+  const dataDir = mkdtempSync(join(tmpdir(), 'inf-s-plot-'));
+  const world = new InfinityWorld({ botName: 't', dataDir, cfg: { autoRun: false, allowSpend: true }, persist: () => {} });
+  await world.start({ pushEvent: async () => {}, log: { warn: () => {} } });
+  const s = world.ensure();
+  s.runner.attrs = { str: 40, agi: 40, con: 40, int: 40, per: 40 };
+
+  // mummy 的四条：evelyn_out / sealed / got_book / ardeth_trust
+  const MUMMY_ALL = { evelyn_out: true, sealed: true, got_book: true, ardeth_trust: true };
+  const tryCase = (worldId, flags, mate) => {
+    // 不能 world.leave()——leave 要求这一局已经 settled，而这里是直接调 settleRun
+    // 拿报告、没有真的走完结算流程。用 clearRun 把 run 清掉再进下一个本。
+    if (s.run) clearRun(s);
+    const e = world.enter(worldId);
+    if (!e.ok) { bad(`进不去 ${worldId}：${e.message}`); return { sPlot: -1, bonus: null, sides: -1 }; }
+    s.run.flags = { ...flags };
+    s.run.mate = mate ?? null;
+    const rep = settleRun(s);
+    const bonus = rep.rows.find((r) => r.kind === 'bonus');
+    return { sPlot: rep.plots.S ?? 0, bonus, sides: rep.rows.filter((r) => r.kind === 'side' && r.points > 0).length };
+  };
+
+  const full = tryCase('mummy', MUMMY_ALL, null);
+  console.log(`  mummy 4/4、没遇到同伴　　　→ S×${full.sPlot}　${full.bonus ? `「${full.bonus.label}」` : '没有那一行'}`);
+  if (full.sPlot !== 1) bad('A 级本 4/4 应该掉 1 个 S');
+  if (!full.bonus) bad('结算里应该有「完美通关」那一行');
+
+  const three = tryCase('mummy', { ...MUMMY_ALL, ardeth_trust: false }, null);
+  console.log(`  mummy 3/4　　　　　　　　　→ S×${three.sPlot}`);
+  if (three.sPlot !== 0) bad('3/4 不该掉 S');
+
+  const deadMate = tryCase('mummy', MUMMY_ALL, { id: 'rick', name: '瑞克·欧康纳', alive: false, how: '被压在了石柱下面', trust: 2 });
+  console.log(`  mummy 4/4、但同伴没出来　　→ S×${deadMate.sPlot}`);
+  if (deadMate.sPlot !== 0) bad('把同伴留在里面不该还能拿 S');
+
+  // lotr：ring_destroyed / frodo_alive + escaped / boromir_lived / gandalf_saved
+  const lotrFull = tryCase('lotr', { ring_destroyed: true, frodo_alive: true, escaped: true, boromir_lived: true, gandalf_saved: true }, null);
+  console.log(`  lotr 4/4　　　　　　　　　　→ S×${lotrFull.sPlot}`);
+  if (lotrFull.sPlot !== 1) bad('魔戒 4/4 也该掉 S（不能只认木乃伊一个本）');
+
+  // re2 是 C 本，全清也不给
+  const cFull = tryCase('re2', { sherry_cured: true, leon_trust: true, sample_taken: true, know_g: true }, null);
+  console.log(`  re2（C 级）4/4　　　　　　　→ S×${cFull.sPlot}（C 本不该给）`);
+  if (cFull.sPlot !== 0) bad('非 A 级本不该掉 S');
+
+  if (s.run) world.leave();
 }
 
 console.log('\n' + (fail ? `✗ ${fail} 个问题` : '✓ 全部通过'));
